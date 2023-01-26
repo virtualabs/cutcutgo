@@ -1,0 +1,1566 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Configuration>
+  <Configurator>
+    <Name dnOrder="0" value="pic32mx470_curiosity"/>
+    <Processor dnOrder="1" value="PIC32MX470F512H"/>
+    <Harmony dnOrder="2" path="../../../.."/>
+    <Folder_Name dnOrder="3" value=""/>
+    <Manifest dnOrder="4">
+      <Files dnOrder="0">
+        <File dnOrder="0">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">app.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3"/>
+          <PhysicalPath dnOrder="4">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="5"/>
+          <UserChecksum dnOrder="6"/>
+        </File>
+        <File dnOrder="1">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">bsp.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/bsp/</LogicalPath>
+          <PhysicalPath dnOrder="4">/bsp/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">8FDE1C474958E71FB5EC6CEC8A1D5E9B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">8FDE1C474958E71FB5EC6CEC8A1D5E9B</UserChecksum>
+        </File>
+        <File dnOrder="2">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">drv_usbfs.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E8A25523C8CDDC97F3FD108E97BF4A9F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E8A25523C8CDDC97F3FD108E97BF4A9F</UserChecksum>
+        </File>
+        <File dnOrder="3">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">drv_usbfs_device.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E65E55268349D2945F1AC4144D0327CC</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E65E55268349D2945F1AC4144D0327CC</UserChecksum>
+        </File>
+        <File dnOrder="4">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">exceptions.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">322976BB28859B437B0D6D3B8E2AFE42</GeneratedChecksum>
+          <UserChecksum dnOrder="6">322976BB28859B437B0D6D3B8E2AFE42</UserChecksum>
+        </File>
+        <File dnOrder="5">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">initialization.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BB20E672B4E97D9FB27C0F4166215E26</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BB20E672B4E97D9FB27C0F4166215E26</UserChecksum>
+        </File>
+        <File dnOrder="6">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">interrupts.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BDF53AD2C457C2F81EA494334747AEF0</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BDF53AD2C457C2F81EA494334747AEF0</UserChecksum>
+        </File>
+        <File dnOrder="7">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">main.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3"/>
+          <PhysicalPath dnOrder="4">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="5"/>
+          <UserChecksum dnOrder="6"/>
+        </File>
+        <File dnOrder="8">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_clk.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/clk/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/clk/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">55DC39C91F92139EC7A440FDDF3BA5C4</GeneratedChecksum>
+          <UserChecksum dnOrder="6">55DC39C91F92139EC7A440FDDF3BA5C4</UserChecksum>
+        </File>
+        <File dnOrder="9">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_evic.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/evic/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/evic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D3EFF6284AE5B5B633406F21F7954533</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D3EFF6284AE5B5B633406F21F7954533</UserChecksum>
+        </File>
+        <File dnOrder="10">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_gpio.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/gpio/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/gpio/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">456142ECB4E6A8BFDF1EB0DC22117361</GeneratedChecksum>
+          <UserChecksum dnOrder="6">456142ECB4E6A8BFDF1EB0DC22117361</UserChecksum>
+        </File>
+        <File dnOrder="11">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">sys_int.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/int/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/int/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">640A4B35B8CDB53BD8EA5077D81386BE</GeneratedChecksum>
+          <UserChecksum dnOrder="6">640A4B35B8CDB53BD8EA5077D81386BE</UserChecksum>
+        </File>
+        <File dnOrder="12">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">tasks.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">309BE6ED69B0F3C33F94C7F74F87E3F3</GeneratedChecksum>
+          <UserChecksum dnOrder="6">309BE6ED69B0F3C33F94C7F74F87E3F3</UserChecksum>
+        </File>
+        <File dnOrder="13">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">usb_device.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BCCEF5B801FFD0CF22D0B454D2F25F1F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BCCEF5B801FFD0CF22D0B454D2F25F1F</UserChecksum>
+        </File>
+        <File dnOrder="14">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">usb_device_cdc.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">25F4F44480641111AE123C70252B0528</GeneratedChecksum>
+          <UserChecksum dnOrder="6">25F4F44480641111AE123C70252B0528</UserChecksum>
+        </File>
+        <File dnOrder="15">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">usb_device_cdc_acm.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">ABA41F10EA872DBEBB285D03A009BC51</GeneratedChecksum>
+          <UserChecksum dnOrder="6">ABA41F10EA872DBEBB285D03A009BC51</UserChecksum>
+        </File>
+        <File dnOrder="16">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">usb_device_init_data.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9070D0A67AC9C877CF82A00FB798AC5B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9070D0A67AC9C877CF82A00FB798AC5B</UserChecksum>
+        </File>
+        <File dnOrder="17">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">xc32_monitor.c</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/stdio/</LogicalPath>
+          <PhysicalPath dnOrder="4">/stdio/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">A9F55E7CB78F22D9000CA03DC635973C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">A9F55E7CB78F22D9000CA03DC635973C</UserChecksum>
+        </File>
+        <File dnOrder="18">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">app.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3"/>
+          <PhysicalPath dnOrder="4">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="5"/>
+          <UserChecksum dnOrder="6"/>
+        </File>
+        <File dnOrder="19">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">bsp.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/bsp/</LogicalPath>
+          <PhysicalPath dnOrder="4">/bsp/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">422E1C8A22D0D55EE2FF73295DFF965E</GeneratedChecksum>
+          <UserChecksum dnOrder="6">422E1C8A22D0D55EE2FF73295DFF965E</UserChecksum>
+        </File>
+        <File dnOrder="20">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">configuration.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F6E80C3E948DFFEEAA5DD46A620B6486</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F6E80C3E948DFFEEAA5DD46A620B6486</UserChecksum>
+        </File>
+        <File dnOrder="21">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">definitions.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">53246C83B6FC8C2408FC084CF545B0A4</GeneratedChecksum>
+          <UserChecksum dnOrder="6">53246C83B6FC8C2408FC084CF545B0A4</UserChecksum>
+        </File>
+        <File dnOrder="22">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">device.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">packs/PIC32MX470F512H_DFP/</LogicalPath>
+          <PhysicalPath dnOrder="4">/../../packs/PIC32MX470F512H_DFP/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">5D5C52527AB1435153DB9B50ADE6B79D</GeneratedChecksum>
+          <UserChecksum dnOrder="6">5D5C52527AB1435153DB9B50ADE6B79D</UserChecksum>
+        </File>
+        <File dnOrder="23">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">driver.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">1D2094DFA60F847FFD4E8153B6E78027</GeneratedChecksum>
+          <UserChecksum dnOrder="6">1D2094DFA60F847FFD4E8153B6E78027</UserChecksum>
+        </File>
+        <File dnOrder="24">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">driver_common.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">CC7DFCC51CD25171A3E400E18969354F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">CC7DFCC51CD25171A3E400E18969354F</UserChecksum>
+        </File>
+        <File dnOrder="25">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">drv_usb.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">DF147276AE56CA76E3E9BEB8447620AB</GeneratedChecksum>
+          <UserChecksum dnOrder="6">DF147276AE56CA76E3E9BEB8447620AB</UserChecksum>
+        </File>
+        <File dnOrder="26">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">drv_usb_external_dependencies.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">520DC1C088A41A16C28DCB58C92BDEC1</GeneratedChecksum>
+          <UserChecksum dnOrder="6">520DC1C088A41A16C28DCB58C92BDEC1</UserChecksum>
+        </File>
+        <File dnOrder="27">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">drv_usbfs.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">8E09A88EA42C831AF5D8F17A1549E1D2</GeneratedChecksum>
+          <UserChecksum dnOrder="6">8E09A88EA42C831AF5D8F17A1549E1D2</UserChecksum>
+        </File>
+        <File dnOrder="28">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">drv_usbfs_local.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BA88E5162CA794A6A62D146A58458A43</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BA88E5162CA794A6A62D146A58458A43</UserChecksum>
+        </File>
+        <File dnOrder="29">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">drv_usbfs_variant_mapping.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">AE86F1881720D058DAAAB3C5A196BC27</GeneratedChecksum>
+          <UserChecksum dnOrder="6">AE86F1881720D058DAAAB3C5A196BC27</UserChecksum>
+        </File>
+        <File dnOrder="30">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">osal.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">/osal/</LogicalPath>
+          <PhysicalPath dnOrder="4">/osal/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F0AD88762263B7CB89B02AB4F5876059</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F0AD88762263B7CB89B02AB4F5876059</UserChecksum>
+        </File>
+        <File dnOrder="31">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">osal_definitions.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">/osal/</LogicalPath>
+          <PhysicalPath dnOrder="4">/osal/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">0AC88C49E4585B606FD5AC6804F0C340</GeneratedChecksum>
+          <UserChecksum dnOrder="6">0AC88C49E4585B606FD5AC6804F0C340</UserChecksum>
+        </File>
+        <File dnOrder="32">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">osal_impl_basic.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">/osal/</LogicalPath>
+          <PhysicalPath dnOrder="4">/osal/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">63FBE37825657165B9EA584BF05DBA43</GeneratedChecksum>
+          <UserChecksum dnOrder="6">63FBE37825657165B9EA584BF05DBA43</UserChecksum>
+        </File>
+        <File dnOrder="33">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_clk.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/clk/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/clk/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">7066CC390335CF75126E2A50C46E3BDD</GeneratedChecksum>
+          <UserChecksum dnOrder="6">7066CC390335CF75126E2A50C46E3BDD</UserChecksum>
+        </File>
+        <File dnOrder="34">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_evic.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/evic/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/evic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9E0B07134C1501D0DB9A238C57E8654B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9E0B07134C1501D0DB9A238C57E8654B</UserChecksum>
+        </File>
+        <File dnOrder="35">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_gpio.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/peripheral/gpio/</LogicalPath>
+          <PhysicalPath dnOrder="4">/peripheral/gpio/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">74FBDBAD71A483761491848BBE0BE3EA</GeneratedChecksum>
+          <UserChecksum dnOrder="6">74FBDBAD71A483761491848BBE0BE3EA</UserChecksum>
+        </File>
+        <File dnOrder="36">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_usbfs.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E79927E7B6B89887AE57C3BDB7D79EC7</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E79927E7B6B89887AE57C3BDB7D79EC7</UserChecksum>
+        </File>
+        <File dnOrder="37">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_usbfs_header.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">3822D4C43CB11882404ECB2B28DD61EA</GeneratedChecksum>
+          <UserChecksum dnOrder="6">3822D4C43CB11882404ECB2B28DD61EA</UserChecksum>
+        </File>
+        <File dnOrder="38">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">sys_debug.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/debug/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/debug/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6972608768DDBE6E37A2D81B83DF490B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6972608768DDBE6E37A2D81B83DF490B</UserChecksum>
+        </File>
+        <File dnOrder="39">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">sys_int.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/int/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/int/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">47330C2D8F204B2B69F8A86240A564B6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">47330C2D8F204B2B69F8A86240A564B6</UserChecksum>
+        </File>
+        <File dnOrder="40">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">sys_int_mapping.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/int/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/int/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">FC7B55936A09E0CA1395AE4DFB1A188F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">FC7B55936A09E0CA1395AE4DFB1A188F</UserChecksum>
+        </File>
+        <File dnOrder="41">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">system.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BE95B4F134C5C929787B9DA6FDBF3501</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BE95B4F134C5C929787B9DA6FDBF3501</UserChecksum>
+        </File>
+        <File dnOrder="42">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">system_common.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">C3F5136D520DAC4416512EBFCCA023C3</GeneratedChecksum>
+          <UserChecksum dnOrder="6">C3F5136D520DAC4416512EBFCCA023C3</UserChecksum>
+        </File>
+        <File dnOrder="43">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">system_module.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/system/</LogicalPath>
+          <PhysicalPath dnOrder="4">/system/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">1C75A8A6B60598A2FD0D533F57839B72</GeneratedChecksum>
+          <UserChecksum dnOrder="6">1C75A8A6B60598A2FD0D533F57839B72</UserChecksum>
+        </File>
+        <File dnOrder="44">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">toolchain_specifics.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9A7344615980CB9443B6436E41E2155A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9A7344615980CB9443B6436E41E2155A</UserChecksum>
+        </File>
+        <File dnOrder="45">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ALL_Interrupt_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">7614490532C606BCAFEC5F729FDBEDAD</GeneratedChecksum>
+          <UserChecksum dnOrder="6">7614490532C606BCAFEC5F729FDBEDAD</UserChecksum>
+        </File>
+        <File dnOrder="46">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ALL_Interrupt_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">745B8DF89B5477EADA7B0786F1491B4C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">745B8DF89B5477EADA7B0786F1491B4C</UserChecksum>
+        </File>
+        <File dnOrder="47">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ActivityPending_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">86227AAF459AA8589F50247D54E63EA1</GeneratedChecksum>
+          <UserChecksum dnOrder="6">86227AAF459AA8589F50247D54E63EA1</UserChecksum>
+        </File>
+        <File dnOrder="48">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ActivityPending_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E86B513BFC354B734122E715E9673569</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E86B513BFC354B734122E715E9673569</UserChecksum>
+        </File>
+        <File dnOrder="49">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_AutomaticSuspend_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">FCDC292B30CBCAE218A51F68C3ADD7B2</GeneratedChecksum>
+          <UserChecksum dnOrder="6">FCDC292B30CBCAE218A51F68C3ADD7B2</UserChecksum>
+        </File>
+        <File dnOrder="50">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_AutomaticSuspend_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">4C2B2ED2E7617D6EFD806454B03D7BF8</GeneratedChecksum>
+          <UserChecksum dnOrder="6">4C2B2ED2E7617D6EFD806454B03D7BF8</UserChecksum>
+        </File>
+        <File dnOrder="51">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BDTBaseAddress_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">09A5E6FEB6CADD075F370EC5FF2733C8</GeneratedChecksum>
+          <UserChecksum dnOrder="6">09A5E6FEB6CADD075F370EC5FF2733C8</UserChecksum>
+        </File>
+        <File dnOrder="52">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BDTBaseAddress_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6ECAB19200B7B025B56DFC85D15369F4</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6ECAB19200B7B025B56DFC85D15369F4</UserChecksum>
+        </File>
+        <File dnOrder="53">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BDTFunctions_PIC32.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">248C88D36ABCF01B3308FDCFF4DC0BAF</GeneratedChecksum>
+          <UserChecksum dnOrder="6">248C88D36ABCF01B3308FDCFF4DC0BAF</UserChecksum>
+        </File>
+        <File dnOrder="54">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BDTFunctions_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">62A57CF6942AF8E8B60B3B8771C53306</GeneratedChecksum>
+          <UserChecksum dnOrder="6">62A57CF6942AF8E8B60B3B8771C53306</UserChecksum>
+        </File>
+        <File dnOrder="55">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BufferFreeze_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">EFDB80DE1EC77D54E76D2F3291142209</GeneratedChecksum>
+          <UserChecksum dnOrder="6">EFDB80DE1EC77D54E76D2F3291142209</UserChecksum>
+        </File>
+        <File dnOrder="56">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_BufferFreeze_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">44A4CF72E79B206503A570A7C6B15CAD</GeneratedChecksum>
+          <UserChecksum dnOrder="6">44A4CF72E79B206503A570A7C6B15CAD</UserChecksum>
+        </File>
+        <File dnOrder="57">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_DeviceAddress_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">10843324F0C3C37B9419EAD8FFB4B75E</GeneratedChecksum>
+          <UserChecksum dnOrder="6">10843324F0C3C37B9419EAD8FFB4B75E</UserChecksum>
+        </File>
+        <File dnOrder="58">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_DeviceAddress_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">54BFBC3F08C0D4752DF74799F4C9B449</GeneratedChecksum>
+          <UserChecksum dnOrder="6">54BFBC3F08C0D4752DF74799F4C9B449</UserChecksum>
+        </File>
+        <File dnOrder="59">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EP0LowSpeedConnect_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">4D2630F1B71886CAF9503FE025AFF5EE</GeneratedChecksum>
+          <UserChecksum dnOrder="6">4D2630F1B71886CAF9503FE025AFF5EE</UserChecksum>
+        </File>
+        <File dnOrder="60">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EP0LowSpeedConnect_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">19518D9996047F6F94CA2AA4902E9E7B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">19518D9996047F6F94CA2AA4902E9E7B</UserChecksum>
+        </File>
+        <File dnOrder="61">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EP0NAKRetry_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E7025F9FBA2413ED2AD4522B66DEDA9C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E7025F9FBA2413ED2AD4522B66DEDA9C</UserChecksum>
+        </File>
+        <File dnOrder="62">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EP0NAKRetry_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BE22CA76DBE5C80AB3E7A7D9C2B3C0DC</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BE22CA76DBE5C80AB3E7A7D9C2B3C0DC</UserChecksum>
+        </File>
+        <File dnOrder="63">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnControlTransfer_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">A172572AB4A8E1076DC9543FCCD4CB65</GeneratedChecksum>
+          <UserChecksum dnOrder="6">A172572AB4A8E1076DC9543FCCD4CB65</UserChecksum>
+        </File>
+        <File dnOrder="64">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnControlTransfer_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">74220D1C57F227F60349E1B08EE06A98</GeneratedChecksum>
+          <UserChecksum dnOrder="6">74220D1C57F227F60349E1B08EE06A98</UserChecksum>
+        </File>
+        <File dnOrder="65">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnHandshake_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">B2A9683B9EF845D691DBE7F61594836F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">B2A9683B9EF845D691DBE7F61594836F</UserChecksum>
+        </File>
+        <File dnOrder="66">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnHandshake_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">7AA89118BF93853F1958AD8736D28B61</GeneratedChecksum>
+          <UserChecksum dnOrder="6">7AA89118BF93853F1958AD8736D28B61</UserChecksum>
+        </File>
+        <File dnOrder="67">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnRxEnableEnhanced_PIC32.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">350B868A638E3EC481AA29B73D81622F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">350B868A638E3EC481AA29B73D81622F</UserChecksum>
+        </File>
+        <File dnOrder="68">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnRxEnableEnhanced_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">B6C1F8C688E949B477CAE40A758D928C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">B6C1F8C688E949B477CAE40A758D928C</UserChecksum>
+        </File>
+        <File dnOrder="69">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnStall_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">34F5E74F7D49EE64CD92F9BEE2B8F7C9</GeneratedChecksum>
+          <UserChecksum dnOrder="6">34F5E74F7D49EE64CD92F9BEE2B8F7C9</UserChecksum>
+        </File>
+        <File dnOrder="70">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnStall_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">0D383886A9E3659029E372AA369E04F0</GeneratedChecksum>
+          <UserChecksum dnOrder="6">0D383886A9E3659029E372AA369E04F0</UserChecksum>
+        </File>
+        <File dnOrder="71">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnTxRx_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">A05787C93C388FF70D13BEDD156E9165</GeneratedChecksum>
+          <UserChecksum dnOrder="6">A05787C93C388FF70D13BEDD156E9165</UserChecksum>
+        </File>
+        <File dnOrder="72">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EPnTxRx_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F46E538F66BC67AB746DE5DC08335D18</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F46E538F66BC67AB746DE5DC08335D18</UserChecksum>
+        </File>
+        <File dnOrder="73">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ERR_InterruptStatus_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D91EF7D6D66318175EC902AC10B07541</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D91EF7D6D66318175EC902AC10B07541</UserChecksum>
+        </File>
+        <File dnOrder="74">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ERR_InterruptStatus_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">13AFF95C87EB4F8C70972D2B27BD9315</GeneratedChecksum>
+          <UserChecksum dnOrder="6">13AFF95C87EB4F8C70972D2B27BD9315</UserChecksum>
+        </File>
+        <File dnOrder="75">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ERR_Interrupt_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">3266F05DC49F47AD8983E08695D228EB</GeneratedChecksum>
+          <UserChecksum dnOrder="6">3266F05DC49F47AD8983E08695D228EB</UserChecksum>
+        </File>
+        <File dnOrder="76">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ERR_Interrupt_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">29467AB44D0B20289667E5E8696C81B6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">29467AB44D0B20289667E5E8696C81B6</UserChecksum>
+        </File>
+        <File dnOrder="77">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EyePattern_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6E6CFAA5FB99D2D377C7B7F194423195</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6E6CFAA5FB99D2D377C7B7F194423195</UserChecksum>
+        </File>
+        <File dnOrder="78">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_EyePattern_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BAEA73C8C521F1ACCE710D4512F3FAE6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BAEA73C8C521F1ACCE710D4512F3FAE6</UserChecksum>
+        </File>
+        <File dnOrder="79">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_FrameNumber_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">76B9CFCF5B06444BD689EAA1F22AD71D</GeneratedChecksum>
+          <UserChecksum dnOrder="6">76B9CFCF5B06444BD689EAA1F22AD71D</UserChecksum>
+        </File>
+        <File dnOrder="80">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_FrameNumber_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">408CB74019E2380B2BCD429049F1B981</GeneratedChecksum>
+          <UserChecksum dnOrder="6">408CB74019E2380B2BCD429049F1B981</UserChecksum>
+        </File>
+        <File dnOrder="81">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_GEN_InterruptStatus_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6EB33D0EB60209522E91C7B805AB25DC</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6EB33D0EB60209522E91C7B805AB25DC</UserChecksum>
+        </File>
+        <File dnOrder="82">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_GEN_InterruptStatus_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">3360F2D7F303E408D8F581FC44A6DE3C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">3360F2D7F303E408D8F581FC44A6DE3C</UserChecksum>
+        </File>
+        <File dnOrder="83">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_GEN_Interrupt_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">980B20058F736B07F71A233527B55809</GeneratedChecksum>
+          <UserChecksum dnOrder="6">980B20058F736B07F71A233527B55809</UserChecksum>
+        </File>
+        <File dnOrder="84">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_GEN_Interrupt_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">54F632B5226E20C4685BB6069D995765</GeneratedChecksum>
+          <UserChecksum dnOrder="6">54F632B5226E20C4685BB6069D995765</UserChecksum>
+        </File>
+        <File dnOrder="85">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_HostBusyWithToken_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">048544CF9B6F68C7EBD7D78ECBFEDA59</GeneratedChecksum>
+          <UserChecksum dnOrder="6">048544CF9B6F68C7EBD7D78ECBFEDA59</UserChecksum>
+        </File>
+        <File dnOrder="86">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_HostBusyWithToken_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">B6C53AAB216360C9BBAE677366BC9890</GeneratedChecksum>
+          <UserChecksum dnOrder="6">B6C53AAB216360C9BBAE677366BC9890</UserChecksum>
+        </File>
+        <File dnOrder="87">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_HostGeneratesReset_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">65F3253730F0AA1AB36C4512A52794FB</GeneratedChecksum>
+          <UserChecksum dnOrder="6">65F3253730F0AA1AB36C4512A52794FB</UserChecksum>
+        </File>
+        <File dnOrder="88">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_HostGeneratesReset_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6623665EA8F1449332618060E20D196B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6623665EA8F1449332618060E20D196B</UserChecksum>
+        </File>
+        <File dnOrder="89">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastDirection_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">B7CF190EB03BA59B93C489D8994926CC</GeneratedChecksum>
+          <UserChecksum dnOrder="6">B7CF190EB03BA59B93C489D8994926CC</UserChecksum>
+        </File>
+        <File dnOrder="90">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastDirection_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">625AB3F01773E229D8CCFEB1006C7CD2</GeneratedChecksum>
+          <UserChecksum dnOrder="6">625AB3F01773E229D8CCFEB1006C7CD2</UserChecksum>
+        </File>
+        <File dnOrder="91">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastEndpoint_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">60810E675DF84F16A02B0D0EAD6D7F63</GeneratedChecksum>
+          <UserChecksum dnOrder="6">60810E675DF84F16A02B0D0EAD6D7F63</UserChecksum>
+        </File>
+        <File dnOrder="92">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastEndpoint_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">82F028EFD6BEB1C80F9B9292831A65D9</GeneratedChecksum>
+          <UserChecksum dnOrder="6">82F028EFD6BEB1C80F9B9292831A65D9</UserChecksum>
+        </File>
+        <File dnOrder="93">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastPingPong_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9A2A474F2CFED908346E87E36C2D79F2</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9A2A474F2CFED908346E87E36C2D79F2</UserChecksum>
+        </File>
+        <File dnOrder="94">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastPingPong_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">058EAAB655838DA5289D587DDAC32CAA</GeneratedChecksum>
+          <UserChecksum dnOrder="6">058EAAB655838DA5289D587DDAC32CAA</UserChecksum>
+        </File>
+        <File dnOrder="95">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastTransactionDetails_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">775CC5B8A96C8C20A1A1592FB30AE498</GeneratedChecksum>
+          <UserChecksum dnOrder="6">775CC5B8A96C8C20A1A1592FB30AE498</UserChecksum>
+        </File>
+        <File dnOrder="96">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LastTransactionDetails_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">EB7BEA76434E3AC1308285FBAB01B13F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">EB7BEA76434E3AC1308285FBAB01B13F</UserChecksum>
+        </File>
+        <File dnOrder="97">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LiveJState_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">5F6530DD94D66305E91832C300436D8C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">5F6530DD94D66305E91832C300436D8C</UserChecksum>
+        </File>
+        <File dnOrder="98">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LiveJState_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6B6273C05B158120AC6D38BAAF663D3B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6B6273C05B158120AC6D38BAAF663D3B</UserChecksum>
+        </File>
+        <File dnOrder="99">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LiveSingleEndedZero_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">30F8DF0AF32CB6257839B7AEB898A46F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">30F8DF0AF32CB6257839B7AEB898A46F</UserChecksum>
+        </File>
+        <File dnOrder="100">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_LiveSingleEndedZero_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">134E5C20D6CA8AED76B4037DB9A09AB7</GeneratedChecksum>
+          <UserChecksum dnOrder="6">134E5C20D6CA8AED76B4037DB9A09AB7</UserChecksum>
+        </File>
+        <File dnOrder="101">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ModuleBusy_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">2422148BA969698923685283F46C92E9</GeneratedChecksum>
+          <UserChecksum dnOrder="6">2422148BA969698923685283F46C92E9</UserChecksum>
+        </File>
+        <File dnOrder="102">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ModuleBusy_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">167442BF79AE0D75BFBED51A312C6EE1</GeneratedChecksum>
+          <UserChecksum dnOrder="6">167442BF79AE0D75BFBED51A312C6EE1</UserChecksum>
+        </File>
+        <File dnOrder="103">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ModulePower_32Bit16Bit.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E2E2A24D754C152E0273ACE870235103</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E2E2A24D754C152E0273ACE870235103</UserChecksum>
+        </File>
+        <File dnOrder="104">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ModulePower_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">A53F5BE327C6E2F3D218EF3C9F5C6EEF</GeneratedChecksum>
+          <UserChecksum dnOrder="6">A53F5BE327C6E2F3D218EF3C9F5C6EEF</UserChecksum>
+        </File>
+        <File dnOrder="105">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_NextTokenSpeed_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E2B3981232810DC07B12BB0F413B787B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E2B3981232810DC07B12BB0F413B787B</UserChecksum>
+        </File>
+        <File dnOrder="106">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_NextTokenSpeed_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9513196BF2783545C5B62361D943437D</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9513196BF2783545C5B62361D943437D</UserChecksum>
+        </File>
+        <File dnOrder="107">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_ASessionValid_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">38BE3303E98314C627DA67AC076C3F09</GeneratedChecksum>
+          <UserChecksum dnOrder="6">38BE3303E98314C627DA67AC076C3F09</UserChecksum>
+        </File>
+        <File dnOrder="108">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_ASessionValid_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">5352DFCC35451F729FA0911037218B86</GeneratedChecksum>
+          <UserChecksum dnOrder="6">5352DFCC35451F729FA0911037218B86</UserChecksum>
+        </File>
+        <File dnOrder="109">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_BSessionEnd_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">36A534DD422BA20FA2AE8EFF18DA8039</GeneratedChecksum>
+          <UserChecksum dnOrder="6">36A534DD422BA20FA2AE8EFF18DA8039</UserChecksum>
+        </File>
+        <File dnOrder="110">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_BSessionEnd_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">FA19A265F10A2C91948E37C137599B24</GeneratedChecksum>
+          <UserChecksum dnOrder="6">FA19A265F10A2C91948E37C137599B24</UserChecksum>
+        </File>
+        <File dnOrder="111">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_IDPinState_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">84C73320F432149F92318F74E8496122</GeneratedChecksum>
+          <UserChecksum dnOrder="6">84C73320F432149F92318F74E8496122</UserChecksum>
+        </File>
+        <File dnOrder="112">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_IDPinState_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">7128C610EC9A82EBDCBCB3BFDC6FF31E</GeneratedChecksum>
+          <UserChecksum dnOrder="6">7128C610EC9A82EBDCBCB3BFDC6FF31E</UserChecksum>
+        </File>
+        <File dnOrder="113">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_InterruptStatus_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D1A36D8ACF5801EACF74063F1F7C8724</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D1A36D8ACF5801EACF74063F1F7C8724</UserChecksum>
+        </File>
+        <File dnOrder="114">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_InterruptStatus_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D551EA6473C70608F3B158FC41103424</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D551EA6473C70608F3B158FC41103424</UserChecksum>
+        </File>
+        <File dnOrder="115">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_Interrupt_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">8106E66B318C78D4F5BCF81A7F9AB47A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">8106E66B318C78D4F5BCF81A7F9AB47A</UserChecksum>
+        </File>
+        <File dnOrder="116">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_Interrupt_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D54E0303FC83CE7061086D7D9C416DFB</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D54E0303FC83CE7061086D7D9C416DFB</UserChecksum>
+        </File>
+        <File dnOrder="117">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_LineState_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">5CE79190E2C8E1130DBA5FA0B133C905</GeneratedChecksum>
+          <UserChecksum dnOrder="6">5CE79190E2C8E1130DBA5FA0B133C905</UserChecksum>
+        </File>
+        <File dnOrder="118">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_LineState_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">39D144A10029BEF9EB84994C93C9F97C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">39D144A10029BEF9EB84994C93C9F97C</UserChecksum>
+        </File>
+        <File dnOrder="119">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_PullUpPullDown_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">749259B13336B1A48E3A212CC8E76A10</GeneratedChecksum>
+          <UserChecksum dnOrder="6">749259B13336B1A48E3A212CC8E76A10</UserChecksum>
+        </File>
+        <File dnOrder="120">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_PullUpPullDown_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">603005C43494A7B577DDFDC072F38934</GeneratedChecksum>
+          <UserChecksum dnOrder="6">603005C43494A7B577DDFDC072F38934</UserChecksum>
+        </File>
+        <File dnOrder="121">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_SessionValid_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F53CDCE8B12DC50609F738356C557D7C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F53CDCE8B12DC50609F738356C557D7C</UserChecksum>
+        </File>
+        <File dnOrder="122">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_SessionValid_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">2E1C89EE866754BA6E3716C01F81840A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">2E1C89EE866754BA6E3716C01F81840A</UserChecksum>
+        </File>
+        <File dnOrder="123">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusCharge_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">169EF167B1CA3EE3432083DDB9A4DF68</GeneratedChecksum>
+          <UserChecksum dnOrder="6">169EF167B1CA3EE3432083DDB9A4DF68</UserChecksum>
+        </File>
+        <File dnOrder="124">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusCharge_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">83BE346B5A9706159421BA8A882BC654</GeneratedChecksum>
+          <UserChecksum dnOrder="6">83BE346B5A9706159421BA8A882BC654</UserChecksum>
+        </File>
+        <File dnOrder="125">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusDischarge_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">CCED5CAFC52EA7EBAB9C7EA633F94FBD</GeneratedChecksum>
+          <UserChecksum dnOrder="6">CCED5CAFC52EA7EBAB9C7EA633F94FBD</UserChecksum>
+        </File>
+        <File dnOrder="126">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusDischarge_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F18FCAF76F4FE96F560CAC9D61883E10</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F18FCAF76F4FE96F560CAC9D61883E10</UserChecksum>
+        </File>
+        <File dnOrder="127">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusPowerOnOff_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">256E24F8D6407783D550D7EE34DC5454</GeneratedChecksum>
+          <UserChecksum dnOrder="6">256E24F8D6407783D550D7EE34DC5454</UserChecksum>
+        </File>
+        <File dnOrder="128">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OTG_VbusPowerOnOff_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">A5FDE90F969D0F5EC080DCA1336EC551</GeneratedChecksum>
+          <UserChecksum dnOrder="6">A5FDE90F969D0F5EC080DCA1336EC551</UserChecksum>
+        </File>
+        <File dnOrder="129">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OnChipPullup_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">09E1D9F5F5E052007AF0A26348B8F59A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">09E1D9F5F5E052007AF0A26348B8F59A</UserChecksum>
+        </File>
+        <File dnOrder="130">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OnChipTransceiver_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E9695732C30EACDBA9345D94C37D4417</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E9695732C30EACDBA9345D94C37D4417</UserChecksum>
+        </File>
+        <File dnOrder="131">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OpModeSelect_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">4909CC4C2573CDE282AF965174A8C73F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">4909CC4C2573CDE282AF965174A8C73F</UserChecksum>
+        </File>
+        <File dnOrder="132">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_OpModeSelect_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">08A0CD4EEF17F405055CD252FBCF396D</GeneratedChecksum>
+          <UserChecksum dnOrder="6">08A0CD4EEF17F405055CD252FBCF396D</UserChecksum>
+        </File>
+        <File dnOrder="133">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_PacketTransfer_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D67E34356E44DDADFD0FEF511E82C4F6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D67E34356E44DDADFD0FEF511E82C4F6</UserChecksum>
+        </File>
+        <File dnOrder="134">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_PacketTransfer_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">96CF545A48CBE1FD23CC65374F22816B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">96CF545A48CBE1FD23CC65374F22816B</UserChecksum>
+        </File>
+        <File dnOrder="135">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_PingPongMode_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9414911A8C7113A0DE499DAC504F8EC8</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9414911A8C7113A0DE499DAC504F8EC8</UserChecksum>
+        </File>
+        <File dnOrder="136">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ResumeSignaling_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">36A4207833DBBB09794F91FB4CE02DE0</GeneratedChecksum>
+          <UserChecksum dnOrder="6">36A4207833DBBB09794F91FB4CE02DE0</UserChecksum>
+        </File>
+        <File dnOrder="137">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_ResumeSignaling_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F1CE5B84B9774E099FC20869BD88D848</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F1CE5B84B9774E099FC20869BD88D848</UserChecksum>
+        </File>
+        <File dnOrder="138">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_SOFThreshold_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">2EDA2AF4702BFC856F32A7C394F1CA3D</GeneratedChecksum>
+          <UserChecksum dnOrder="6">2EDA2AF4702BFC856F32A7C394F1CA3D</UserChecksum>
+        </File>
+        <File dnOrder="139">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_SOFThreshold_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">173533D9D44F34EAC6A43805F513C5BB</GeneratedChecksum>
+          <UserChecksum dnOrder="6">173533D9D44F34EAC6A43805F513C5BB</UserChecksum>
+        </File>
+        <File dnOrder="140">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_SleepEntryGuard_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D130FC249330270320088204690E6E69</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D130FC249330270320088204690E6E69</UserChecksum>
+        </File>
+        <File dnOrder="141">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_SleepEntryGuard_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">22AF76F4008304D97083432006CE7B3C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">22AF76F4008304D97083432006CE7B3C</UserChecksum>
+        </File>
+        <File dnOrder="142">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_SpeedControl_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">43AC410D2E57BEDBEDBA5CEB27E39C85</GeneratedChecksum>
+          <UserChecksum dnOrder="6">43AC410D2E57BEDBEDBA5CEB27E39C85</UserChecksum>
+        </File>
+        <File dnOrder="143">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_StartOfFrames_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D009D85E4B81A1B1C348D6B41AB33556</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D009D85E4B81A1B1C348D6B41AB33556</UserChecksum>
+        </File>
+        <File dnOrder="144">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_StartOfFrames_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">80E4E33CD6C02C4AF9EC825D4628B8CE</GeneratedChecksum>
+          <UserChecksum dnOrder="6">80E4E33CD6C02C4AF9EC825D4628B8CE</UserChecksum>
+        </File>
+        <File dnOrder="145">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_StopInIdle_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">BFB7D5B997ADAB1B881165EBCE26C408</GeneratedChecksum>
+          <UserChecksum dnOrder="6">BFB7D5B997ADAB1B881165EBCE26C408</UserChecksum>
+        </File>
+        <File dnOrder="146">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_StopInIdle_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D8718B32B3BCE26F4B03AF46971ACF34</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D8718B32B3BCE26F4B03AF46971ACF34</UserChecksum>
+        </File>
+        <File dnOrder="147">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_Suspend_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D88042DD257B1A0841E72FF9E8A53768</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D88042DD257B1A0841E72FF9E8A53768</UserChecksum>
+        </File>
+        <File dnOrder="148">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_Suspend_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F450A2CB5B56FB19B09D89481F6B6D9C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F450A2CB5B56FB19B09D89481F6B6D9C</UserChecksum>
+        </File>
+        <File dnOrder="149">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_TokenEP_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">37B19C89A43207CF77661935E8D2188B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">37B19C89A43207CF77661935E8D2188B</UserChecksum>
+        </File>
+        <File dnOrder="150">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_TokenEP_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">AAAF6430E674ED656EBD9939AF79EB82</GeneratedChecksum>
+          <UserChecksum dnOrder="6">AAAF6430E674ED656EBD9939AF79EB82</UserChecksum>
+        </File>
+        <File dnOrder="151">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_TokenPID_Default.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6B9BA1140FB58631035F927EAF5E9AE5</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6B9BA1140FB58631035F927EAF5E9AE5</UserChecksum>
+        </File>
+        <File dnOrder="152">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_TokenPID_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">979F4D2846A355BE6DF6DD0D02D82AE0</GeneratedChecksum>
+          <UserChecksum dnOrder="6">979F4D2846A355BE6DF6DD0D02D82AE0</UserChecksum>
+        </File>
+        <File dnOrder="153">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_UOEMonitor_Unsupported.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">E67575175AA2DF30E077E4F10646158E</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E67575175AA2DF30E077E4F10646158E</UserChecksum>
+        </File>
+        <File dnOrder="154">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_cdc.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">04DE7427F2482FE11505CD10FDE14D53</GeneratedChecksum>
+          <UserChecksum dnOrder="6">04DE7427F2482FE11505CD10FDE14D53</UserChecksum>
+        </File>
+        <File dnOrder="155">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_chapter_9.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">39659CDE2CC726544BD68544FB7EF4B2</GeneratedChecksum>
+          <UserChecksum dnOrder="6">39659CDE2CC726544BD68544FB7EF4B2</UserChecksum>
+        </File>
+        <File dnOrder="156">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_common.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">2AAF1AB3341FB7F74004B6C7EFF8929C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">2AAF1AB3341FB7F74004B6C7EFF8929C</UserChecksum>
+        </File>
+        <File dnOrder="157">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">C3A6851F02AB3A2A5169A42F2EA459C6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">C3A6851F02AB3A2A5169A42F2EA459C6</UserChecksum>
+        </File>
+        <File dnOrder="158">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device_cdc.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">EE6F55EAA31844DFFD1822493E3BE0FF</GeneratedChecksum>
+          <UserChecksum dnOrder="6">EE6F55EAA31844DFFD1822493E3BE0FF</UserChecksum>
+        </File>
+        <File dnOrder="159">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device_cdc_local.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">EF212E3430B6EC748903C7DCE3124B6A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">EF212E3430B6EC748903C7DCE3124B6A</UserChecksum>
+        </File>
+        <File dnOrder="160">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device_function_driver.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">626BFDDD140B808E90C9DD2E4A27421E</GeneratedChecksum>
+          <UserChecksum dnOrder="6">626BFDDD140B808E90C9DD2E4A27421E</UserChecksum>
+        </File>
+        <File dnOrder="161">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device_local.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">9B727D396CAEBD5FCB12F1F8264C4FD9</GeneratedChecksum>
+          <UserChecksum dnOrder="6">9B727D396CAEBD5FCB12F1F8264C4FD9</UserChecksum>
+        </File>
+        <File dnOrder="162">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_device_mapping.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">C8D4A1D9092FD842506F565CE9B8C265</GeneratedChecksum>
+          <UserChecksum dnOrder="6">C8D4A1D9092FD842506F565CE9B8C265</UserChecksum>
+        </File>
+        <File dnOrder="163">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_external_dependencies.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6C4A6859DB16EA8C046F995C6B6C1C6F</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6C4A6859DB16EA8C046F995C6B6C1C6F</UserChecksum>
+        </File>
+        <File dnOrder="164">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_host.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">F127C67A3E33E5788C0F057F648EE57C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">F127C67A3E33E5788C0F057F648EE57C</UserChecksum>
+        </File>
+        <File dnOrder="165">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_host_client_driver.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6EBC5E4D06FC96A02ADF3B7416957DD6</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6EBC5E4D06FC96A02ADF3B7416957DD6</UserChecksum>
+        </File>
+        <File dnOrder="166">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_host_hub_interface.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">757C8484C955543C893361992D11FD4C</GeneratedChecksum>
+          <UserChecksum dnOrder="6">757C8484C955543C893361992D11FD4C</UserChecksum>
+        </File>
+        <File dnOrder="167">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb_hub.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/usb/</LogicalPath>
+          <PhysicalPath dnOrder="4">/usb/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">3E3CC6BC9128194CB4D19F29C57E312B</GeneratedChecksum>
+          <UserChecksum dnOrder="6">3E3CC6BC9128194CB4D19F29C57E312B</UserChecksum>
+        </File>
+        <File dnOrder="168">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usbfs_registers.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">6C8C42002A3EF221532D06F809FDD69A</GeneratedChecksum>
+          <UserChecksum dnOrder="6">6C8C42002A3EF221532D06F809FDD69A</UserChecksum>
+        </File>
+        <File dnOrder="169">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usbfs_registers.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/driver/usb/usbfs/src/templates</LogicalPath>
+          <PhysicalPath dnOrder="4">/driver/usb/usbfs/src/templates/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5">D048A36DC93E66C9CA02E4D6CD9827B9</GeneratedChecksum>
+          <UserChecksum dnOrder="6">D048A36DC93E66C9CA02E4D6CD9827B9</UserChecksum>
+        </File>
+        <File dnOrder="170">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">user.h</Name>
+          <Security dnOrder="2">NON_SECURE</Security>
+          <LogicalPath dnOrder="3">config/pic32mx470_curiosity/</LogicalPath>
+          <PhysicalPath dnOrder="4">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="5"/>
+          <UserChecksum dnOrder="6"/>
+        </File>
+      </Files>
+      <Settings dnOrder="1">
+        <Setting append="true" category="C32" delimiter=";" dnOrder="0" key="extra-include-directories" security="NON_SECURE" value="../src;../src/config/pic32mx470_curiosity;../src/packs/PIC32MX470F512H_DFP;"/>
+        <Setting category="C32-LD" dnOrder="1" key="heap-size" security="NON_SECURE" value="512"/>
+        <Setting category="C32-LD" dnOrder="2" key="no-device-startup-code" security="NON_SECURE" value="true"/>
+        <Setting append="true" category="C32-LD" delimiter=";" dnOrder="3" key="preprocessor-macros" security="NON_SECURE" value=""/>
+      </Settings>
+    </Manifest>
+    <Settings dnOrder="5">
+      <Setting dnOrder="0" key="CMSISPath" value=".\dev_packs\arm\CMSIS\5.6.0"/>
+      <Setting dnOrder="1" key="DFPPath" value=".\dev_packs\Microchip\PIC32MX_DFP\1.3.231\atdf\PIC32MX470F512H.atdf"/>
+      <Setting dnOrder="2" key="FORCE_OPTIMIZATION" value="false"/>
+      <Setting dnOrder="3" key="GENERATE_BACKUP" value="true"/>
+      <Setting dnOrder="4" key="MERGE_STRATEGY" value="USER_ALL"/>
+      <Setting dnOrder="5" key="PackageFilter" value="bsp;core;csp;usb;"/>
+    </Settings>
+  </Configurator>
+</Configuration>

@@ -1,0 +1,71 @@
+format_version: v1.0
+type: UniqueComponent
+attributes: {id: usb_device}
+children:
+- type: Symbols
+  children:
+  - type: Integer
+    attributes: {id: CONFIG_USB_DEVICE_CONFIG_DESCRPTR_SIZE}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: '67'}
+  - type: Integer
+    attributes: {id: CONFIG_USB_DEVICE_ENDPOINTS_NUMBER}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: '3'}
+  - type: Boolean
+    attributes: {id: CONFIG_USB_DEVICE_EVENT_ENABLE_SOF}
+    children:
+    - type: Values
+      children:
+      - type: User
+        attributes: {value: 'true'}
+  - type: Integer
+    attributes: {id: CONFIG_USB_DEVICE_FUNCTIONS_NUMBER}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: '1'}
+  - type: Integer
+    attributes: {id: CONFIG_USB_DEVICE_INTERFACES_NUMBER}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: '2'}
+  - type: Boolean
+    attributes: {id: CONFIG_USB_DEVICE_MSD_DISK_IMAGE}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: 'false'}
+  - type: String
+    attributes: {id: CONFIG_USB_DEVICE_PRODUCT_ID_IDX0}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: '0x000A'}
+  - type: Combo
+    attributes: {id: CONFIG_USB_DEVICE_PRODUCT_ID_SELECTION_IDX0}
+    children:
+    - type: Values
+      children:
+      - type: User
+        attributes: {value: cdc_com_port_single_demo}
+  - type: String
+    attributes: {id: CONFIG_USB_DEVICE_PRODUCT_STRING_DESCRIPTOR}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: usb_device, value: Simple CDC Device Demo}
+- type: ElementPosition
+  attributes: {x: '153', y: '145', id: usb_device}

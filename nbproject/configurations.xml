@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="65">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="config" projectFiles="true">
+        <logicalFolder name="f1" displayName="cutcutgo" projectFiles="true">
+          <logicalFolder name="f1" displayName="bsp" projectFiles="true">
+            <itemPath>src/config/cutcutgo/bsp/bsp.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="driver" projectFiles="true">
+            <logicalFolder name="f1" displayName="usb" projectFiles="true">
+              <logicalFolder name="f1" displayName="usbfs" projectFiles="true">
+                <logicalFolder name="f1" displayName="src" projectFiles="true">
+                  <logicalFolder name="f1" displayName="templates" projectFiles="true">
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usbfs_registers.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ActivityPending_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ActivityPending_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ALL_Interrupt_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ALL_Interrupt_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_AutomaticSuspend_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_AutomaticSuspend_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BDTBaseAddress_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BDTBaseAddress_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BDTFunctions_PIC32.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BDTFunctions_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BufferFreeze_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BufferFreeze_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_DeviceAddress_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_DeviceAddress_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EP0LowSpeedConnect_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EP0LowSpeedConnect_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EP0NAKRetry_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EP0NAKRetry_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnControlTransfer_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnControlTransfer_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnHandshake_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnHandshake_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnRxEnableEnhanced_PIC32.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnRxEnableEnhanced_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnStall_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnStall_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnTxRx_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EPnTxRx_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ERR_Interrupt_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ERR_Interrupt_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ERR_InterruptStatus_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ERR_InterruptStatus_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EyePattern_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_EyePattern_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_FrameNumber_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_FrameNumber_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_GEN_Interrupt_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_GEN_Interrupt_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_GEN_InterruptStatus_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_GEN_InterruptStatus_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_HostBusyWithToken_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_HostBusyWithToken_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_HostGeneratesReset_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_HostGeneratesReset_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastDirection_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastDirection_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastEndpoint_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastEndpoint_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastPingPong_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastPingPong_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastTransactionDetails_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LastTransactionDetails_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LiveJState_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LiveJState_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LiveSingleEndedZero_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_LiveSingleEndedZero_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ModuleBusy_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ModuleBusy_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ModulePower_32Bit16Bit.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ModulePower_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_NextTokenSpeed_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_NextTokenSpeed_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OnChipPullup_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OnChipTransceiver_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OpModeSelect_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OpModeSelect_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_ASessionValid_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_ASessionValid_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_BSessionEnd_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_BSessionEnd_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_IDPinState_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_IDPinState_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_Interrupt_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_Interrupt_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_InterruptStatus_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_InterruptStatus_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_LineState_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_LineState_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_PullUpPullDown_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_PullUpPullDown_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_SessionValid_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_SessionValid_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusCharge_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusCharge_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusDischarge_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusDischarge_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusPowerOnOff_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_OTG_VbusPowerOnOff_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_PacketTransfer_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_PacketTransfer_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_PingPongMode_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ResumeSignaling_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_ResumeSignaling_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_SleepEntryGuard_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_SleepEntryGuard_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_SOFThreshold_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_SOFThreshold_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_SpeedControl_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_StartOfFrames_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_StartOfFrames_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_StopInIdle_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_StopInIdle_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_Suspend_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_Suspend_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_TokenEP_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_TokenEP_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_TokenPID_Default.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_TokenPID_Unsupported.h</itemPath>
+                    <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_UOEMonitor_Unsupported.h</itemPath>
+                  </logicalFolder>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs_variant_mapping.h</itemPath>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs_local.h</itemPath>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/plib_usbfs.h</itemPath>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/plib_usbfs_header.h</itemPath>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/usbfs_registers.h</itemPath>
+                </logicalFolder>
+                <itemPath>src/config/cutcutgo/driver/usb/usbfs/drv_usbfs.h</itemPath>
+              </logicalFolder>
+              <itemPath>src/config/cutcutgo/driver/usb/drv_usb.h</itemPath>
+              <itemPath>src/config/cutcutgo/driver/usb/drv_usb_external_dependencies.h</itemPath>
+            </logicalFolder>
+            <itemPath>src/config/cutcutgo/driver/driver.h</itemPath>
+            <itemPath>src/config/cutcutgo/driver/driver_common.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f3" displayName="osal" projectFiles="true">
+            <itemPath>src/config/cutcutgo/osal/osal.h</itemPath>
+            <itemPath>src/config/cutcutgo/osal/osal_definitions.h</itemPath>
+            <itemPath>src/config/cutcutgo/osal/osal_impl_basic.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="f1" displayName="clk" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/clk/plib_clk.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f2" displayName="evic" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/evic/plib_evic.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f3" displayName="gpio" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/gpio/plib_gpio.h</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f5" displayName="system" projectFiles="true">
+            <logicalFolder name="f1" displayName="debug" projectFiles="true">
+              <itemPath>src/config/cutcutgo/system/debug/sys_debug.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f2" displayName="int" projectFiles="true">
+              <itemPath>src/config/cutcutgo/system/int/sys_int.h</itemPath>
+              <itemPath>src/config/cutcutgo/system/int/sys_int_mapping.h</itemPath>
+            </logicalFolder>
+            <itemPath>src/config/cutcutgo/system/system.h</itemPath>
+            <itemPath>src/config/cutcutgo/system/system_common.h</itemPath>
+            <itemPath>src/config/cutcutgo/system/system_module.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f6" displayName="usb" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_local.h</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_mapping.h</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_function_driver.h</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_external_dependencies.h</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_cdc_local.h</itemPath>
+            </logicalFolder>
+            <itemPath>src/config/cutcutgo/usb/usb_host_client_driver.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_host_hub_interface.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_host.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_hub.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_device.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_common.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_chapter_9.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_device_cdc.h</itemPath>
+            <itemPath>src/config/cutcutgo/usb/usb_cdc.h</itemPath>
+          </logicalFolder>
+          <itemPath>src/config/cutcutgo/toolchain_specifics.h</itemPath>
+          <itemPath>src/config/cutcutgo/definitions.h</itemPath>
+          <itemPath>src/config/cutcutgo/user.h</itemPath>
+          <itemPath>src/config/cutcutgo/configuration.h</itemPath>
+          <itemPath>src/config/cutcutgo/device.h</itemPath>
+          <itemPath>src/config/cutcutgo/interrupts.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <itemPath>src/app.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="true">
+      <logicalFolder name="f1"
+                     displayName="pic32mx470_curiosity.mhc"
+                     projectFiles="true">
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/BSP_PIC32MX470_Curiosity_Development_Board.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/core.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/dfp.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/drv_usbfs_v1.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/GraphSettings.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/HarmonyCore.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/project.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/settings.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/usb_device.yml</itemPath>
+        <itemPath>src/config/cutcutgo/pic32mx470_curiosity.mhc/usb_device_cdc.yml</itemPath>
+      </logicalFolder>
+      <itemPath>Makefile</itemPath>
+      <itemPath>src/config/cutcutgo/harmony-manifest-success.yml</itemPath>
+      <itemPath>cdc_com_port_single_pic32mx470_curiosity.mc3</itemPath>
+    </logicalFolder>
+    <logicalFolder name="LinkerScript"
+                   displayName="Linker Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="config" projectFiles="true">
+        <logicalFolder name="f1" displayName="cutcutgo" projectFiles="true">
+          <itemPath>src/config/cutcutgo/p32MX470F512H.ld</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="config" projectFiles="true">
+        <logicalFolder name="f1" displayName="cutcutgo" projectFiles="true">
+          <logicalFolder name="f1" displayName="bsp" projectFiles="true">
+            <itemPath>src/config/cutcutgo/bsp/bsp.c</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="driver" projectFiles="true">
+            <logicalFolder name="f1" displayName="usb" projectFiles="true">
+              <logicalFolder name="f1" displayName="usbfs" projectFiles="true">
+                <logicalFolder name="f1" displayName="src" projectFiles="true">
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs.c</itemPath>
+                  <itemPath>src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs_device.c</itemPath>
+                </logicalFolder>
+              </logicalFolder>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f3" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="f1" displayName="clk" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/clk/plib_clk.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f2" displayName="evic" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/evic/plib_evic.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f3" displayName="gpio" projectFiles="true">
+              <itemPath>src/config/cutcutgo/peripheral/gpio/plib_gpio.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="stdio" projectFiles="true">
+            <itemPath>src/config/cutcutgo/stdio/xc32_monitor.c</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f5" displayName="system" projectFiles="true">
+            <logicalFolder name="f1" displayName="int" projectFiles="true">
+              <itemPath>src/config/cutcutgo/system/int/src/sys_int.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f6" displayName="usb" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>src/config/cutcutgo/usb/src/usb_device.c</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_cdc.c</itemPath>
+              <itemPath>src/config/cutcutgo/usb/src/usb_device_cdc_acm.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <itemPath>src/config/cutcutgo/initialization.c</itemPath>
+          <itemPath>src/config/cutcutgo/interrupts.c</itemPath>
+          <itemPath>src/config/cutcutgo/exceptions.c</itemPath>
+          <itemPath>src/config/cutcutgo/usb_device_init_data.c</itemPath>
+          <itemPath>src/config/cutcutgo/tasks.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="grbl" displayName="grbl" projectFiles="true">
+        <itemPath>src/grbl/grbl/stepper.h</itemPath>
+        <itemPath>src/grbl/grbl/probe.h</itemPath>
+        <itemPath>src/grbl/grbl/coolant_control.h</itemPath>
+        <itemPath>src/grbl/grbl/settings.c</itemPath>
+        <itemPath>src/grbl/grbl/gcode.c</itemPath>
+        <itemPath>src/grbl/grbl/config.h</itemPath>
+        <itemPath>src/grbl/grbl/coolant_control.c</itemPath>
+        <itemPath>src/grbl/grbl/jog.c</itemPath>
+        <itemPath>src/grbl/grbl/eeprom.h</itemPath>
+        <itemPath>src/grbl/grbl/spindle_control.h</itemPath>
+        <itemPath>src/grbl/grbl/serial.h</itemPath>
+        <itemPath>src/grbl/grbl/print.c</itemPath>
+        <itemPath>src/grbl/grbl/defaults.h</itemPath>
+        <itemPath>src/grbl/grbl/gcode.h</itemPath>
+        <itemPath>src/grbl/grbl/motion_control.c</itemPath>
+        <itemPath>src/grbl/grbl/protocol.c</itemPath>
+        <itemPath>src/grbl/grbl/cpu_map.h</itemPath>
+        <itemPath>src/grbl/grbl/spindle_control.c</itemPath>
+        <itemPath>src/grbl/grbl/serial.c</itemPath>
+        <itemPath>src/grbl/grbl/planner.h</itemPath>
+        <itemPath>src/grbl/grbl/planner.c</itemPath>
+        <itemPath>src/grbl/grbl/system.c</itemPath>
+        <itemPath>src/grbl/grbl/nuts_bolts.h</itemPath>
+        <itemPath>src/grbl/grbl/stepper.c</itemPath>
+        <itemPath>src/grbl/grbl/nuts_bolts.c</itemPath>
+        <itemPath>src/grbl/grbl/motion_control.h</itemPath>
+        <itemPath>src/grbl/grbl/main.c</itemPath>
+        <itemPath>src/grbl/grbl/report.c</itemPath>
+        <itemPath>src/grbl/grbl/grbl.h</itemPath>
+        <itemPath>src/grbl/grbl/jog.h</itemPath>
+        <itemPath>src/grbl/grbl/print.h</itemPath>
+        <itemPath>src/grbl/grbl/protocol.h</itemPath>
+        <itemPath>src/grbl/grbl/eeprom.c</itemPath>
+        <itemPath>src/grbl/grbl/limits.c</itemPath>
+        <itemPath>src/grbl/grbl/system.h</itemPath>
+        <itemPath>src/grbl/grbl/probe.c</itemPath>
+        <itemPath>src/grbl/grbl/limits.h</itemPath>
+        <itemPath>src/grbl/grbl/report.h</itemPath>
+        <itemPath>src/grbl/grbl/settings.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="hal" displayName="hal" projectFiles="true">
+        <itemPath>src/hal/config.h</itemPath>
+        <itemPath>src/hal/motor.h</itemPath>
+        <itemPath>src/hal/motor.c</itemPath>
+        <itemPath>src/hal/timer.c</itemPath>
+        <itemPath>src/hal/timer.h</itemPath>
+      </logicalFolder>
+      <itemPath>src/main.c</itemPath>
+      <itemPath>src/app.c</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="cutcutgo" type="2">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <targetDevice>PIC32MX470F512L</targetDevice>
+        <targetHeader></targetHeader>
+        <targetPluginBoard></targetPluginBoard>
+        <platformTool>PICkit3PlatformTool</platformTool>
+        <languageToolchain>XC32</languageToolchain>
+        <languageToolchainVersion>4.20</languageToolchainVersion>
+        <platform>2</platform>
+      </toolsSet>
+      <packs>
+        <pack name="PIC32MX_DFP" vendor="Microchip" version="1.5.259"/>
+      </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
+      <compileType>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+        </linkerTool>
+        <archiverTool>
+        </archiverTool>
+        <loading>
+          <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <parseOnProdLoad>false</parseOnProdLoad>
+          <alternateLoadableFile></alternateLoadableFile>
+        </loading>
+        <subordinates>
+        </subordinates>
+      </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+        <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
+        <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
+      </makeCustomizationType>
+      <C32>
+        <property key="additional-warnings" value="true"/>
+        <property key="addresss-attribute-use" value="false"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories" value="src;src/config/cutcutgo"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="true"/>
+        <property key="make-warnings-into-errors" value="true"/>
+        <property key="optimization-level" value="-O1"/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="strict-ansi" value="false"/>
+        <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value="-fno-common"/>
+        <property key="toplevel-reordering" value=""/>
+        <property key="unaligned-access" value=""/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+        <appendMe value="-Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wno-deprecated-declarations -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wmissing-noreturn"/>
+      </C32>
+      <C32-AR>
+        <property key="additional-options-chop-files" value="false"/>
+      </C32-AR>
+      <C32-AS>
+        <property key="assembler-symbols" value=""/>
+        <property key="enable-symbols" value="true"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="expand-macros" value="false"/>
+        <property key="extra-include-directories-for-assembler" value=""/>
+        <property key="extra-include-directories-for-preprocessor" value=""/>
+        <property key="false-conditionals" value="false"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="keep-locals" value="false"/>
+        <property key="list-assembly" value="false"/>
+        <property key="list-source" value="false"/>
+        <property key="list-symbols" value="false"/>
+        <property key="oXC32asm-list-to-file" value="false"/>
+        <property key="omit-debug-dirs" value="false"/>
+        <property key="omit-forms" value="false"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="warning-level" value=""/>
+      </C32-AS>
+      <C32-CO>
+        <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
+      </C32-CO>
+      <C32-LD>
+        <property key="additional-options-use-response-files" value="false"/>
+        <property key="additional-options-write-sla" value="false"/>
+        <property key="allocate-dinit" value="false"/>
+        <property key="code-dinit" value="false"/>
+        <property key="ebase-addr" value=""/>
+        <property key="enable-check-sections" value="false"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="exclude-standard-libraries" value="false"/>
+        <property key="extra-lib-directories" value=""/>
+        <property key="fill-flash-options-addr" value=""/>
+        <property key="fill-flash-options-const" value=""/>
+        <property key="fill-flash-options-how" value="0"/>
+        <property key="fill-flash-options-inc-const" value="1"/>
+        <property key="fill-flash-options-increment" value=""/>
+        <property key="fill-flash-options-seq" value=""/>
+        <property key="fill-flash-options-what" value="0"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-cross-reference-file" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="heap-size" value="512"/>
+        <property key="input-libraries" value=""/>
+        <property key="kseg-length" value=""/>
+        <property key="kseg-origin" value=""/>
+        <property key="linker-symbols" value=""/>
+        <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
+        <property key="no-device-startup-code" value="true"/>
+        <property key="no-startup-files" value="false"/>
+        <property key="oXC32ld-extra-opts" value=""/>
+        <property key="optimization-level" value=""/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="remove-unused-sections" value="true"/>
+        <property key="report-memory-usage" value="false"/>
+        <property key="serial-length" value=""/>
+        <property key="serial-origin" value=""/>
+        <property key="stack-size" value=""/>
+        <property key="symbol-stripping" value=""/>
+        <property key="trace-symbols" value=""/>
+        <property key="warn-section-align" value="false"/>
+      </C32-LD>
+      <C32CPP>
+        <property key="additional-warnings" value="false"/>
+        <property key="addresss-attribute-use" value="false"/>
+        <property key="check-new" value="false"/>
+        <property key="eh-specs" value="true"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exceptions" value="true"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories" value="src;src/config/cutcutgo"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="true"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="optimization-level" value="-O1"/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="rtti" value="true"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="toplevel-reordering" value=""/>
+        <property key="unaligned-access" value=""/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+      </C32CPP>
+      <C32Global>
+        <property key="common-include-directories" value=""/>
+        <property key="gp-relative-option" value=""/>
+        <property key="legacy-libc" value="false"/>
+        <property key="mdtcm" value=""/>
+        <property key="mitcm" value=""/>
+        <property key="mstacktcm" value="false"/>
+        <property key="omit-pack-options" value="1"/>
+        <property key="relaxed-math" value="false"/>
+        <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
+        <property key="wpo-lto" value="false"/>
+      </C32Global>
+      <PICkit3PlatformTool>
+        <property key="ADC 1" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="CHANGE NOTICE" value="true"/>
+        <property key="COMPARATOR" value="true"/>
+        <property key="CTMU" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="I2C1" value="true"/>
+        <property key="I2C2" value="true"/>
+        <property key="INPUT CAPTURE 1" value="true"/>
+        <property key="INPUT CAPTURE 2" value="true"/>
+        <property key="INPUT CAPTURE 3" value="true"/>
+        <property key="INPUT CAPTURE 4" value="true"/>
+        <property key="INPUT CAPTURE 5" value="true"/>
+        <property key="INTERRUPT CONTROL" value="true"/>
+        <property key="OUTPUT COMPARE 1" value="true"/>
+        <property key="OUTPUT COMPARE 2" value="true"/>
+        <property key="OUTPUT COMPARE 3" value="true"/>
+        <property key="OUTPUT COMPARE 4" value="true"/>
+        <property key="OUTPUT COMPARE 5" value="true"/>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
+        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="SPI/I2S 1" value="true"/>
+        <property key="SPI/I2S 2" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="TIMER1" value="true"/>
+        <property key="TIMER2" value="true"/>
+        <property key="TIMER3" value="true"/>
+        <property key="TIMER4" value="true"/>
+        <property key="TIMER5" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="/home/virtualabs/opt/mplab/v6.05/mplab_platform/mplablibs/modules/ext/PICKIT3.jar/PK3FW_015609.jam"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="UART1" value="true"/>
+        <property key="UART2" value="true"/>
+        <property key="UART3" value="true"/>
+        <property key="UART4" value="true"/>
+        <property key="UART5" value="true"/>
+        <property key="USB" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges.default}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0x1d000000-0x1d07ffff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmertogo.imagename" value=""/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmspeed" value="2"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </PICkit3PlatformTool>
+      <PKOBSKDEPlatformTool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="1d000000-1d003fff"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges" value=""/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${memories.eedata.default}"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="true"/>
+      </PKOBSKDEPlatformTool>
+      <Tool>
+        <property key="ADC 1" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="CHANGE NOTICE" value="true"/>
+        <property key="COMPARATOR" value="true"/>
+        <property key="CTMU" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="I2C1" value="true"/>
+        <property key="I2C2" value="true"/>
+        <property key="INPUT CAPTURE 1" value="true"/>
+        <property key="INPUT CAPTURE 2" value="true"/>
+        <property key="INPUT CAPTURE 3" value="true"/>
+        <property key="INPUT CAPTURE 4" value="true"/>
+        <property key="INPUT CAPTURE 5" value="true"/>
+        <property key="INTERRUPT CONTROL" value="true"/>
+        <property key="OUTPUT COMPARE 1" value="true"/>
+        <property key="OUTPUT COMPARE 2" value="true"/>
+        <property key="OUTPUT COMPARE 3" value="true"/>
+        <property key="OUTPUT COMPARE 4" value="true"/>
+        <property key="OUTPUT COMPARE 5" value="true"/>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
+        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="SPI/I2S 1" value="true"/>
+        <property key="SPI/I2S 2" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="TIMER1" value="true"/>
+        <property key="TIMER2" value="true"/>
+        <property key="TIMER3" value="true"/>
+        <property key="TIMER4" value="true"/>
+        <property key="TIMER5" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="/home/virtualabs/opt/mplab/v6.05/mplab_platform/mplablibs/modules/ext/PICKIT3.jar/PK3FW_015609.jam"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="UART1" value="true"/>
+        <property key="UART2" value="true"/>
+        <property key="UART3" value="true"/>
+        <property key="UART4" value="true"/>
+        <property key="UART5" value="true"/>
+        <property key="USB" value="true"/>
+        <property key="communication.adaptivespeed" value="false"/>
+        <property key="communication.autoselectspeed" value="true"/>
+        <property key="communication.interface" value="2wire"/>
+        <property key="communication.speed" value="4"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="lastid" value=""/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges.default}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0x1d000000-0x1d07ffff"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmertogo.imagename" value=""/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmspeed" value="2"/>
+        <property key="programoptions.preservebootflash" value="false"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogrammemory" value="false"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveprogramrange.ranges"
+                  value="0x1d000000-0x1d07ffff"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.resetafterprogram" value="true"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </Tool>
+      <jlink>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="communication.adaptivespeed" value="false"/>
+        <property key="communication.autoselectspeed" value="true"/>
+        <property key="communication.interface" value="2wire"/>
+        <property key="communication.speed" value="4"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges.default}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0x1d000000-0x1d07ffff"/>
+        <property key="programoptions.eraseb4program" value="false"/>
+        <property key="programoptions.preservebootflash" value="false"/>
+        <property key="programoptions.preserveprogrammemory" value="false"/>
+        <property key="programoptions.preserveprogramrange.ranges"
+                  value="0x1d000000-0x1d07ffff"/>
+        <property key="programoptions.resetafterprogram" value="true"/>
+      </jlink>
+    </conf>
+  </confs>
+</configurationDescriptor>

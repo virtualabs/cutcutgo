@@ -1,0 +1,13 @@
+configName: pic32mx470_curiosity
+folderName: ''
+format_version: v1.0
+frameworkPath: ../../..
+processor: PIC32MX470F512H
+projectName: ''
+settings:
+  PackageFilter: bsp;core;csp;quick_docs;usb;
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  CMSISPath: .\dev_packs\arm\CMSIS\5.7.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: .\dev_packs\Microchip\PIC32MX_DFP\1.5.259\atdf\PIC32MX470F512H.atdf
