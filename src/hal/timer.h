@@ -1,16 +1,18 @@
+/**
+ * System timers module
+ */
+
 #ifndef __INC_HAL_TIMER_H
 #define __INC_HAL_TIMER_H
 
-enum {
-    HAL_TIMER_1,
-    HAL_TIMER_2,
-    HAL_TIMER_3,
-    HAL_TIMER_4,
-    HAL_TIMER_5
-};
+#include <stdint.h>
 
-void timer_init(int timer);
-void timer_start(int timer);
-void timer_stop(int timer);
+/* Initialize system timers. */
+void timer_init(void);
+void timer_start(void);
+
+void _delay_ms(uint32_t ms);
+
+
 
 #endif /* __INC_HAL_TIMER_H */
