@@ -322,6 +322,7 @@
         <itemPath>src/hal/motor.h</itemPath>
         <itemPath>src/hal/motor.c</itemPath>
         <itemPath>src/hal/timer.c</itemPath>
+        <itemPath>src/hal/led.c</itemPath>
         <itemPath>src/hal/timer.h</itemPath>
       </logicalFolder>
       <itemPath>src/main.c</itemPath>
