@@ -64,6 +64,7 @@
 // *****************************************************************************
 
 uint8_t CACHE_ALIGN switchPromptUSB[] = "\r\nPUSH BUTTON PRESSED";
+char CACHE_ALIGN banner[] = "This is foo";
 
 uint8_t CACHE_ALIGN cdcReadBuffer[APP_READ_BUFFER_SIZE];
 uint8_t CACHE_ALIGN cdcWriteBuffer[APP_READ_BUFFER_SIZE];
@@ -395,6 +396,7 @@ bool APP_StateReset(void)
 
 void APP_Initialize(void)
 {
+    
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
     
@@ -442,14 +444,10 @@ void APP_Initialize(void)
     
     /* Initialize GRBL layer. */
     GRBL_Init();
-    //serial_init();
+    serial_init();
+    timer_init();
+    led_init();
     
-    /* Initialize GPIO RB10 */
-    GPIO_PinOutputEnable(GPIO_PIN_RB10);
-    GPIO_PinOutputEnable(GPIO_PIN_RB11);
-    GPIO_PinClear(GPIO_PIN_RB10);
-    GPIO_PinClear(GPIO_PIN_RB11);
-    //GPIO_PinSet(GPIO_PIN_RB11);
 }
 
 
@@ -463,8 +461,13 @@ void APP_Initialize(void)
 
 void APP_Tasks(void)
 {
+    int nb_pending_bytes;
+    
     /* Update the application state machine based
      * on the current state */
+
+    /* GRBL protocol handler */
+    protocol_handler();
     
     switch(appData.state)
     {
@@ -508,10 +511,9 @@ void APP_Tasks(void)
 
             /* If a read is complete, then schedule a read
              * else wait for the current read to complete */
-            GPIO_PinSet(GPIO_PIN_RB10);
-            GPIO_PinClear(GPIO_PIN_RB11);
+            
             appData.state = APP_STATE_WAIT_FOR_READ_COMPLETE;
-            //if(appData.isReadComplete == true)
+            if(appData.isReadComplete == true)
             {
                 appData.isReadComplete = false;
                 appData.readTransferHandle =  USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
@@ -532,106 +534,34 @@ void APP_Tasks(void)
 
             
         case APP_STATE_WAIT_FOR_READ_COMPLETE:
-        case APP_STATE_CHECK_SWITCH_PRESSED:
 
             if(APP_StateReset())
             {
                 break;
             }
-
-            APP_ProcessSwitchPress();
 
             /* Check if a character was received or a switch was pressed.
              * The isReadComplete flag gets updated in the CDC event handler. */
 
             if(appData.isReadComplete)
             {
-                GPIO_PinClear(GPIO_PIN_RB10);
                 serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead);
-                appData.state = APP_STATE_SCHEDULE_WRITE;
-            }
-            
-#if 0
-            if (serial_get_tx_buffer_count() > 0)
-            {
-                appData.numBytesRead = serial_get_tx_buffer_count();
-                serial_copy_pending_tx(appData.cdcReadBuffer,
-                        serial_get_tx_buffer_count());
                 
-                appData.state = APP_STATE_SCHEDULE_WRITE;
-            }
-#endif
-            break;
-
-#if 0
-        case APP_STATE_SCHEDULE_WRITE:
-
-            if(APP_StateReset())
-            {
-                break;
-            }
-
-            appData.writeTransferHandle = USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
-            appData.isWriteComplete = false;
-            appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
-
-            if(appData.isSwitchPressed)
-            {
-                /* If the switch was pressed, then send the switch prompt*/
-                appData.isSwitchPressed = false;
-                USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
-                        &appData.writeTransferHandle, switchPromptUSB, sizeof(switchPromptUSB),
-                        USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);
+                appData.state = APP_STATE_SCHEDULE_READ;
             }
             else
             {
-                /* Else echo each received character by adding 1 */
-                for(int i = 0; i < appData.numBytesRead; i++)
-                {
-                    if((appData.cdcReadBuffer[i] != 0x0A) && (appData.cdcReadBuffer[i] != 0x0D))
-                    {
-                        appData.cdcWriteBuffer[i] = appData.cdcReadBuffer[i];
-                    }
-                }
-                USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
-                        &appData.writeTransferHandle,
-                        appData.cdcWriteBuffer, appData.numBytesRead,
-                        USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);
-            }
-
-            break;
-
-#else 
-
-        case APP_STATE_SCHEDULE_WRITE:
-            {
-                int nb_pending_bytes;
-
-                if(APP_StateReset())
-                {
-                    break;
-                }
-
-                /* Setup the write */
-                appData.writeTransferHandle = USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
-                appData.isWriteComplete = false;
-                appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
-                //appData.state = APP_STATE_SCHEDULE_READ;
-
-                /* Send TX buffer if not empty. */
                 nb_pending_bytes = serial_get_tx_buffer_count();
                 if (nb_pending_bytes > 0)
                 {
-                    
-                    if (nb_pending_bytes > APP_READ_BUFFER_SIZE)
-                    {
-                        nb_pending_bytes = APP_READ_BUFFER_SIZE;
-                    }
-                    /*
+                    /* Setup the write */
+                    appData.writeTransferHandle = USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
+                    appData.isWriteComplete = false;
+
                     if (nb_pending_bytes > 64)
                     {
                         nb_pending_bytes = 64;
-                    }*/
+                    }
 
                     /* Extract pending TX bytes. */
                     serial_copy_pending_tx(appData.cdcWriteBuffer,
@@ -644,18 +574,18 @@ void APP_Tasks(void)
 
                     if(appData.writeTransferHandle == USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID)
                     {
-                        appData.state = APP_STATE_SCHEDULE_READ;
+                        appData.state = APP_STATE_ERROR;
                         break;
                     }
-                }
-                else
-                {
-                    appData.state = APP_STATE_SCHEDULE_READ;
+                    else
+                    {
+                        appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
+                    }
                 }
             }
-            
             break;
-#endif
+
+     
             
         case APP_STATE_WAIT_FOR_WRITE_COMPLETE:
 
@@ -663,16 +593,14 @@ void APP_Tasks(void)
             {
                 break;
             }
-            GPIO_PinSet(GPIO_PIN_RB11);
             
             /* Check if a character was sent. The isWriteComplete
              * flag gets updated in the CDC event handler */
 
             if(appData.isWriteComplete == true)
             {
-                appData.state = APP_STATE_SCHEDULE_READ;
+                appData.state = APP_STATE_WAIT_FOR_READ_COMPLETE;
             }
-
             break;
             
             
@@ -680,7 +608,6 @@ void APP_Tasks(void)
             
         case APP_STATE_ERROR:
         default:
-            GPIO_PinSet(GPIO_PIN_RB11);
             break;
     }
 }
