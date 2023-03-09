@@ -162,6 +162,13 @@ int hal_motor_pwm_init(void)
 
         /* Set up the period. Period = PBCLK3 frequency, which is SYS_FREQ / 2, divided by 1000Hz and then divided by 8 for our chosen pre-scaler. */
         PR2 = SYS_FREQ / 2 / 20000;
+        
+#if 0
+        // Enable Timer2 interrupt
+        IPC2SET = 0x00000005; /* Priority: 1, Sub-priority: 1 */
+        IFS0 &= ~(1 << 9);
+        IEC0 |= (1 << 9);
+#endif
 
         // Set up the pre-scaler
         //T2CONbits.TCKPS = 0b101; // Pre-scale of 32
@@ -596,4 +603,24 @@ void hal_motor_update_callback(void)
         }
     }
 }
+
+hal_motor_state_t hal_motor_get_state(hal_motor_driver_t *motor)
+{
+    return motor->state;
+}
+
+void hal_motor_stop(hal_motor_driver_t *motor)
+{
+    /* Stop motor. */
+    hal_motor_set_direction(motor, HAL_MOTOR_STOP);
+    motor->state = HAL_MOTOR_IDLE;
+}
+
+void hal_motor_driver_init(void)
+{
+    /* Enable IEC1<18> (Change notification for Port G) */
+    IEC1bits.CNGIE = 1;
+    IFS1bits.CNGIF = 0;
+}
+
 

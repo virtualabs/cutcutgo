@@ -56,7 +56,7 @@ void EVIC_Initialize( void )
 
     /* Set up priority and subpriority of enabled interrupts */
     IPC7SET = 0x1000 | 0x0;  /* USB_1:  Priority 4 / Subpriority 0 */
-
+    IPC8SET = 0x400 | 0x0;   /* Change notification Port G Priority 1 / Subpriority 0 */
 
 }
 

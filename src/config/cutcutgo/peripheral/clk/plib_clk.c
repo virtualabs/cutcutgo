@@ -94,8 +94,8 @@ void CLK_Initialize( void )
     /* Peripheral Module Disable Configuration */
     PMD1 = 0x1101;
     PMD2 = 0x3;
-    PMD3 = 0x1f001f;
-    PMD4 = 0x1e;        /* Timer1 enabled. */
+    PMD3 = 0x00001f; // Output Compare modules 1 to 5 enabled -> 0001 1111 0000 0000 0001 1111 
+    PMD4 = 0x1c;        /* Timer1 & Timer2 enabled. */
     PMD5 = 0xfeffffff;
     PMD6 = 0xfffffffd;
 }

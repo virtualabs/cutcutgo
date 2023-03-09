@@ -60,6 +60,7 @@
 #include "configuration.h"
 #include "definitions.h"
 #include "hal/led.h"
+#include "hal/motor.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -181,6 +182,10 @@ typedef struct
 
     /* Number of bytes read from Host */ 
     uint32_t numBytesRead; 
+
+    /* GRBL init. */
+    bool grblInitialized;
+
 } APP_DATA;
 
 // *****************************************************************************

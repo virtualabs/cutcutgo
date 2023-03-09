@@ -68,6 +68,9 @@ extern hal_motor_driver_t HAL_MOTOR_ACCESSORY;
  * Exported functions
  */
 
+/* Driver initialization. */
+void hal_motor_driver_init(void);
+
 /* Motor initialization. */
 int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode);
 int hal_motor_set_mode(hal_motor_driver_t *motor, hal_motor_mode_t mode);
@@ -76,6 +79,8 @@ int hal_motor_set_mode(hal_motor_driver_t *motor, hal_motor_mode_t mode);
 int hal_motor_set_speed(hal_motor_driver_t *motor, uint32_t speed);
 int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t direction);
 void hal_motor_wait(hal_motor_driver_t *motor);
+hal_motor_state_t hal_motor_get_state(hal_motor_driver_t *motor);
+void hal_motor_stop(hal_motor_driver_t *motor);
 
 /* Interrupt-driven callback for motors (don't use it, it's required by our interrupt manager). */
 void hal_motor_update_callback(void);

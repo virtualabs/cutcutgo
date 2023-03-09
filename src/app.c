@@ -233,7 +233,7 @@ void APP_USBDeviceEventHandler
         case USB_DEVICE_EVENT_RESET:
 
             /* Update LED to show reset state */
-            LED_Off();
+            led_set_logo(false);
 
             appData.isConfigured = false;
 
@@ -282,14 +282,15 @@ void APP_USBDeviceEventHandler
         case USB_DEVICE_EVENT_SUSPENDED:
 
             /* Switch LED to show suspended state */
-            LED_Off();
+            led_set_logo(false);
             
             break;
 
         case USB_DEVICE_EVENT_RESUMED:
         case USB_DEVICE_EVENT_ERROR:
         default:
-            
+            led_set_logo(false);
+            led_set_other(false);
             break;
     }
 }
@@ -441,13 +442,18 @@ void APP_Initialize(void)
 
     /* Set up the read buffer */
     appData.cdcWriteBuffer = &cdcWriteBuffer[0];
+
+    /* Initialize GRBL status. */
+    appData.grblInitialized = false;
     
-    /* Initialize GRBL layer. */
-    GRBL_Init();
-    serial_init();
+    //serial_init();
     timer_init();
     led_init();
-    
+    hal_motor_driver_init();
+
+    /* Switch off leds. */
+    led_set_logo(false);
+    led_set_other(false);
 }
 
 
@@ -466,8 +472,11 @@ void APP_Tasks(void)
     /* Update the application state machine based
      * on the current state */
 
-    /* GRBL protocol handler */
-    protocol_handler();
+    if (appData.grblInitialized)
+    {
+        /* GRBL protocol handler */
+        protocol_handler();
+    }
     
     switch(appData.state)
     {
@@ -496,6 +505,13 @@ void APP_Tasks(void)
             /* Check if the device was configured */
             if(appData.isConfigured)
             {
+                /* Initialize GRBL layer. */
+                GRBL_Init();
+
+                appData.grblInitialized = true;
+
+                led_set_logo(true);
+
                 /* If the device is configured then lets start reading */
                 appData.state = APP_STATE_SCHEDULE_READ;
             }
@@ -608,6 +624,9 @@ void APP_Tasks(void)
             
         case APP_STATE_ERROR:
         default:
+            appData.grblInitialized = false;
+            led_set_other(true);
+            led_set_logo(true);
             break;
     }
 }

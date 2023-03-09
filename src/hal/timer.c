@@ -33,9 +33,6 @@ void timer_init(void)
 
 
 void __ISR(_TIMER_1_VECTOR, ipl1SOFT) Timer1Handler (void) {
-    
-    led_set_logo(true);
-    led_set_other(true);
 
     /* Increment our counter. */
     g_ticks_count++;
