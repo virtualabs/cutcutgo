@@ -139,6 +139,21 @@ void hal_motor_lookup_init(void)
     hal_motor_lookup_register(&HAL_MOTOR_ACCESSORY);
 }
 
+void hal_motor_enable_encoder(hal_motor_driver_t *motor, bool enabled)
+{
+    if (enabled)
+    {
+        /* Enable encA/encB pin change notification. */
+        CNENG |= (1 << (motor->encA & 0x0F));
+        CNENG |= (1 << (motor->encB & 0x0F));
+    }
+    else
+    {
+        /* Disable encA/encB pin change notification. */
+        CNENG &= ~(1 << (motor->encA & 0x0F));
+        CNENG &= ~(1 << (motor->encB & 0x0F));
+    }
+}   
 
 /**
  * Motor API
@@ -375,15 +390,15 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     GPIO_PinInputEnable(motor->encA);
     GPIO_PinInputEnable(motor->encB);
     
+    /* Enable pulldown for Change Notification. */
+    CNPDG |= (1 << (motor->encA & 0x0F));
+    CNPDG |= (1 << (motor->encB & 0x0F));
+    
     /* Enable change notification for port G. */
     if (!CNCONGbits.ON)
     {
         CNCONGbits.ON = 1;
     }
-    
-    /* Enable encA/encB pin change notification. */
-    CNENG |= (1 << (motor->encA & 0x0F));
-    CNENG |= (1 << (motor->encB & 0x0F));
        
     /* Success. */
     return 0;
@@ -508,6 +523,9 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
     motor->current_steps = 0;
     motor->state = HAL_MOTOR_DRIVEN;
     
+    /* Enable the motor's encoders. */
+    hal_motor_enable_encoder(motor, true);
+    
     /* Start motor in the given direction. */
     hal_motor_set_direction(motor, direction);
     
@@ -569,6 +587,9 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
             motor->current_steps = 0;
             motor->command_steps = 0;
             motor->state = HAL_MOTOR_IDLE;
+            
+            /* Disable motor encoders. */
+            hal_motor_enable_encoder(motor, false);
         }
     }
 }
@@ -618,6 +639,12 @@ void hal_motor_stop(hal_motor_driver_t *motor)
 
 void hal_motor_driver_init(void)
 {
+    /* Force RG6, RG7, RG8 and RG9 to digital I/O. */
+    ANSELGbits.ANSG6 = 0;
+    ANSELGbits.ANSG7 = 0;
+    ANSELGbits.ANSG8 = 0;
+    ANSELGbits.ANSG9 = 0;
+    
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;
     IFS1bits.CNGIF = 0;

@@ -203,9 +203,6 @@ void SYS_Initialize ( void* data )
     /* Set the SRAM wait states to zero */
     BMXCONbits.BMXWSDRM = 0;
 
-
-
-
 	GPIO_Initialize();
 
 	BSP_Initialize();
