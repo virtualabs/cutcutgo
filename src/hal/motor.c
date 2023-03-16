@@ -384,7 +384,7 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     hal_motor_set_direction(motor, HAL_MOTOR_STOP);
     
     /* Set default speed. */
-    hal_motor_set_speed(motor, 0);
+    hal_motor_set_speed(motor, HAL_MOTOR_SPEED_MIN);
     
     /* Set encA/encB pins as input. */
     GPIO_PinInputEnable(motor->encA);
@@ -520,6 +520,7 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
 {
     /* Save command. */
     motor->command_steps = steps;
+    //motor->command_steps = 3840;
     motor->current_steps = 0;
     motor->state = HAL_MOTOR_DRIVEN;
     
@@ -578,7 +579,7 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
         
         /* Check if we reach command steps. */
         motor->current_steps++;
-        if (motor->current_steps >= motor->command_steps)
+        if (motor->current_steps >= (motor->command_steps - 5))
         {
             /* Stop motor. */
             hal_motor_set_direction(motor, HAL_MOTOR_STOP);

@@ -3,8 +3,10 @@
 
 #include "hal/config.h"
 
-#define HAL_MOTOR_SPEED_MIN         0
-#define HAL_MOTOR_SPEED_MAX         60000
+#define HAL_MOTOR_SPEED_MAX         0
+#define HAL_MOTOR_SPEED_MIN         1800
+//#define HAL_MOTOR_SPEED_MIN         2100
+//#define HAL_MOTOR_SPEED_MIN         1000
 
 typedef enum {
     HAL_MOTOR_IDLE,
@@ -42,7 +44,8 @@ typedef struct {
     volatile uint32_t *pwm_in2;     /* DC motor driver IN2 pin mux*/
     
     /* Motor mode, speed and direction. */
-    int speed;                          /* Motor speed */
+    int speed;                          /* Motor current speed */
+
     hal_motor_mode_t mode;              /* Motor mode (PWM, direct) */
     hal_motor_direction_t direction;    /* Current motor direction (CW, CCW, STOP). */
     
