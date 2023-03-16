@@ -1,3 +1,9 @@
+build/
+debug/
+dist/
+.vscode/
+.generated_files/
+
 # Prerequisites
 *.d
 
