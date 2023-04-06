@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "hal/motor.h"
+#include "../grbl/grbl/stepper.h"
 #include "definitions.h"
 #include "config.h"
 
@@ -591,6 +592,9 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
             
             /* Disable motor encoders. */
             hal_motor_enable_encoder(motor, false);
+            
+            /* Plan next move (if any). */
+            st_plan_next_move();
         }
     }
 }
