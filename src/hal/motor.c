@@ -1,12 +1,19 @@
 /**
  * Motor driver library
  */
+
+/**
+ *
+ * ISR à revoir, trop d'appels, instabilité.
+ */
+
 #include <string.h>
 #include <stdbool.h>
 #include "hal/motor.h"
 #include "../grbl/grbl/stepper.h"
 #include "definitions.h"
 #include "config.h"
+#include "../grbl/grbl/grbl.h"
 
 /* Define X MOTOR driver pins and default state. */
 hal_motor_driver_t HAL_MOTOR_X = {
@@ -392,8 +399,8 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     GPIO_PinInputEnable(motor->encB);
     
     /* Enable pulldown for Change Notification. */
-    CNPDG |= (1 << (motor->encA & 0x0F));
-    CNPDG |= (1 << (motor->encB & 0x0F));
+    //CNPDG |= (1 << (motor->encA & 0x0F));
+    //CNPDG |= (1 << (motor->encB & 0x0F));
     
     /* Enable change notification for port G. */
     if (!CNCONGbits.ON)
@@ -564,26 +571,34 @@ void hal_motor_wait(hal_motor_driver_t *motor)
 
 void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
 {
-    uint8_t enc_state;
+    char dbg[256];
+    //uint8_t enc_state;
     
     /* Are we driving this motor ?*/
     if (motor->state == HAL_MOTOR_DRIVEN)
     {
+
         /* Read encoder state. */
-        enc_state = (GPIO_PinRead(motor->encA) << 1) | GPIO_PinRead(motor->encB);
+        //enc_state = (GPIO_PinRead(motor->encA) << 1) | GPIO_PinRead(motor->encB);
+        
+        //GPIO_PinRead(motor->encA);
+        //GPIO_PinRead(motor->encB);
         
         /* Determine direction (TODO) */
         
         /* Update current state. */
-        motor->enc_old_state = motor->enc_cur_state;
-        motor->enc_cur_state = enc_state;
-        
+        //motor->enc_old_state = motor->enc_cur_state;
+        //motor->enc_cur_state = enc_state;
+
         /* Check if we reach command steps. */
         motor->current_steps++;
-        if (motor->current_steps >= (motor->command_steps - 5))
-        {
+        if (motor->current_steps >= motor->command_steps)
+        {   
             /* Stop motor. */
             hal_motor_set_direction(motor, HAL_MOTOR_STOP);
+            
+            snprintf(dbg, 256, "current steps: %d\r\n", motor->current_steps);
+            printString(dbg);
             
             /* Target position reached. */
             motor->current_steps = 0;
@@ -649,6 +664,9 @@ void hal_motor_driver_init(void)
     ANSELGbits.ANSG7 = 0;
     ANSELGbits.ANSG8 = 0;
     ANSELGbits.ANSG9 = 0;
+    
+    /* Enable pull-downs on encoders input. */
+    //CNPDG = 0xF3CF;
     
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;

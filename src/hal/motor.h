@@ -4,8 +4,8 @@
 #include "hal/config.h"
 
 #define HAL_MOTOR_SPEED_MAX         0
-#define HAL_MOTOR_SPEED_MIN         1800
-//#define HAL_MOTOR_SPEED_MIN         2100
+//#define HAL_MOTOR_SPEED_MIN         1800
+#define HAL_MOTOR_SPEED_MIN         2100
 //#define HAL_MOTOR_SPEED_MIN         1000
 
 typedef enum {
