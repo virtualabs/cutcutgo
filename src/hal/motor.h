@@ -4,12 +4,15 @@
 #include "hal/config.h"
 
 #define HAL_MOTOR_SPEED_MAX         0
-//#define HAL_MOTOR_SPEED_MIN         1800
+//#define HAL_MOTOR_SPEED_MIN         1000
 #define HAL_MOTOR_SPEED_MIN         2100
+//#define HAL_MOTOR_SPEED_MIN         100
+#define HAL_MOTOR_SPEED_KICK        100
 //#define HAL_MOTOR_SPEED_MIN         1000
 
 typedef enum {
     HAL_MOTOR_IDLE,
+    HAL_MOTOR_KICK,
     HAL_MOTOR_DRIVEN
 } hal_motor_state_t;
 
@@ -45,6 +48,7 @@ typedef struct {
     
     /* Motor mode, speed and direction. */
     int speed;                          /* Motor current speed */
+    int nominal_speed;                  /* Motor nominal speed */
 
     hal_motor_mode_t mode;              /* Motor mode (PWM, direct) */
     hal_motor_direction_t direction;    /* Current motor direction (CW, CCW, STOP). */

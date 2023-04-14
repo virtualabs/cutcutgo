@@ -74,10 +74,11 @@ void __ISR(_USB_1_VECTOR, ipl4SOFT) USB_FS_Handler (void)
 
 
 void __ISR(_CHANGE_NOTICE_VECTOR, ipl1SOFT) CHANGE_NOTICE_Handler (void)
-{
+{   
     /* Handle RGx change notifications */
-    //GPIO_PinToggle(GPIO_PIN_RB10);
-    
+    GPIO_PinToggle(GPIO_PIN_RB10);
+   
+        
     /* Forward notification to our motor controller. */
     hal_motor_update_callback();
     

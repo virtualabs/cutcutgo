@@ -15,6 +15,14 @@
 #include "config.h"
 #include "../grbl/grbl/grbl.h"
 
+#define M_CW    1
+#define M_CCW   -1
+#define M_NULL  0
+#define M_ERR   2
+
+#define M_DIR_CW    1
+#define M_DIR_CCW   2
+
 /* Define X MOTOR driver pins and default state. */
 hal_motor_driver_t HAL_MOTOR_X = {
     MOTOR_X_OCM,
@@ -407,6 +415,9 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     {
         CNCONGbits.ON = 1;
     }
+    
+    /* Initialize encoder state. */
+    motor->enc_cur_state = (PORTG >> (motor->encA & 0x0F)) & 0x03;
        
     /* Success. */
     return 0;
@@ -528,15 +539,20 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
 {
     /* Save command. */
     motor->command_steps = steps;
-    //motor->command_steps = 3840;
     motor->current_steps = 0;
     motor->state = HAL_MOTOR_DRIVEN;
-    
-    /* Enable the motor's encoders. */
-    hal_motor_enable_encoder(motor, true);
+        
+    /* Set motor speed to kick speed. */
+    //motor->nominal_speed = HAL_MOTOR_SPEED_MIN;
+    //hal_motor_set_speed(motor, HAL_MOTOR_SPEED_KICK);
     
     /* Start motor in the given direction. */
     hal_motor_set_direction(motor, direction);
+    
+    delay_ms(2);
+    
+    /* Enable the motor's encoders. */
+    hal_motor_enable_encoder(motor, true);
     
     /* Success. */
     return 0;
@@ -569,47 +585,63 @@ void hal_motor_wait(hal_motor_driver_t *motor)
  * @param motor pointer to a motor structure.
  */
 
-void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
-{
+void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state)
+{    
+    /**
+     * 0, 1, 3, 2 -> CW ?
+     * 0, 2, 3, 1 -> CCW ?
+     */
     char dbg[256];
-    //uint8_t enc_state;
+    int8_t offset;
+    //int8_t direction;
+    
+    int8_t state_matrix[4][4] = {
+        {M_NULL, M_CW,   M_CCW,  M_ERR},
+        {M_CCW,  M_NULL, M_ERR,  M_CW},
+        {M_CW,   M_ERR,  M_NULL, M_CCW},
+        {M_ERR,  M_CCW,  M_CW,   M_NULL}
+    };
     
     /* Are we driving this motor ?*/
     if (motor->state == HAL_MOTOR_DRIVEN)
     {
 
-        /* Read encoder state. */
-        //enc_state = (GPIO_PinRead(motor->encA) << 1) | GPIO_PinRead(motor->encB);
+        /* Compare with previous encoder state. */
+        offset = state_matrix[motor->enc_cur_state][enc_state];
         
-        //GPIO_PinRead(motor->encA);
-        //GPIO_PinRead(motor->encB);
-        
-        /* Determine direction (TODO) */
-        
-        /* Update current state. */
-        //motor->enc_old_state = motor->enc_cur_state;
-        //motor->enc_cur_state = enc_state;
+        if (offset == M_ERR)
+        {
+            motor->enc_cur_state = enc_state;
+        }
+        else
+        {
+            /* Update motor steps and keep track of direction. */
+            //direction = (offset==M_CCW) ? M_DIR_CCW : M_DIR_CW;
+            motor->current_steps += ((offset==M_CCW) ? -1 : 1) * offset;
+            
+            /* Keep track of current encoder state. */
+            motor->enc_cur_state = enc_state;
+            
+            /* Are we done ? */
+            if (motor->current_steps >= motor->command_steps)
+            {   
+                /* Stop motor. */
+                hal_motor_set_direction(motor, HAL_MOTOR_STOP);
 
-        /* Check if we reach command steps. */
-        motor->current_steps++;
-        if (motor->current_steps >= motor->command_steps)
-        {   
-            /* Stop motor. */
-            hal_motor_set_direction(motor, HAL_MOTOR_STOP);
-            
-            snprintf(dbg, 256, "current steps: %d\r\n", motor->current_steps);
-            printString(dbg);
-            
-            /* Target position reached. */
-            motor->current_steps = 0;
-            motor->command_steps = 0;
-            motor->state = HAL_MOTOR_IDLE;
-            
-            /* Disable motor encoders. */
-            hal_motor_enable_encoder(motor, false);
-            
-            /* Plan next move (if any). */
-            st_plan_next_move();
+                snprintf(dbg, 256, "current steps: %d\r\n", motor->current_steps);
+                printString(dbg);
+
+                /* Target position reached. */
+                motor->current_steps = 0;
+                motor->command_steps = 0;
+                motor->state = HAL_MOTOR_IDLE;
+
+                /* Disable motor encoders. */
+                hal_motor_enable_encoder(motor, false);
+
+                /* Plan next move (if any). */
+                st_plan_next_move();
+            }
         }
     }
 }
@@ -624,23 +656,31 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor)
 
 void hal_motor_update_callback(void)
 {
-    int i;
+    //int i;
+    uint8_t enc_state;
     
-    /* Iterate over CNSTATG bits. */
-    for (i=0; i<15; i++)
+    
+    if (HAL_MOTOR_X.state == HAL_MOTOR_DRIVEN)
     {
-        
-        /* Bits 2,3,4,5,10,11 undefined. */
-        if ((i>=2 && i<=5) || (i>=10 && i<=11))
-            continue;
-        
-        /* Check state. */
-        if (CNSTATG & (1 << i))
+        if (CNSTATG & (0x3 << (HAL_MOTOR_X.encA & 0x0F)))
         {
-            if (ga_motor_lookup[i] != NULL)
-            {
-                hal_motor_update_encoder_state(ga_motor_lookup[i]);
-            }
+            /* Read encoder state. */
+            enc_state = (PORTG >> (HAL_MOTOR_X.encA & 0x0F)) & 0x03;
+            
+            /* Update encoder state. */
+            hal_motor_update_encoder_state(&HAL_MOTOR_X, enc_state);
+        }
+    }
+    
+    if (HAL_MOTOR_Y.state == HAL_MOTOR_DRIVEN)
+    {
+        if (CNSTATG & (0x3 << (HAL_MOTOR_Y.encA & 0x0F)))
+        {
+            /* Read encoder state. */
+            enc_state = (PORTG >> (HAL_MOTOR_Y.encA & 0x0F)) & 0x03;
+            
+            /* Update encoder state. */
+            hal_motor_update_encoder_state(&HAL_MOTOR_Y, enc_state);
         }
     }
 }
@@ -666,7 +706,10 @@ void hal_motor_driver_init(void)
     ANSELGbits.ANSG9 = 0;
     
     /* Enable pull-downs on encoders input. */
-    //CNPDG = 0xF3CF;
+    CNPDG = 0xF3CF;
+    
+    /* Enable encoder for X axis. */
+    //hal_motor_enable_encoder(&HAL_MOTOR_X, true);
     
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;
