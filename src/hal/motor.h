@@ -4,22 +4,23 @@
 #include "hal/config.h"
 
 #define HAL_MOTOR_SPEED_MAX         0
-//#define HAL_MOTOR_SPEED_MIN         1000
+//#define HAL_MOTOR_SPEED_MIN         1800
 #define HAL_MOTOR_SPEED_MIN         2100
+//#define HAL_MOTOR_SPEED_MIN         2000
 //#define HAL_MOTOR_SPEED_MIN         100
 #define HAL_MOTOR_SPEED_KICK        100
 //#define HAL_MOTOR_SPEED_MIN         1000
 
 typedef enum {
     HAL_MOTOR_IDLE,
-    HAL_MOTOR_KICK,
-    HAL_MOTOR_DRIVEN
+    HAL_MOTOR_DRIVEN,
+    HAL_MOTOR_BRAKE
 } hal_motor_state_t;
 
 typedef enum {
+    HAL_MOTOR_DIR_CCW = -1,
     HAL_MOTOR_STOP,
     HAL_MOTOR_DIR_CW,
-    HAL_MOTOR_DIR_CCW
 } hal_motor_direction_t;
 
 typedef enum {
@@ -61,6 +62,12 @@ typedef struct {
     volatile hal_motor_state_t state;   /* Motor state. */
     int command_steps;                  /* Number of steps to perform (if motor is driven by this driver). */
     int current_steps;                  /* Current number of steps performed. */
+    int error_steps;
+    
+    /* Relative position for the axis. */
+    int rel_pos;
+    int rel_pos_th;
+    
     
 } hal_motor_driver_t;
 

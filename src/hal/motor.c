@@ -418,6 +418,10 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     
     /* Initialize encoder state. */
     motor->enc_cur_state = (PORTG >> (motor->encA & 0x0F)) & 0x03;
+    
+    /* Initialize motor's relative position. */
+    motor->rel_pos = 0;
+    motor->rel_pos_th = 0;
        
     /* Success. */
     return 0;
@@ -537,23 +541,53 @@ int hal_motor_set_speed(hal_motor_driver_t *motor, uint32_t speed)
 
 int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t direction)
 {
-    /* Save command. */
-    motor->command_steps = steps;
-    motor->current_steps = 0;
-    motor->state = HAL_MOTOR_DRIVEN;
+    char dbg[256];
+    int offset = 0;
+    
+    snprintf(dbg, 256, "rel. pos: %d\r\n", motor->rel_pos);
+    printString(dbg);
+    snprintf(dbg, 256, "rel. pos th.: %d\r\n", motor->rel_pos_th);
+    printString(dbg);
         
+    /* Save command. */
+    //motor->command_steps = steps; 
+        
+    switch (direction)
+    {
+        case HAL_MOTOR_DIR_CCW:
+        {
+            offset = (motor->rel_pos - motor->rel_pos_th);
+        }
+        break;
+        
+        case HAL_MOTOR_DIR_CW:
+        {
+            offset = motor->rel_pos_th - motor->rel_pos;            
+        }
+        break;
+        
+        default:
+            break;
+    }
+
+    motor->command_steps = 8 + offset;
+    motor->current_steps = 0;
+    motor->error_steps = 0;
+    motor->state = HAL_MOTOR_DRIVEN;
+    motor->rel_pos_th += 8 * direction;
+    
     /* Set motor speed to kick speed. */
     //motor->nominal_speed = HAL_MOTOR_SPEED_MIN;
     //hal_motor_set_speed(motor, HAL_MOTOR_SPEED_KICK);
     
-    /* Start motor in the given direction. */
-    hal_motor_set_direction(motor, direction);
-    
-    delay_ms(2);
-    
     /* Enable the motor's encoders. */
     hal_motor_enable_encoder(motor, true);
     
+    /* Start motor in the given direction. */
+    hal_motor_set_direction(motor, direction);
+    
+    //delay_ms(2);
+        
     /* Success. */
     return 0;
 }
@@ -587,13 +621,9 @@ void hal_motor_wait(hal_motor_driver_t *motor)
 
 void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state)
 {    
-    /**
-     * 0, 1, 3, 2 -> CW ?
-     * 0, 2, 3, 1 -> CCW ?
-     */
     char dbg[256];
-    int8_t offset;
-    //int8_t direction;
+    int8_t direction;
+  
     
     int8_t state_matrix[4][4] = {
         {M_NULL, M_CW,   M_CCW,  M_ERR},
@@ -602,47 +632,64 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
         {M_ERR,  M_CCW,  M_CW,   M_NULL}
     };
     
-    /* Are we driving this motor ?*/
-    if (motor->state == HAL_MOTOR_DRIVEN)
-    {
+    /*
+    int8_t state_matrix[4][4] = {
+        {M_NULL, M_NULL,  M_CW,   M_CCW },
+        {M_ERR,  M_ERR,  M_CW,  M_CCW },
+        {M_ERR,  M_CW,   M_ERR, M_ERR },
+        {M_CCW,  M_ERR,  M_ERR, M_ERR },
+    };
+    */
+    
+    /* Compare with previous encoder state. */
+    direction = state_matrix[motor->enc_cur_state][enc_state];
 
-        /* Compare with previous encoder state. */
-        offset = state_matrix[motor->enc_cur_state][enc_state];
-        
-        if (offset == M_ERR)
+    switch (direction)
+    {
+        case M_ERR:
         {
+            motor->error_steps++;
             motor->enc_cur_state = enc_state;
         }
-        else
+        break;
+
+        case M_CW:
+        case M_CCW:
         {
-            /* Update motor steps and keep track of direction. */
-            //direction = (offset==M_CCW) ? M_DIR_CCW : M_DIR_CW;
-            motor->current_steps += ((offset==M_CCW) ? -1 : 1) * offset;
+            /* Increment number of steps done. */
+            if (direction == motor->direction)
+                motor->current_steps++;
+            else
+                motor->current_steps--;
+
+            /* Keep relative position up to date. */
+            motor->rel_pos += direction;
+
+            snprintf(dbg, 256, "dir.: %d\r\n", direction);
+            printString(dbg);
             
-            /* Keep track of current encoder state. */
+            /* Save current encoder state. */
             motor->enc_cur_state = enc_state;
-            
-            /* Are we done ? */
-            if (motor->current_steps >= motor->command_steps)
+
+            /* Shall we brake ? */
+            if ((motor->state == HAL_MOTOR_DRIVEN) && (motor->current_steps >= motor->command_steps))
             {   
                 /* Stop motor. */
                 hal_motor_set_direction(motor, HAL_MOTOR_STOP);
-
-                snprintf(dbg, 256, "current steps: %d\r\n", motor->current_steps);
-                printString(dbg);
-
-                /* Target position reached. */
-                motor->current_steps = 0;
-                motor->command_steps = 0;
                 motor->state = HAL_MOTOR_IDLE;
-
-                /* Disable motor encoders. */
-                hal_motor_enable_encoder(motor, false);
-
-                /* Plan next move (if any). */
+                
+                /* Go to next move. */
                 st_plan_next_move();
             }
         }
+        break;
+
+        case M_NULL:
+        {
+            /* Save current encoder state. */
+            motor->enc_cur_state = enc_state;
+        }
+        break;
     }
 }
 
@@ -660,7 +707,7 @@ void hal_motor_update_callback(void)
     uint8_t enc_state;
     
     
-    if (HAL_MOTOR_X.state == HAL_MOTOR_DRIVEN)
+    //if (HAL_MOTOR_X.state == HAL_MOTOR_DRIVEN)
     {
         if (CNSTATG & (0x3 << (HAL_MOTOR_X.encA & 0x0F)))
         {
