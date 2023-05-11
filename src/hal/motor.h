@@ -11,6 +11,10 @@
 #define HAL_MOTOR_SPEED_KICK        100
 //#define HAL_MOTOR_SPEED_MIN         1000
 
+#define HAL_MOTOR_SPEED_X       2100
+#define HAL_MOTOR_SPEED_Y       1800
+
+
 typedef enum {
     HAL_MOTOR_IDLE,
     HAL_MOTOR_DRIVEN,

@@ -541,13 +541,15 @@ int hal_motor_set_speed(hal_motor_driver_t *motor, uint32_t speed)
 
 int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t direction)
 {
-    char dbg[256];
+    //char dbg[256];
     int offset = 0;
-    
+
+#if 0
     snprintf(dbg, 256, "rel. pos: %d\r\n", motor->rel_pos);
     printString(dbg);
     snprintf(dbg, 256, "rel. pos th.: %d\r\n", motor->rel_pos_th);
     printString(dbg);
+#endif
         
     /* Save command. */
     //motor->command_steps = steps; 
@@ -621,7 +623,7 @@ void hal_motor_wait(hal_motor_driver_t *motor)
 
 void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state)
 {    
-    char dbg[256];
+    //char dbg[256];
     int8_t direction;
   
     
@@ -665,8 +667,10 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
             /* Keep relative position up to date. */
             motor->rel_pos += direction;
 
+#if 0
             snprintf(dbg, 256, "dir.: %d\r\n", direction);
             printString(dbg);
+#endif
             
             /* Save current encoder state. */
             motor->enc_cur_state = enc_state;
@@ -679,7 +683,7 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
                 motor->state = HAL_MOTOR_IDLE;
                 
                 /* Go to next move. */
-                st_plan_next_move();
+                st_execute_next_step();
             }
         }
         break;
@@ -719,7 +723,7 @@ void hal_motor_update_callback(void)
         }
     }
     
-    if (HAL_MOTOR_Y.state == HAL_MOTOR_DRIVEN)
+    //if (HAL_MOTOR_Y.state == HAL_MOTOR_DRIVEN)
     {
         if (CNSTATG & (0x3 << (HAL_MOTOR_Y.encA & 0x0F)))
         {
