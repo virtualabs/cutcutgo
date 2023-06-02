@@ -12,7 +12,7 @@
 //#define HAL_MOTOR_SPEED_MIN         1000
 
 #define HAL_MOTOR_SPEED_X       2100
-#define HAL_MOTOR_SPEED_Y       1800
+#define HAL_MOTOR_SPEED_Y       1500
 
 
 typedef enum {
@@ -67,10 +67,16 @@ typedef struct {
     int command_steps;                  /* Number of steps to perform (if motor is driven by this driver). */
     int current_steps;                  /* Current number of steps performed. */
     int error_steps;
+    int wd_prev_steps;                  /* Watchdog: number of steps previously monitored. */
+    bool wd_armed;                      /* Watchdog armed state. */
+    int wd_stall_counter;
     
     /* Relative position for the axis. */
     int rel_pos;
     int rel_pos_th;
+    
+    /* GRBL axis number. */
+    int grbl_axis;
     
     
 } hal_motor_driver_t;
@@ -102,6 +108,9 @@ void hal_motor_stop(hal_motor_driver_t *motor);
 
 /* Interrupt-driven callback for motors (don't use it, it's required by our interrupt manager). */
 void hal_motor_update_callback(void);
+
+/* Callback for motor stall detection. */
+void hal_motor_safety_checks(void);
 
 
 #endif /* __INC_HAL_MOTOR_H */

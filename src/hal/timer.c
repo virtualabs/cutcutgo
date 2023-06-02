@@ -1,5 +1,6 @@
 #include "hal/timer.h"
 #include "hal/led.h"
+#include "hal/watchdog.h"
 #include "definitions.h"
 #include "interrupts.h"
 #include "config.h"
@@ -36,6 +37,9 @@ void __ISR(_TIMER_1_VECTOR, ipl1SOFT) Timer1Handler (void) {
 
     /* Increment our counter. */
     g_ticks_count++;
+    
+    /* Run our watchdog. */
+    watchdog_callback();
     
     /* Clear interrupt flag for Timer1 interrupt. */
     IFS0 &= ~(1 << 4);

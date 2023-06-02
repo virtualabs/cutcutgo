@@ -575,6 +575,9 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
     motor->command_steps = 8 + offset;
     motor->current_steps = 0;
     motor->error_steps = 0;
+    motor->wd_prev_steps = 0;
+    motor->wd_armed = false;
+    motor->wd_stall_counter = 0;
     motor->state = HAL_MOTOR_DRIVEN;
     motor->rel_pos_th += 8 * direction;
     
@@ -682,6 +685,9 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
                 hal_motor_set_direction(motor, HAL_MOTOR_STOP);
                 motor->state = HAL_MOTOR_IDLE;
                 
+                /* Disarm watchdog. */
+                motor->wd_armed = false;
+                
                 /* Go to next move. */
                 st_execute_next_step();
             }
@@ -761,10 +767,58 @@ void hal_motor_driver_init(void)
     
     /* Enable encoder for X axis. */
     //hal_motor_enable_encoder(&HAL_MOTOR_X, true);
+    HAL_MOTOR_X.grbl_axis = X_AXIS;
+    HAL_MOTOR_Y.grbl_axis = Y_AXIS;
     
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;
     IFS1bits.CNGIF = 0;
 }
 
+void hal_motor_stall_detection(hal_motor_driver_t *motor)
+{
+/* Checking X axis. */
+    if (motor->state == HAL_MOTOR_DRIVEN)
+    {
+        if (!motor->wd_armed)
+        {
+            if (motor->current_steps != 0)
+            {
+                /* First pass, keep track of current steps and arm motor watchdog. */
+                motor->wd_prev_steps = motor->current_steps;
+                motor->wd_armed = true;
+                
+                /* We are not hitting any hard limit. */
+                limits_set_state(motor->grbl_axis, false);
+            }
+        }
+        else if (motor->current_steps == motor->wd_prev_steps)
+        {
+            if (motor->wd_stall_counter < 3)
+            {
+                motor->wd_stall_counter++;
+            }
+            else
+            {
+                /* Watchdog is armed and motor is stalled. First, cut motor. */
+                hal_motor_set_direction(motor, HAL_MOTOR_STOP);
+                motor->state = HAL_MOTOR_IDLE;
+
+                /* Tell GRBL we hit an hard limit. */
+                limits_set_state(motor->grbl_axis, true);
+            }
+            
+        } else {
+            motor->wd_prev_steps = motor->current_steps;
+            motor->wd_stall_counter = 0;
+        }
+    }   
+}
+
+void hal_motor_safety_checks(void)
+{
+    /* Apply safety checks on all motors. */
+    hal_motor_stall_detection(&HAL_MOTOR_X);
+    hal_motor_stall_detection(&HAL_MOTOR_Y);
+}
 
