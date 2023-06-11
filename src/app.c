@@ -562,7 +562,6 @@ void APP_Tasks(void)
             if(appData.isReadComplete)
             {
                 serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead);
-                
                 appData.state = APP_STATE_SCHEDULE_READ;
             }
             else
