@@ -39,7 +39,8 @@ hal_motor_driver_t HAL_MOTOR_X = {
     0,
     HAL_MOTOR_IDLE,
     0,
-    0
+    0,
+    false
 };
 
 /* Define Y MOTOR driver pins and default state. */
@@ -58,7 +59,8 @@ hal_motor_driver_t HAL_MOTOR_Y = {
     0,
     HAL_MOTOR_IDLE,
     0,
-    0
+    0,
+    false
 };
 
 /* Define TOOL1 MOTOR driver pins and default state. */
@@ -77,7 +79,8 @@ hal_motor_driver_t HAL_MOTOR_TOOL1 = {
     0,
     HAL_MOTOR_IDLE,
     0,
-    0
+    0,
+    true
 };
 
 /* Define TOOL2 MOTOR driver pins and default state. */
@@ -96,7 +99,8 @@ hal_motor_driver_t HAL_MOTOR_TOOL2 = {
     0,
     HAL_MOTOR_IDLE,
     0,
-    0
+    0,
+    true
 };
 
 /* Define ACCESSORY MOTOR driver pins and default state. */
@@ -115,7 +119,8 @@ hal_motor_driver_t HAL_MOTOR_ACCESSORY = {
     0,
     HAL_MOTOR_IDLE,
     0,
-    0
+    0,
+    false
 };
 
 /* Globals. */
@@ -407,8 +412,7 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     GPIO_PinInputEnable(motor->encB);
     
     /* Enable pulldown for Change Notification. */
-    //CNPDG |= (1 << (motor->encA & 0x0F));
-    //CNPDG |= (1 << (motor->encB & 0x0F));
+    hal_motor_enable_encoder(motor, true);
     
     /* Enable change notification for port G. */
     if (!CNCONGbits.ON)
@@ -655,6 +659,10 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
         {
             motor->error_steps++;
             motor->enc_cur_state = enc_state;
+#if 0
+            snprintf(dbg, 256, "err steps.: %d\r\n", motor->error_steps);
+            printString(dbg);
+#endif
         }
         break;
 
@@ -663,17 +671,34 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
         {
             /* Increment number of steps done. */
             if (direction == motor->direction)
-                motor->current_steps++;
+            {
+                if (motor->inv_encoder)
+                    motor->current_steps--;
+                else
+                    motor->current_steps++;
+            }           
             else
-                motor->current_steps--;
+            {
+                if (motor->inv_encoder)
+                    motor->current_steps++;
+                else
+                    motor->current_steps--;
+            }
 
             /* Keep relative position up to date. */
-            motor->rel_pos += direction;
+            if (motor->inv_encoder)
+                motor->rel_pos += (-direction);
+            else
+                motor->rel_pos += direction;
+
 
 #if 0
             snprintf(dbg, 256, "dir.: %d\r\n", direction);
             printString(dbg);
+            snprintf(dbg, 256, "cursteps: %d | cmdsteps: %d\r\n", motor->current_steps, motor->command_steps);
+            printString(dbg);
 #endif
+
             
             /* Save current encoder state. */
             motor->enc_cur_state = enc_state;
@@ -714,31 +739,48 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
 void hal_motor_update_callback(void)
 {
     //int i;
+    //uint32_t portg = PORTG;
     uint8_t enc_state;
     
-    
-    //if (HAL_MOTOR_X.state == HAL_MOTOR_DRIVEN)
+
+    /* X axis */
+    if (CNSTATG & (0x3 << (HAL_MOTOR_X.encA & 0x0F)))
     {
-        if (CNSTATG & (0x3 << (HAL_MOTOR_X.encA & 0x0F)))
-        {
-            /* Read encoder state. */
-            enc_state = (PORTG >> (HAL_MOTOR_X.encA & 0x0F)) & 0x03;
-            
-            /* Update encoder state. */
-            hal_motor_update_encoder_state(&HAL_MOTOR_X, enc_state);
-        }
+        /* Read encoder state. */
+        enc_state = (PORTG >> (HAL_MOTOR_X.encA & 0x0F)) & 0x03;
+
+        /* Update encoder state. */
+        hal_motor_update_encoder_state(&HAL_MOTOR_X, enc_state);
     }
     
-    //if (HAL_MOTOR_Y.state == HAL_MOTOR_DRIVEN)
+    /* Y axis */
+    if (CNSTATG & (0x3 << (HAL_MOTOR_Y.encA & 0x0F)))
     {
-        if (CNSTATG & (0x3 << (HAL_MOTOR_Y.encA & 0x0F)))
-        {
-            /* Read encoder state. */
-            enc_state = (PORTG >> (HAL_MOTOR_Y.encA & 0x0F)) & 0x03;
-            
-            /* Update encoder state. */
-            hal_motor_update_encoder_state(&HAL_MOTOR_Y, enc_state);
-        }
+        /* Read encoder state. */
+        enc_state = (PORTG >> (HAL_MOTOR_Y.encA & 0x0F)) & 0x03;
+
+        /* Update encoder state. */
+        hal_motor_update_encoder_state(&HAL_MOTOR_Y, enc_state);
+    }
+    
+    /* TOOL1 */
+    if (CNSTATG & (0x3 << (HAL_MOTOR_TOOL1.encA & 0x0F)))
+    {
+        /* Read encoder state. */
+        enc_state = (PORTG >> (HAL_MOTOR_TOOL1.encA & 0x0F)) & 0x03;
+
+        /* Update encoder state. */
+        hal_motor_update_encoder_state(&HAL_MOTOR_TOOL1, enc_state);
+    }
+    
+    /* TOOL2 - TODO */
+    if (CNSTATG & (0x3 << (HAL_MOTOR_TOOL2.encA & 0x0F)))
+    {
+        /* Read encoder state. */
+        enc_state = (PORTG >> (HAL_MOTOR_TOOL2.encA & 0x0F)) & 0x03;
+
+        /* Update encoder state. */
+        hal_motor_update_encoder_state(&HAL_MOTOR_TOOL2, enc_state);
     }
 }
 
@@ -769,6 +811,8 @@ void hal_motor_driver_init(void)
     //hal_motor_enable_encoder(&HAL_MOTOR_X, true);
     HAL_MOTOR_X.grbl_axis = X_AXIS;
     HAL_MOTOR_Y.grbl_axis = Y_AXIS;
+    HAL_MOTOR_TOOL1.grbl_axis = Z_AXIS;
+    HAL_MOTOR_TOOL2.grbl_axis = Z_AXIS;
     
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;
@@ -777,7 +821,6 @@ void hal_motor_driver_init(void)
 
 void hal_motor_stall_detection(hal_motor_driver_t *motor)
 {
-/* Checking X axis. */
     if (motor->state == HAL_MOTOR_DRIVEN)
     {
         if (!motor->wd_armed)
@@ -800,6 +843,8 @@ void hal_motor_stall_detection(hal_motor_driver_t *motor)
             }
             else
             {
+                //printString("motor stalled !\r\n");
+                
                 /* Watchdog is armed and motor is stalled. First, cut motor. */
                 hal_motor_set_direction(motor, HAL_MOTOR_STOP);
                 motor->state = HAL_MOTOR_IDLE;
@@ -820,5 +865,7 @@ void hal_motor_safety_checks(void)
     /* Apply safety checks on all motors. */
     hal_motor_stall_detection(&HAL_MOTOR_X);
     hal_motor_stall_detection(&HAL_MOTOR_Y);
+    hal_motor_stall_detection(&HAL_MOTOR_TOOL1);
+    hal_motor_stall_detection(&HAL_MOTOR_TOOL2);
 }
 

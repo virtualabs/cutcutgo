@@ -11,8 +11,10 @@
 #define HAL_MOTOR_SPEED_KICK        100
 //#define HAL_MOTOR_SPEED_MIN         1000
 
-#define HAL_MOTOR_SPEED_X       2100
+#define HAL_MOTOR_SPEED_X       2000
 #define HAL_MOTOR_SPEED_Y       1500
+#define HAL_MOTOR_SPEED_TOOL1   2200
+#define HAL_MOTOR_SPEED_TOOL2   2000
 
 
 typedef enum {
@@ -53,7 +55,6 @@ typedef struct {
     
     /* Motor mode, speed and direction. */
     int speed;                          /* Motor current speed */
-    int nominal_speed;                  /* Motor nominal speed */
 
     hal_motor_mode_t mode;              /* Motor mode (PWM, direct) */
     hal_motor_direction_t direction;    /* Current motor direction (CW, CCW, STOP). */
@@ -66,6 +67,8 @@ typedef struct {
     volatile hal_motor_state_t state;   /* Motor state. */
     int command_steps;                  /* Number of steps to perform (if motor is driven by this driver). */
     int current_steps;                  /* Current number of steps performed. */
+    bool inv_encoder;                   /* Invert encoder */
+    
     int error_steps;
     int wd_prev_steps;                  /* Watchdog: number of steps previously monitored. */
     bool wd_armed;                      /* Watchdog armed state. */
@@ -76,9 +79,7 @@ typedef struct {
     int rel_pos_th;
     
     /* GRBL axis number. */
-    int grbl_axis;
-    
-    
+    int grbl_axis;   
 } hal_motor_driver_t;
 
 /* Hardware motors declaration (export). */
