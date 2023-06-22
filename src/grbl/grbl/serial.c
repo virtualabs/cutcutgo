@@ -25,12 +25,16 @@
 #define TX_RING_BUFFER (TX_BUFFER_SIZE+1)
 
 uint8_t serial_rx_buffer[RX_RING_BUFFER];
-uint8_t serial_rx_buffer_head = 0;
-volatile uint8_t serial_rx_buffer_tail = 0;
+uint32_t serial_rx_buffer_head = 0;
+volatile uint32_t serial_rx_buffer_tail = 0;
 
 uint8_t serial_tx_buffer[TX_RING_BUFFER];
 uint32_t serial_tx_buffer_head = 0;
 volatile uint32_t serial_tx_buffer_tail = 0;
+volatile uint32_t next_head_;
+volatile uint32_t tail_;
+
+OSAL_MUTEX_HANDLE_TYPE serial_mutex;
 
 
 // Returns the number of bytes available in the RX serial buffer.
@@ -81,6 +85,7 @@ void serial_init()
 
   // defaults to 8-bit, no parity, 1 stop bit
 #endif /* AVR */
+  OSAL_MUTEX_Create(&serial_mutex);
 }
 
 
@@ -167,25 +172,30 @@ ISR(SERIAL_UDRE)
 // Fetches the first byte in the serial read buffer. Called by main program.
 uint8_t serial_read()
 {
+   
+  if (OSAL_MUTEX_Lock(&serial_mutex, 20) == OSAL_RESULT_TRUE)
+  { 
+    tail_ = serial_rx_buffer_tail; // Temporary serial_rx_buffer_tail (to optimize for volatile)
+    if (serial_rx_buffer_head == tail_) {
+      OSAL_MUTEX_Unlock(&serial_mutex);
+      return SERIAL_NO_DATA;
+    } else {
+      uint8_t data = serial_rx_buffer[tail_];
 
-  uint32_t tail = serial_rx_buffer_tail; // Temporary serial_rx_buffer_tail (to optimize for volatile)
-  if (serial_rx_buffer_head == tail) {
-    return SERIAL_NO_DATA;
-  } else {
-    uint8_t data = serial_rx_buffer[tail];
+      tail_++;
+      if (tail_ == RX_RING_BUFFER) { tail_ = 0; }
+      serial_rx_buffer_tail = tail_;
 
-    tail++;
-    if (tail == RX_RING_BUFFER) { tail = 0; }
-    serial_rx_buffer_tail = tail;
-
-    return data;
+      OSAL_MUTEX_Unlock(&serial_mutex);
+      return data;
+    }
   }
-  return 0;
+
+  return SERIAL_NO_DATA;
 }
 
 static void serial_on_receive_byte(uint8_t data)
 {
-  uint32_t next_head;
 
   // Pick off realtime command characters directly from the serial stream. These characters are
   // not passed into the main buffer, but these set system state flag bits for realtime execution.
@@ -227,19 +237,29 @@ static void serial_on_receive_byte(uint8_t data)
         }
         // Throw away any unfound extended-ASCII character by not passing it to the serial buffer.
       } else { // Write character to buffer
-        next_head = serial_rx_buffer_head + 1;
-        if (next_head == RX_RING_BUFFER) { next_head = 0; }
+          
+        if (OSAL_MUTEX_Lock(&serial_mutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+        { 
+            next_head_ = (serial_rx_buffer_head + 1);
+            if (next_head_ == RX_RING_BUFFER) { next_head_ = 0; }
 
-        // Write data to buffer unless it is full.
-        if (next_head != serial_rx_buffer_tail) {
-          serial_rx_buffer[serial_rx_buffer_head] = data;
-          serial_rx_buffer_head = next_head;
+            // Write data to buffer unless it is full.
+            if (next_head_ != serial_rx_buffer_tail) {
+              serial_rx_buffer[serial_rx_buffer_head] = data;
+              serial_rx_buffer_head = next_head_;
+            }
+            else
+            {
+                printString("[OOPS]\r\n");
+            }
+            
+            OSAL_MUTEX_Unlock(&serial_mutex);
         }
       }
   }
 }
 
-void serial_on_receive(uint8_t *p_buffer, int size)
+int serial_on_receive(uint8_t *p_buffer, int size)
 {
     int i;
     
@@ -247,6 +267,15 @@ void serial_on_receive(uint8_t *p_buffer, int size)
     {
         serial_on_receive_byte(p_buffer[i]);
     }
+    
+    /* Check if our RX buffer is full */
+    if (((serial_rx_buffer_head +1)%RX_RING_BUFFER) == serial_rx_buffer_tail )
+    {
+        /* Buffer is full. */
+        return -1;
+    }
+    
+    return 0;
 }
 
 void serial_reset_read_buffer()

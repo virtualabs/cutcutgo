@@ -443,7 +443,7 @@ void report_build_info(char *line)
   serial_write(',');
   print_uint8_base10(BLOCK_BUFFER_SIZE-1);
   serial_write(',');
-  print_uint8_base10(RX_BUFFER_SIZE);
+  print_uint32_base10(RX_BUFFER_SIZE);
 
   report_util_feedback_line_feed();
 }

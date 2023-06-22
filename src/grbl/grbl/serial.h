@@ -22,6 +22,8 @@
 #ifndef serial_h
 #define serial_h
 
+#include "config/cutcutgo/osal/osal.h"
+
 
 #ifndef RX_BUFFER_SIZE
   #define RX_BUFFER_SIZE 128
@@ -63,7 +65,7 @@ uint32_t serial_get_tx_buffer_count(void);
 // a given buffer.
 int serial_copy_pending_tx(uint8_t *p_buffer, int size);
 
-void serial_on_receive(uint8_t *p_buffer, int size);
+int serial_on_receive(uint8_t *p_buffer, int size);
 
 
 #endif

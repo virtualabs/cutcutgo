@@ -468,6 +468,8 @@ void APP_Initialize(void)
 void APP_Tasks(void)
 {
     int nb_pending_bytes;
+    USB_CDC_SERIAL_STATE notificationData;
+    USB_DEVICE_CDC_RESULT result;
     
     /* Update the application state machine based
      * on the current state */
@@ -533,7 +535,6 @@ void APP_Tasks(void)
             {
                 appData.isReadComplete = false;
                 appData.readTransferHandle =  USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
-
                
                 USB_DEVICE_CDC_Read (USB_DEVICE_CDC_INDEX_0,
                         &appData.readTransferHandle, appData.cdcReadBuffer,
@@ -561,8 +562,27 @@ void APP_Tasks(void)
 
             if(appData.isReadComplete)
             {
-                serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead);
-                appData.state = APP_STATE_SCHEDULE_READ;
+                if (serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead) < 0)
+                {
+                    memset(&notificationData, 0, sizeof(USB_CDC_SERIAL_STATE));
+                    notificationData.bRxCarrier = 1;
+                    notificationData.bTxCarrier = 0;
+
+                    // Now send the updated notification data to the host.
+
+                    result = USB_DEVICE_CDC_SerialStateNotificationSend
+                                (USB_DEVICE_CDC_INDEX_0, &appData.writeTransferHandle, &notificationData);
+
+                    if(USB_DEVICE_CDC_RESULT_OK != result)
+                    {
+                        appData.state = APP_STATE_ERROR;
+                        break;
+                    } 
+                }
+                else
+                {
+                    appData.state = APP_STATE_SCHEDULE_READ;                    
+                }
             }
             else
             {

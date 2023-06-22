@@ -377,7 +377,7 @@
 // NOTE: Only use this for debugging purposes!! When echoing, this takes up valuable resources and can effect
 // performance. If absolutely needed for normal operation, the serial write buffer should be greatly increased
 // to help minimize transmission waiting within the serial write protocol.
-#define REPORT_ECHO_LINE_RECEIVED // Default disabled. Uncomment to enable.
+// #define REPORT_ECHO_LINE_RECEIVED // Default disabled. Uncomment to enable.
 
 // Minimum planner junction speed. Sets the default minimum junction speed the planner plans to at
 // every buffer block junction, except for starting from rest and end of the buffer, which are always
@@ -462,8 +462,8 @@
 // 115200 baud will take 5 msec to transmit a typical 55 character report. Worst case reports are
 // around 90-100 characters. As long as the serial TX buffer doesn't get continually maxed, Grbl
 // will continue operating efficiently. Size the TX buffer around the size of a worst-case report.
-// #define RX_BUFFER_SIZE 128 // (1-254) Uncomment to override defaults in serial.h
-#define TX_BUFFER_SIZE 4096
+#define RX_BUFFER_SIZE (16384*2) // (1-254) Uncomment to override defaults in serial.h
+#define TX_BUFFER_SIZE 16384
 
 // A simple software debouncing feature for hard limit switches. When enabled, the interrupt 
 // monitoring the hard limit switch pins will enable the Arduino's watchdog timer to re-check 
