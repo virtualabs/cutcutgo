@@ -1,6 +1,0 @@
-format_version: v1.0
-type: UniqueComponent
-attributes: {id: drv_usbfs_v1}
-children:
-- type: ElementPosition
-  attributes: {x: '0', y: '144', id: drv_usbfs_v1}

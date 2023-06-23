@@ -1,6 +1,0 @@
-format_version: v1.0
-type: UniqueComponent
-attributes: {id: dfp}
-children:
-- type: ElementPosition
-  attributes: {x: '139', y: '61', id: dfp}
