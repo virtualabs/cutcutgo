@@ -7,14 +7,10 @@ Welcome to CutcutGo's documentation!
 ====================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-Test !
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    intro.rst
+    teardown.rst
+    setup.rst
+    tech.rst
