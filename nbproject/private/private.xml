@@ -6,6 +6,7 @@
             <file>file:/home/virtualabs/projets/CutcutGo/src/hal/motor.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/config/cutcutgo/interrupts.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/serial.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/motion_control.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/hal/config.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/motion_control.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/planner.c</file>
@@ -29,6 +30,8 @@
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/system.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/config/cutcutgo/exceptions.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/cpu_map.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/src/config/cutcutgo/peripheral/evic/plib_evic.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/gcode.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/protocol.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/grbl/grbl/grbl.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/src/hal/timer.c</file>
