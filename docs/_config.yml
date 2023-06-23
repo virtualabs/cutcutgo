@@ -17,7 +17,7 @@ title: Cutcutgo - Documentation
 email: virtualabs@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Official documentation of the open-source Cutcutgo firmware for the
-  Cricut Maker
+  Cricut Maker - test
 baseurl: "/cutcutgo" # the subpath of your site, e.g. /blog
 url: "https://virtualabs.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: virtualabs
@@ -25,7 +25,7 @@ github_username:  virtualabs
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: just-the-docs
 plugins:
   - jekyll-feed
 
