@@ -1,6 +1,9 @@
 name: sphinx
 on: [push, pull_request]
 
+permissions:
+  contents: write
+
 env:
   DEFAULT_BRANCH: "main"
 
