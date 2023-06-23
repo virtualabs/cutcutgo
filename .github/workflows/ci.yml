@@ -3,14 +3,18 @@ name: CI
 on:
   push:
     branches: ["main"]
+    paths: ["docs/**"]
   pull_request:
 
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
     steps:
-      - name: Checkout
+      - name
         uses: actions/checkout@v3
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
