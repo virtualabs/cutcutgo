@@ -48,10 +48,9 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introducing CutcutGo</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Teardown of the Cricut Maker Champagne</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#a-low-cost-cnc-plotter">A low-cost CNC plotter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main-pcb-architecture">Main PCB architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main-pcb-breakdown">Main PCB breakdown</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pic32-micro-controller">PIC32 micro-controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dc-motors-instead-of-stepper-motors">DC motors instead of stepper motors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usb-interface">USB interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#servo-motors">Servo motors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bluetooth-low-energy-module">Bluetooth Low Energy module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mechanical-details">Mechanical details</a></li>
 </ul>
@@ -86,34 +85,57 @@
              
   <section id="teardown-of-the-cricut-maker-champagne">
 <h1>Teardown of the Cricut Maker Champagne<a class="headerlink" href="#teardown-of-the-cricut-maker-champagne" title="Permalink to this heading"></a></h1>
-<p>Foo</p>
 <section id="a-low-cost-cnc-plotter">
 <h2>A low-cost CNC plotter<a class="headerlink" href="#a-low-cost-cnc-plotter" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<p>The Cricut Maker seems to be a low-cost CNC plotter/cutter using cheap parts (servo motors, gears) but
+relying on a strong metallic frame. Most of the plastic parts are injection-molded but somehow standards.</p>
+<p>It does not use any ball bearing but some self-lubricating rings instead (for cost reduction).</p>
 </section>
-<section id="main-pcb-architecture">
-<h2>Main PCB architecture<a class="headerlink" href="#main-pcb-architecture" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<section id="main-pcb-breakdown">
+<h2>Main PCB breakdown<a class="headerlink" href="#main-pcb-breakdown" title="Permalink to this heading"></a></h2>
+<a class="reference internal image-reference" href="_images/pcb-breakout.png"><img alt="Cricut Maker Champagne PCB breakout" src="_images/pcb-breakout.png" style="width: 800px;" /></a>
+<p>The above PCB breakdown is from a Maker Champagne and contains
+the following components:</p>
+<ul class="simple">
+<li><p>A PIC32 micro-controller (<strong>MCU</strong>)</p></li>
+<li><p>A set of DC motor drivers (<strong>X/Y drivers</strong>, <strong>Head drivers</strong>)</p></li>
+<li><p>A set of JST connectors to X/Y motors (<strong>X/Y motors</strong> and <strong>X/Y sensors</strong>)</p></li>
+<li><p>A power stage with regulators and a barrel jack connector (<strong>Power</strong>)</p></li>
+<li><p>A USB female connector used as the main communication channel with the host (<strong>Main USB interface</strong>)</p></li>
+<li><p>A connector for the cutting/tracing head (<strong>Head conn.</strong>)</p></li>
+<li><p>A bluetooth low energy module (<strong>Bluetooth module</strong>)</p></li>
+<li><p>A connector for the top LEDs and buttons PCB (<strong>LEDs/buttons</strong>)</p></li>
+<li><p>A debugging/programming connector (not populated, <strong>Debug/Prog</strong>)</p></li>
+</ul>
 </section>
 <section id="pic32-micro-controller">
 <h2>PIC32 micro-controller<a class="headerlink" href="#pic32-micro-controller" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<p>This main PCB uses a PIC32MX-family micro-controller, namely a <em>PIC32MX470F512L</em>.
+This is a 32-bit MCU with up to 512 KB of Flash memory and 128 KB of SRAM.</p>
+<p>The datasheet is available <a class="reference external" href="_static/documents/teardown/microchip-pic32mx470F512L.pdf">here</a></p>
 </section>
-<section id="dc-motors-instead-of-stepper-motors">
-<h2>DC motors instead of stepper motors<a class="headerlink" href="#dc-motors-instead-of-stepper-motors" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
-</section>
-<section id="usb-interface">
-<h2>USB interface<a class="headerlink" href="#usb-interface" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<section id="servo-motors">
+<h2>Servo motors<a class="headerlink" href="#servo-motors" title="Permalink to this heading"></a></h2>
+<p>This Cricut Maker Champagne uses a set of servo motors using a quadrature encoder.
+The markings have been used to find out <a class="reference external" href="https://www.aliexpress.com/item/1005003551214085.html">the exact model used</a>.</p>
+<a class="reference internal image-reference" href="_images/servo-motor.webp"><img alt="&quot;Johnson&quot; HC385MG-based servo-motor" src="_images/servo-motor.webp" style="width: 400px;" /></a>
+<p>This is basically a DC motor coupled with a quadrature encoder,
+which is less precise than a stepper motor (like a NEMA17).</p>
 </section>
 <section id="bluetooth-low-energy-module">
 <h2>Bluetooth Low Energy module<a class="headerlink" href="#bluetooth-low-energy-module" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<p>The Cricut Maker relies on a Microchip <em>RN4678</em> Bluetooth/Bluetooth LE module driven by a dedicated
+UART interface. <strong>This module interface has not been totally reversed yet</strong>.</p>
+<p>The datasheet of this module is <a class="reference external" href="_static/documents/rn4678.pdf">available here</a></p>
 </section>
 <section id="mechanical-details">
 <h2>Mechanical details<a class="headerlink" href="#mechanical-details" title="Permalink to this heading"></a></h2>
-<p>todo.</p>
+<p>X axis is driven through a set of reduction gears coupled to a belt that drives the tool head.</p>
+<a class="reference internal image-reference" href="_images/x-axis-mechanical.jpg"><img alt="Mechanical interface with the tool head (X axis)" src="_images/x-axis-mechanical.jpg" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="_images/X-axis-reduction-gears.jpg"><img alt="X axis reduction gears" src="_images/X-axis-reduction-gears.jpg" style="width: 600px;" /></a>
+<p>The machine
+Y axis however, is driven only by a set of reduction gears and drive rollers.</p>
+<a class="reference internal image-reference" href="_images/Y-axis-reduction-gears.jpg"><img alt="Y axis reduction gears" src="_images/Y-axis-reduction-gears.jpg" style="width: 600px;" /></a>
 </section>
 </section>
 
