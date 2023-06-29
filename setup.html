@@ -86,18 +86,72 @@
 <h1>CutcutGo installation and configuration<a class="headerlink" href="#cutcutgo-installation-and-configuration" title="Permalink to this heading"></a></h1>
 <section id="cut-a-hole-to-access-the-programming-interface">
 <h2>Cut a hole to access the programming interface<a class="headerlink" href="#cut-a-hole-to-access-the-programming-interface" title="Permalink to this heading"></a></h2>
+<p>In order to access the debug port of your Cricut Maker’s PCB, you need to drill a
+hole at a very specific position as shown below (drilling guide will come pretty soon
+to help you).</p>
+<a class="reference internal image-reference" href="_images/cutting-hole.jpg"><img alt="A hole has been cut in a Cricut Maker plastic bottom case." src="_images/cutting-hole.jpg" style="width: 600px;" /></a>
+<p>Solder a 6-pin male header to the main board debug interface on the bottom of the PCB,
+as shown below.</p>
+<a class="reference internal image-reference" href="_images/debug-connector.jpg"><img alt="A 6-pin debug header soldered to the Cricut Maker main PCB" src="_images/debug-connector.jpg" style="width: 600px;" /></a>
+<p>Install the PCB back into the case and reassemble the device.</p>
+<a class="reference internal image-reference" href="_images/debug-pcb-installed.jpg"><img alt="Main PCB screwed to the main bottom case." src="_images/debug-pcb-installed.jpg" style="width: 600px;" /></a>
 </section>
 <section id="flashing-the-firmware-into-the-cricut-maker">
 <h2>Flashing the firmware into the Cricut Maker<a class="headerlink" href="#flashing-the-firmware-into-the-cricut-maker" title="Permalink to this heading"></a></h2>
+<p>Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.</p>
+<a class="reference internal image-reference" href="_images/microchip-snap.jpg"><img alt="Microchip SNAP connected to our Cricut Maker debug port." src="_images/microchip-snap.jpg" style="width: 600px;" /></a>
+<p>Plug the Microchip SNAP (or PicKit 3) into your computer.</p>
+<p>Download and install <a class="reference external" href="https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide">Microchip MPLABX</a> on your
+system. Launch MPLABX and import the <em>CutcutGo</em> project from the repository. Make sure your SNAP device has been
+detected by MPLABX.</p>
+<p>Go to the <em>Production</em> menu and click on <em>Make and Program Device</em> in order to compile and flash the firmware. MPLABX
+should display something like this:</p>
+<a class="reference internal image-reference" href="_images/mplabx_build_flash.png"><img alt="MPLABX expected output when building and flashing the CutcutGo firmware onto the Cricut Maker." src="_images/mplabx_build_flash.png" style="width: 600px;" /></a>
 </section>
 <section id="installing-inkcut">
 <h2>Installing InkCut<a class="headerlink" href="#installing-inkcut" title="Permalink to this heading"></a></h2>
+<p>We slightly modified the InkCut project in order to add support for the Cricut Maker. Our modified version can
+be found in our dedicated <a class="reference external" href="https://github.com/virtualabs/inkcut-cutcutgo">InkCut repository</a>.</p>
+<p>Install <em>InkCut</em> with the following commands (Debian-like machine):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/virtualabs/inkcut-cutcutgo.git &amp;&amp; cd inkcut-cutcutgo
+$ sudo apt install python3-pip python3-pyqt5 python3-setuptools libcups2-dev python3-pyqt5.qtsvg
+$ sudo pip install .
+</pre></div>
+</div>
 </section>
 <section id="configuring-inkcut">
 <h2>Configuring InkCut<a class="headerlink" href="#configuring-inkcut" title="Permalink to this heading"></a></h2>
+<p>Launch <em>InkCut</em> and go straight to the <em>Device Setup</em> menu. Add a new device and select the <cite>Cricut Maker Champagne</cite>
+type. Once done, edit the device settings starting with the <em>Connection</em> tab. Use the following settings:</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-connection.png"><img alt="Cricut Maker connection settings for InkCut (connection tab)" src="_images/inkcut-device-connection.png" style="width: 800px;" /></a>
+<p>Go to the <em>Protocol</em> tab, and select the <em>GCODE</em> protocol. Untick the <em>Use builtin and startup commands</em> option,
+set the decimal precision to <cite>4</cite> and set the lift mode to <cite>Custom</cite>. Set the raise GCODE to <cite>G01Z0F10</cite> and the lower
+GCODE to <cite>G01Z-10F10</cite>. These are GCODE commands used to raise and lower the tool heads.</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-protocol.png"><img alt="Cricut Maker connection settings for InkCut (protocol tab)" src="_images/inkcut-device-protocol.png" style="width: 800px;" /></a>
+<p>Go to the <em>Device</em> tab and then to the <em>Connection commands</em> vertical sub-tab in order to set the following
+commands in the <em>after connect</em> text box:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>T0 ; home tool A
+$H
+T1 ; home tool B
+$H
+
+T0 ;select tool
+G21
+G01X0Y0F10
+</pre></div>
+</div>
+<p>Use <cite>T1</cite> to automatically select the B tool, or <cite>T0</cite> to use the A tool.</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-connection-cmds.png"><img alt="Cricut Maker connection settings for InkCut (connection commands)" src="_images/inkcut-device-connection-cmds.png" style="width: 800px;" /></a>
+<p>Last, go to the device <em>Output</em> vertical sub-tab and set the X and Y scale to <cite>0.2</cite>.</p>
+<p>Your device is ready to draw/cut !</p>
 </section>
 <section id="cut-your-first-design">
 <h2>Cut your first design !<a class="headerlink" href="#cut-your-first-design" title="Permalink to this heading"></a></h2>
+<p>Select a SVG file, load it into <em>InkCut</em> and make sure to have set a left margin in the <em>Material</em> tab
+of at least 40mm (this measure has not already been precisely determined yet).</p>
+<p>Click on the <em>Device</em> menu and then <em>Send to device</em>. <em>InkCut</em> will connect to the Cricut Maker and send
+GCODE. The Cricut Maker is expected to home all axes (X and Z) and then start cutting/drawing depending on
+the selected tool.</p>
 </section>
 </section>
 
