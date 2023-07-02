@@ -1,0 +1,16 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v3
+
+      - name: Build library
+        uses: Rockman18/ghactions-mplabx@master
+        with:
+          project: .
+          configuration: cutcutgo
