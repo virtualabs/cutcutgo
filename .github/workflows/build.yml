@@ -1,5 +1,5 @@
-name: Build
-on: [push]
+name: Build firmware binaries
+on: [push, pull_request]
 
 jobs:
   build:
@@ -9,17 +9,20 @@ jobs:
       - name: Download source
         uses: actions/checkout@v3
 
-      - name: Build library
+      - name: Build binaries
         uses: Rockman18/ghactions-mplabx@master
         with:
           project: cutcutgo.X
           configuration: cutcutgo
-      
+
+      - name: Move binaries
+        run: mkdir output && cp cutcutgo.X/dist/cutcutgo/production/cutcutgo.X.production.hex output/cricut_maker1_cutcutgo_cfw.hex
+
       - name: Upload firmware binaries
         uses: actions/upload-artifact@v3
         with:
           name: cricut_maker1_cutcutgo_cfw.hex
-          path: cutcutgo.X/dist/cutcutgo/production/cutcutgo.X.production.hex
+          path: output/cricut_maker1_cutcutgo_cfw.hex
           if-no-files-found: error
 
 
