@@ -18,8 +18,8 @@ jobs:
       - name: Upload firmware binaries
         uses: actions/upload-artifact@v3
         with:
-          name: Cutcutgo Firmware
-          path: cutcutgo.X/dist/**/production/*.hex
+          name: cricut_maker1_cutcutgo_cfw.hex
+          path: cutcutgo.X/dist/cutcutgo/production/cutcutgo.X.production.hex
           if-no-files-found: error
 
 
