@@ -12,5 +12,5 @@ jobs:
       - name: Build library
         uses: Rockman18/ghactions-mplabx@master
         with:
-          project: .
+          project: cutcutgo.X
           configuration: cutcutgo
