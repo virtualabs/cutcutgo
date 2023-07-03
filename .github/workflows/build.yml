@@ -19,5 +19,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Cutcutgo Firmware
-          path: /github/workspace/cutcutgo.X/dist/**/production/*.hex
+          path: cutcutgo.X/dist/**/production/*.hex
+          if-no-files-found: error
+
 
