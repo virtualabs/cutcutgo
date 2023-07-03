@@ -14,3 +14,10 @@ jobs:
         with:
           project: cutcutgo.X
           configuration: cutcutgo
+      
+      - name: Upload firmware binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: Cutcutgo Firmware
+          path: /github/workspace/cutcutgo.X/dist/**/production/*.hex
+
