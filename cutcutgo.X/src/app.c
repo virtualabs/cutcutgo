@@ -233,7 +233,6 @@ void APP_USBDeviceEventHandler
         case USB_DEVICE_EVENT_RESET:
 
             /* Update LED to show reset state */
-            led_set_logo(false);
 
             appData.isConfigured = false;
 
@@ -246,9 +245,6 @@ void APP_USBDeviceEventHandler
             
             if ( configuredEventData->configurationValue == 1)
             {
-                /* Update LED to show configured state */
-                LED_On();
-                
                 /* Register the CDC Device application event handler here.
                  * Note how the appData object pointer is passed as the
                  * user data */
@@ -275,22 +271,14 @@ void APP_USBDeviceEventHandler
             
             appData.isConfigured = false;
             
-            LED_Off();
-            
             break;
 
         case USB_DEVICE_EVENT_SUSPENDED:
-
-            /* Switch LED to show suspended state */
-            led_set_logo(false);
-            
             break;
 
         case USB_DEVICE_EVENT_RESUMED:
         case USB_DEVICE_EVENT_ERROR:
         default:
-            led_set_logo(false);
-            led_set_other(false);
             break;
     }
 }
@@ -449,11 +437,8 @@ void APP_Initialize(void)
     //serial_init();
     timer_init();
     led_init();
+    button_init();
     hal_motor_driver_init();
-
-    /* Switch off leds. */
-    led_set_logo(false);
-    led_set_other(false);
 }
 
 
@@ -483,7 +468,7 @@ void APP_Tasks(void)
     switch(appData.state)
     {
         case APP_STATE_INIT:
-
+          
             /* Open the device layer */
             appData.deviceHandle = USB_DEVICE_Open( USB_DEVICE_INDEX_0, DRV_IO_INTENT_READWRITE );
 
@@ -503,7 +488,7 @@ void APP_Tasks(void)
             break;
 
         case APP_STATE_WAIT_FOR_CONFIGURATION:
-
+           
             /* Check if the device was configured */
             if(appData.isConfigured)
             {
@@ -511,8 +496,6 @@ void APP_Tasks(void)
                 GRBL_Init();
 
                 appData.grblInitialized = true;
-
-                led_set_logo(true);
 
                 /* If the device is configured then lets start reading */
                 appData.state = APP_STATE_SCHEDULE_READ;
@@ -644,8 +627,6 @@ void APP_Tasks(void)
         case APP_STATE_ERROR:
         default:
             appData.grblInitialized = false;
-            led_set_other(true);
-            led_set_logo(true);
             break;
     }
 }

@@ -56,6 +56,8 @@
 #include "stepper.h"
 #include "jog.h"
 #include "hal/timer.h"
+#include "hal/led.h"
+#include "hal/button.h"
 
 // ---------------------------------------------------------------------------------------
 // COMPILE-TIME ERROR CHECKING OF DEFINE VALUES:

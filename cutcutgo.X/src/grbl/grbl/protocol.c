@@ -253,6 +253,32 @@ void protocol_handler(void)
       }
     }
 
+    /* Update status LED based on current state. */
+    switch (sys.state)
+    {        
+        case STATE_CYCLE:
+        {
+            /* Enable white LED. */
+            led_set_power(true, false, false);
+        }
+        break;
+        
+        case STATE_ALARM:
+        {
+            /* Enable red LED. */
+            led_set_power(false, false, true);
+        }
+        break;
+
+        default:
+        case STATE_IDLE:
+        {
+            /* Enable white LED. */
+            led_set_power(false, true, false);
+        }
+        break;
+    }
+    
     // If there are no more characters in the serial read buffer to be processed and executed,
     // this indicates that g-code streaming has either filled the planner buffer or has
     // completed. In either case, auto-cycle start, if enabled, any queued moves.
@@ -334,6 +360,7 @@ void protocol_exec_rt_system()
         // the user and a GUI time to do what is needed before resetting, like killing the
         // incoming stream. The same could be said about soft limits. While the position is not
         // lost, continued streaming could cause a serious crash if by chance it gets executed.
+        led_set_power(false, false, true);
       } while (bit_isfalse(sys_rt_exec_state,EXEC_RESET));
     }
     system_clear_exec_alarm(); // Clear alarm

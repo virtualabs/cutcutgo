@@ -326,6 +326,9 @@
         <itemPath>src/hal/timer.h</itemPath>
         <itemPath>src/hal/watchdog.c</itemPath>
         <itemPath>src/hal/watchdog.h</itemPath>
+        <itemPath>src/hal/led.h</itemPath>
+        <itemPath>src/hal/button.h</itemPath>
+        <itemPath>src/hal/button.c</itemPath>
       </logicalFolder>
       <itemPath>src/main.c</itemPath>
       <itemPath>src/app.c</itemPath>

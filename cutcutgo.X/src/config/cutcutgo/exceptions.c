@@ -115,9 +115,6 @@ void __attribute__((noreturn)) _general_exception_handler ( void )
     _excep_code = (_CP0_GET_CAUSE() & 0x0000007C) >> 2;
     _excep_addr = _CP0_GET_EPC();
 
-    led_set_logo(false);
-    led_set_other(true);
-
     while (1)
     {
         #if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
