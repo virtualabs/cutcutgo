@@ -3,7 +3,43 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/harmony-manifest-success.yml</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/exceptions.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/stepper.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/motor.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/button.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/planner.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/planner.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/button.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/interrupts.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/usb/src/usb_device.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/bsp/bsp.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/grbl.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/peripheral/gpio/plib_gpio.c</file>
+            <file>file:/home/virtualabs/opt/mplab/v6.05/packs/Microchip/PIC32MX_DFP/1.5.259/include/proc/p32mx470f512l.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/peripheral/gpio/plib_gpio.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/motion_control.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/settings.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/tasks.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs_device.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/main.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/defaults.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/motion_control.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/app.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/system.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/main.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/timer.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/gcode.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/system.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/limits.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/report.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/led.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/watchdog.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/led.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/protocol.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/serial.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/config.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/config.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/nuts_bolts.c</file>
         </group>
     </open-files>
 </project-private>

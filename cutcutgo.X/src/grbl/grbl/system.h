@@ -147,6 +147,8 @@ typedef struct {
   #ifdef VARIABLE_SPINDLE
     float spindle_speed;
   #endif
+  uint8_t mat_loaded;          // Cutting mat or support loaded
+  uint8_t pending_mat_loaded;
 } system_t;
 extern system_t sys;
 

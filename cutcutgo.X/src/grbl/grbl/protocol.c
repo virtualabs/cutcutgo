@@ -279,6 +279,19 @@ void protocol_handler(void)
         break;
     }
     
+    /**
+     * Perform user-triggered actions:
+     * - mat loading/unloading
+     * - homing
+     * - cycle pause
+     */
+    
+    if (sys.pending_mat_loaded)
+    {
+        sys.pending_mat_loaded = 0;
+        mc_feed_mat();
+    }
+    
     // If there are no more characters in the serial read buffer to be processed and executed,
     // this indicates that g-code streaming has either filled the planner buffer or has
     // completed. In either case, auto-cycle start, if enabled, any queued moves.

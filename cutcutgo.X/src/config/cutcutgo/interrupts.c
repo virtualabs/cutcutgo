@@ -76,17 +76,25 @@ void __ISR(_USB_1_VECTOR, ipl4SOFT) USB_FS_Handler (void)
 
 void __ISR(_CHANGE_NOTICE_VECTOR, ipl1SOFT) CHANGE_NOTICE_Handler (void)
 {   
-    /* Handle RGx change notifications */
-    //GPIO_PinToggle(GPIO_PIN_RB10);
-   
-    /* Forward notification to our button controller. */
-    hal_button_pressed();
-        
-    /* Forward notification to our motor controller. */
-    hal_motor_update_callback();
-    
-    /* Clear interrupt flag */
-    IFS1bits.CNGIF = 0;
+    /* Handle buttons interrupts. */
+    if (IFS1bits.w & BTN_IFS1_MASK)
+    {
+        /* Forward notification to our button controller. */
+        hal_button_pressed();
+
+        /* Ack interrupt. */
+        IFS1bits.w &= ~(BTN_IFS1_MASK);
+    }
+       
+    /* Motor-related interrupt. */
+    if (IFS1bits.CNGIF)
+    {
+        /* Forward notification to our motor controller. */
+        hal_motor_update_callback();
+
+        /* Ack interrupt. */
+        IFS1bits.CNGIF = 0;        
+    }
 }
 
 

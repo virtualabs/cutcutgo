@@ -365,6 +365,59 @@ uint8_t mc_probe_cycle(float *target, plan_line_data_t *pl_data, uint8_t parser_
   }
 #endif
 
+  
+void mc_feed_mat(void)
+{
+  float target[N_AXIS];
+  plan_line_data_t plan_data;
+  plan_line_data_t *pl_data = &plan_data;
+  
+  if (sys.state == STATE_IDLE)
+  {
+    memset(pl_data,0,sizeof(plan_line_data_t));
+
+    plan_data.feed_rate = 10.0;
+    plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
+    target[X_AXIS] = 0.0;
+    target[Y_AXIS] = (sys.mat_loaded == 0)?50.0:-50.0;
+    target[Z_AXIS] = 0.0;
+    plan_buffer_line(target, pl_data);
+    sys.step_control = STEP_CONTROL_EXECUTE_SYS_MOTION; // Set to execute homing motion and clear existing flags.
+    st_prep_buffer(); // Prep and fill segment buffer from newly planned block.
+    st_wake_up(); // Initiate motion
+
+    protocol_execute_realtime(); // Check for reset and set system abort.
+    if (sys.abort) { return; } // Did not complete. Alarm state set by mc_alarm.
+
+    // Homing cycle complete! Setup system for normal operation.
+    // -------------------------------------------------------------------------------------
+
+    // Sync gcode parser and planner positions to homed position.
+    gc_sync_position();
+    plan_sync_position();
+
+    /*
+     * Wait while mat is loading/unloading
+     *
+     * TODO: Improve this code !
+     * 
+     */
+    
+    while (sys.state != STATE_IDLE)
+        protocol_execute_realtime();
+    
+    /* Save mat state. */
+    if (sys.mat_loaded == 0)
+    {
+        sys.mat_loaded = 1;
+    }
+    else
+    {
+        sys.mat_loaded = 0;
+    }
+  }
+}
+  
 
 // Method to ready the system to reset by setting the realtime reset command and killing any
 // active processes in the system. This also checks if a system reset is issued while Grbl
