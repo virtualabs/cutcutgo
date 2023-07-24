@@ -36,10 +36,6 @@ This firmware open-source firmware is currently able to drive a Cricut Maker thr
 issue, supporting both tools (A & B). It is still experimental as a lot of features have still
 to be added to this implementation, but the hardest part is done.
 
-Below is a video showing the latest tests we made:
-
-.. raw:: html
-
-    <iframe title="Cutting paper with Cricut Maker/GRBL" width="560" height="315" src="https://video.ploud.fr/videos/embed/03959d91-eb34-4a5a-a1a5-5a93cacfb448" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>
+`Here is a video showing the latest tests we made <https://video.ploud.fr/w/1rEYK9AB4MAKmCMSikSvNG>`_.
 
 
