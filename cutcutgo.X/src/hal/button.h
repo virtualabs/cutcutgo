@@ -20,6 +20,7 @@
 
 void button_init(void);
 void hal_button_pressed(void);
+bool is_power_button_pressed(void);
 
 #endif	/* __INC_BUTTON_H */
 

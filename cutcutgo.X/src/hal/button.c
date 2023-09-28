@@ -77,3 +77,11 @@ void hal_button_pressed(void)
         //mc_homing_cycle((1 << X_AXIS));
     }
 }
+
+bool is_power_button_pressed(void)
+{
+    volatile uint32_t portf = PORTF;
+    
+    /* Is pause button pressed ? */
+    return ((portf & (1 << (BTN_POWER & 0x0F))) == 0);
+}

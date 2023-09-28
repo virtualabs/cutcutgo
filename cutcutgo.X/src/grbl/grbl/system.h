@@ -210,5 +210,8 @@ void system_set_exec_accessory_override_flag(uint8_t mask);
 void system_clear_exec_motion_overrides(void);
 void system_clear_exec_accessory_overrides(void);
 
+/* Special function to check if system is idling. */
+bool system_is_idle(void);
+
 
 #endif

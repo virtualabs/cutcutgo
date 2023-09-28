@@ -55,6 +55,7 @@
 
 #include "app.h"
 #include "grbl/grbl/grbl.h"
+#include "reset.h"
 
 
 // *****************************************************************************
@@ -69,6 +70,7 @@ char CACHE_ALIGN banner[] = "This is foo";
 uint8_t CACHE_ALIGN cdcReadBuffer[APP_READ_BUFFER_SIZE];
 uint8_t CACHE_ALIGN cdcWriteBuffer[APP_READ_BUFFER_SIZE];
 
+uint32_t counter = 0;
 
 // *****************************************************************************
 /* Application Data
@@ -233,7 +235,6 @@ void APP_USBDeviceEventHandler
         case USB_DEVICE_EVENT_RESET:
 
             /* Update LED to show reset state */
-
             appData.isConfigured = false;
 
             break;
@@ -463,6 +464,29 @@ void APP_Tasks(void)
     {
         /* GRBL protocol handler */
         protocol_handler();
+    }
+    
+    if (system_is_idle())
+    {
+        if (is_power_button_pressed())
+        {
+            counter++;
+
+            /* Wait for ~4s before resetting. */
+            if (counter > 0x36800)
+            {
+                /* Switch off all LEDs. */
+                led_set_power(false, false, false);
+                led_set_updown(false);
+                led_set_logo(false);
+                led_set_updown(false);
+
+                /* Reset. */
+                reset_soft();
+            }
+        }
+        else
+            counter=0;
     }
     
     switch(appData.state)

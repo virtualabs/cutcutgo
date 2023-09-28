@@ -407,3 +407,8 @@ void system_clear_exec_accessory_overrides() {
     sys_rt_exec_accessory_override = 0;
     EVIC_INT_Enable();
 }
+
+bool system_is_idle(void)
+{
+    return (sys.state == STATE_IDLE);
+}
