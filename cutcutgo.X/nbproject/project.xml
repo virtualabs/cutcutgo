@@ -14,10 +14,15 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>src</sourceRootElem>
+                <sourceRootElem>../../cutcutgo-bl/cutcutgo_bl.X/src</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
                     <name>cutcutgo</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>cutcutgo_bl</name>
                     <type>2</type>
                 </confElem>
             </confList>

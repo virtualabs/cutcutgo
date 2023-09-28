@@ -27,11 +27,11 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=cutcutgo.X
 
 # Active Configuration
-DEFAULTCONF=cutcutgo
+DEFAULTCONF=cutcutgo_bl
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=cutcutgo 
+ALLCONFS=cutcutgo cutcutgo_bl 
 
 
 # build
@@ -46,12 +46,14 @@ ALLCONFS=cutcutgo
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
 	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=cutcutgo clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=cutcutgo_bl clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
 	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=cutcutgo build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=cutcutgo_bl build
 
 
 
