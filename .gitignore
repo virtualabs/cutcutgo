@@ -56,3 +56,38 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+### MPLabX ###
+#Ignore List for Microchip's MPLAB X IDE
+#It's a form of NetBeans with vendor specific changes
+#Taken from zeha on GIST https://gist.github.com/zeha/5999375
+#Updated by Cristian Cristea (https://github.com/cristiancristea00)
+
+*.d
+*.pre
+*.p1
+*.lst
+*.sym
+*.obj
+*.o
+*.sdb
+*.obj.dmp
+*.mk
+*.map
+*.properties
+*.production
+*.debug
+cutcutgo.X/html/
+cutcutgo.X/nbproject/private/
+cutcutgo.X/nbproject/Package-*.bash
+cutcutgo.X/build/
+cutcutgo.X/debug/
+cutcutgo.X/nbbuild/
+cutcutgo.X/dist/
+cutcutgo.X/nbdist/
+cutcutgo.X/nbactions.xml
+cutcutgo.X/nb-configuration.xml
+cutcutgo.X/funclist
+cutcutgo.X/nbproject/Makefile-*
+cutcutgo.X/disassembly/
+#cutcutgo.X/.generated_files/
