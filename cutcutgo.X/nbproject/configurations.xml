@@ -194,7 +194,7 @@
         </logicalFolder>
       </logicalFolder>
       <itemPath>src/app.h</itemPath>
-      <itemPath>../../cutcutgo-bl/cutcutgo_bl.X/src/reset.h</itemPath>
+      <itemPath>src/reset.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -334,7 +334,7 @@
       </logicalFolder>
       <itemPath>src/main.c</itemPath>
       <itemPath>src/app.c</itemPath>
-      <itemPath>../../cutcutgo-bl/cutcutgo_bl.X/src/reset.c</itemPath>
+      <itemPath>src/reset.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -351,7 +351,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>snap</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>4.20</languageToolchainVersion>
+        <languageToolchainVersion>4.35</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -867,7 +867,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>snap</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>4.20</languageToolchainVersion>
+        <languageToolchainVersion>4.35</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
