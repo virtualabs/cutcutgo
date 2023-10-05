@@ -1,6 +1,6 @@
 #include "reset.h"
 
-void reset_soft(void)
+__attribute__((__noreturn__)) void reset_soft(void)
 {
     /* Software reset */
     SYSKEY = 0x00000000; //write invalid key to force lock
@@ -13,6 +13,7 @@ void reset_soft(void)
     /* read RSWRST register to trigger reset */
     unsigned int dummy;
     dummy = RSWRST;
+    dummy++;
 
     /* prevent any unwanted code execution until reset occurs*/
     while(1);

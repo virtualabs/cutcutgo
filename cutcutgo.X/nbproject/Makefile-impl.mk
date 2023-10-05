@@ -27,7 +27,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=cutcutgo.X
 
 # Active Configuration
-DEFAULTCONF=cutcutgo_bl
+DEFAULTCONF=cutcutgo
 CONF=${DEFAULTCONF}
 
 # All Configurations
