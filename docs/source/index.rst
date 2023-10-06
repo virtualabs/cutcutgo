@@ -13,4 +13,5 @@ Welcome to CutcutGo's documentation!
     intro.rst
     teardown.rst
     setup.rst
+    config.rst
     tech.rst

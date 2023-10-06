@@ -1,8 +1,8 @@
-CutcutGo installation and configuration
-=======================================
+CutcutGo installation
+=====================
 
-Cut a hole to access the programming interface
-----------------------------------------------
+Prepare your Cricut Maker for programming
+-----------------------------------------
 
 In order to access the debug port of your Cricut Maker's PCB, you need to drill a
 hole at a very specific position as shown below (drilling guide will come pretty soon
@@ -25,8 +25,16 @@ Install the PCB back into the case and reassemble the device.
     :width: 600
     :alt: Main PCB screwed to the main bottom case.
 
-Flashing the firmware into the Cricut Maker
--------------------------------------------
+
+.. _firmware_flashing:
+
+Flashing the CutcutGo bootloader
+--------------------------------
+
+First, download and install `Microchip MPLABX <https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide>`_ on your
+system. You will only need MPLabX' Integrated Programming Environment (IPE) utility to re-program the main micro-controller.
+Download the `latest version of CutcutGo Bootloader <https://github.com/virtualabs/cutcutgo-bl/releases/download/v1.0/cutcutgo_bootloader_v1.0.hex>`_ and save
+it.
 
 Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.
 
@@ -34,84 +42,70 @@ Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as sh
     :width: 600
     :alt: Microchip SNAP connected to our Cricut Maker debug port.
 
-Plug the Microchip SNAP (or PicKit 3) into your computer.
+Connect your SNAP (or PicKit3) device into your computer, and launch MPLabX IPE.
 
-Download and install `Microchip MPLABX <https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide>`_ on your
-system. Launch MPLABX and import the *CutcutGo* project from the repository. Make sure your SNAP device has been
-detected by MPLABX. 
-
-Go to the *Production* menu and click on *Make and Program Device* in order to compile and flash the firmware. MPLABX
-should display something like this:
-
-.. image:: _static/images/setup/mplabx_build_flash.png
+.. image:: _static/images/setup/mplab-ipe-first-step.png
     :width: 600
-    :alt: MPLABX expected output when building and flashing the CutcutGo firmware onto the Cricut Maker.
+    :alt: MPLabX IPE main view.
+
+Follow these steps to connect your SNAP (or PicKit3) to MPLabX IPE:
+
+1. Click on the *Operate* button on the left toolbar
+2. Select the correct target MCU family: *32-bit MCUs (PIC32)*
+3. Pick your device in the dropdown list: *PIC32MX470F512L*
+4. Select your programmer (SNAP or PicKit3) in the tool dropdown list. If your device is not recognized, check your USB configuration
+5. Click the *Connect* button
+
+If your programmer is correctly recognized and connected, you would see something like the following:
+
+.. image:: _static/images/setup/mplab-ipe-second-step.png
+    :width: 600
+    :alt: MPLabX IPE connected to our programmer.
+
+When successfully connected, the *Connect* button turns into a *Disconnect* button.
+
+Then, click on the *Browse* button as shown below and pick the bootloader *hex* file to program.
+Click the *Program* button to upload the boootloader into the target micro-controller.
+
+.. image:: _static/images/setup/mplab-ipe-third-step.png
+    :width: 600
+    :alt: MPLabX IPE HEX file selection dialog.
+
+MPLabX IPE must outputs something like this:
+
+.. image:: _static/images/setup/mplab-ipe-fourth-step.png
+    :width: 600
+    :alt: MPLabX IPE output after programming.
 
 
-Installing InkCut
------------------
+Flashing the CutcutGo application
+---------------------------------
 
-We slightly modified the InkCut project in order to add support for the Cricut Maker. Our modified version can
-be found in our dedicated `InkCut repository <https://github.com/virtualabs/inkcut-cutcutgo>`_.
+.. image:: _static/images/bootloader/buttons-off.png
+    :width: 400
 
-Install *InkCut* with the following commands (Debian-like machine):
+After flashing the bootloader, connect the Cricut Maker to your computer with an USB cable
+and power on the Cricut Maker by a long-press on the power button. The power button will
+light up in red and the button below in white, indicating that the bootloader has started
+and is waiting for some application file to be programmed.
 
-.. code:: text
+.. image:: _static/images/bootloader/buttons-msd-on.png
+    :width: 400
 
-    $ git clone https://github.com/virtualabs/inkcut-cutcutgo.git && cd inkcut-cutcutgo
-    $ sudo apt install python3-pip python3-pyqt5 python3-setuptools libcups2-dev python3-pyqt5.qtsvg
-    $ sudo pip install .
+The Cricut Maker must appear as a USB thumb drive named "CutcutGo" on your host, as shown
+below:
 
+.. image:: _static/images/bootloader/msd-device.png
+    :width: 400
 
-Configuring InkCut
-------------------
+Download the `latest version of the CutcutGo application (UF2 file) <https://github.com/virtualabs/cutcutgo/releases/download/v0.9-alpha/Cutcutgo-app_v0.9-alpha.uf2>`_ to your computer and
+copy it into the `Cutcutgo` drive. The Cricut Maker LEDs will blink during the copy, and reset
+once programmed (all lEDs are then off). 
 
-Launch *InkCut* and go straight to the *Device Setup* menu. Add a new device and select the `Cricut Maker Champagne`
-type. Once done, edit the device settings starting with the *Connection* tab. Use the following settings:
+Power up the Cricut Maker by a long-press on the power button, it will start the CutcutGo firmware and
+you should see the power button LED light up in white.
 
-.. image:: _static/images/setup/inkcut-device-connection.png
-    :width: 800
-    :alt: Cricut Maker connection settings for InkCut (connection tab)
+.. image:: _static/images/bootloader/app-running.png
+    :width: 400
 
-Go to the *Protocol* tab, and select the *GCODE* protocol. Untick the *Use builtin and startup commands* option,
-set the decimal precision to `4` and set the lift mode to `Custom`. Set the raise GCODE to `G01Z0F10` and the lower
-GCODE to `G01Z-10F10`. These are GCODE commands used to raise and lower the tool heads.
-
-.. image:: _static/images/setup/inkcut-device-protocol.png
-    :width: 800
-    :alt: Cricut Maker connection settings for InkCut (protocol tab)
-
-Go to the *Device* tab and then to the *Connection commands* vertical sub-tab in order to set the following
-commands in the *after connect* text box:
-
-.. code:: text
-
-    T0 ; home tool A
-    $H
-    T1 ; home tool B
-    $H
-
-    T0 ;select tool
-    G21
-    G01X0Y0F10
-
-Use `T1` to automatically select the B tool, or `T0` to use the A tool.
-
-.. image:: _static/images/setup/inkcut-device-connection-cmds.png
-    :width: 800
-    :alt: Cricut Maker connection settings for InkCut (connection commands)
-
-Last, go to the device *Output* vertical sub-tab and set the X and Y scale to `0.2`.
-
-Your device is ready to draw/cut !
-
-
-Cut your first design !
------------------------
-
-Select a SVG file, load it into *InkCut* and make sure to have set a left margin in the *Material* tab
-of at least 40mm (this measure has not already been precisely determined yet).
-
-Click on the *Device* menu and then *Send to device*. *InkCut* will connect to the Cricut Maker and send
-GCODE. The Cricut Maker is expected to home all axes (X and Z) and then start cutting/drawing depending on
-the selected tool.
+Congratulations, you have successfully installed CutcutGo on your Cricut Maker !
