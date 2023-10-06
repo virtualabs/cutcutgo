@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CutcutGo installation and configuration &mdash; CutcutGo v1.0 documentation</title>
+  <title>CutcutGo installation &mdash; CutcutGo v1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Technical resources" href="tech.html" />
+    <link rel="next" title="Configuring CutcutGo" href="config.html" />
     <link rel="prev" title="Teardown of the Cricut Maker Champagne" href="teardown.html" /> 
 </head>
 
@@ -47,14 +47,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introducing CutcutGo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="teardown.html">Teardown of the Cricut Maker Champagne</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CutcutGo installation and configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#cut-a-hole-to-access-the-programming-interface">Cut a hole to access the programming interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#flashing-the-firmware-into-the-cricut-maker">Flashing the firmware into the Cricut Maker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-inkcut">Installing InkCut</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuring-inkcut">Configuring InkCut</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cut-your-first-design">Cut your first design !</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CutcutGo installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-your-cricut-maker-for-programming">Prepare your Cricut Maker for programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flashing-the-cutcutgo-bootloader">Flashing the CutcutGo bootloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flashing-the-cutcutgo-application">Flashing the CutcutGo application</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuring CutcutGo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tech.html">Technical resources</a></li>
 </ul>
 
@@ -72,7 +71,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">CutcutGo installation and configuration</li>
+      <li class="breadcrumb-item active">CutcutGo installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/setup.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -82,10 +81,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cutcutgo-installation-and-configuration">
-<h1>CutcutGo installation and configuration<a class="headerlink" href="#cutcutgo-installation-and-configuration" title="Permalink to this heading"></a></h1>
-<section id="cut-a-hole-to-access-the-programming-interface">
-<h2>Cut a hole to access the programming interface<a class="headerlink" href="#cut-a-hole-to-access-the-programming-interface" title="Permalink to this heading"></a></h2>
+  <section id="cutcutgo-installation">
+<h1>CutcutGo installation<a class="headerlink" href="#cutcutgo-installation" title="Permalink to this heading"></a></h1>
+<section id="prepare-your-cricut-maker-for-programming">
+<h2>Prepare your Cricut Maker for programming<a class="headerlink" href="#prepare-your-cricut-maker-for-programming" title="Permalink to this heading"></a></h2>
 <p>In order to access the debug port of your Cricut Maker’s PCB, you need to drill a
 hole at a very specific position as shown below (drilling guide will come pretty soon
 to help you).</p>
@@ -96,62 +95,51 @@ as shown below.</p>
 <p>Install the PCB back into the case and reassemble the device.</p>
 <a class="reference internal image-reference" href="_images/debug-pcb-installed.jpg"><img alt="Main PCB screwed to the main bottom case." src="_images/debug-pcb-installed.jpg" style="width: 600px;" /></a>
 </section>
-<section id="flashing-the-firmware-into-the-cricut-maker">
-<h2>Flashing the firmware into the Cricut Maker<a class="headerlink" href="#flashing-the-firmware-into-the-cricut-maker" title="Permalink to this heading"></a></h2>
+<section id="flashing-the-cutcutgo-bootloader">
+<span id="firmware-flashing"></span><h2>Flashing the CutcutGo bootloader<a class="headerlink" href="#flashing-the-cutcutgo-bootloader" title="Permalink to this heading"></a></h2>
+<p>First, download and install <a class="reference external" href="https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide">Microchip MPLABX</a> on your
+system. You will only need MPLabX’ Integrated Programming Environment (IPE) utility to re-program the main micro-controller.
+Download the <a class="reference external" href="https://github.com/virtualabs/cutcutgo-bl/releases/download/v1.0/cutcutgo_bootloader_v1.0.hex">latest version of CutcutGo Bootloader</a> and save
+it.</p>
 <p>Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.</p>
 <a class="reference internal image-reference" href="_images/microchip-snap.jpg"><img alt="Microchip SNAP connected to our Cricut Maker debug port." src="_images/microchip-snap.jpg" style="width: 600px;" /></a>
-<p>Plug the Microchip SNAP (or PicKit 3) into your computer.</p>
-<p>Download and install <a class="reference external" href="https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide">Microchip MPLABX</a> on your
-system. Launch MPLABX and import the <em>CutcutGo</em> project from the repository. Make sure your SNAP device has been
-detected by MPLABX.</p>
-<p>Go to the <em>Production</em> menu and click on <em>Make and Program Device</em> in order to compile and flash the firmware. MPLABX
-should display something like this:</p>
-<a class="reference internal image-reference" href="_images/mplabx_build_flash.png"><img alt="MPLABX expected output when building and flashing the CutcutGo firmware onto the Cricut Maker." src="_images/mplabx_build_flash.png" style="width: 600px;" /></a>
+<p>Connect your SNAP (or PicKit3) device into your computer, and launch MPLabX IPE.</p>
+<a class="reference internal image-reference" href="_images/mplab-ipe-first-step.png"><img alt="MPLabX IPE main view." src="_images/mplab-ipe-first-step.png" style="width: 600px;" /></a>
+<p>Follow these steps to connect your SNAP (or PicKit3) to MPLabX IPE:</p>
+<ol class="arabic simple">
+<li><p>Click on the <em>Operate</em> button on the left toolbar</p></li>
+<li><p>Select the correct target MCU family: <em>32-bit MCUs (PIC32)</em></p></li>
+<li><p>Pick your device in the dropdown list: <em>PIC32MX470F512L</em></p></li>
+<li><p>Select your programmer (SNAP or PicKit3) in the tool dropdown list. If your device is not recognized, check your USB configuration</p></li>
+<li><p>Click the <em>Connect</em> button</p></li>
+</ol>
+<p>If your programmer is correctly recognized and connected, you would see something like the following:</p>
+<a class="reference internal image-reference" href="_images/mplab-ipe-second-step.png"><img alt="MPLabX IPE connected to our programmer." src="_images/mplab-ipe-second-step.png" style="width: 600px;" /></a>
+<p>When successfully connected, the <em>Connect</em> button turns into a <em>Disconnect</em> button.</p>
+<p>Then, click on the <em>Browse</em> button as shown below and pick the bootloader <em>hex</em> file to program.
+Click the <em>Program</em> button to upload the boootloader into the target micro-controller.</p>
+<a class="reference internal image-reference" href="_images/mplab-ipe-third-step.png"><img alt="MPLabX IPE HEX file selection dialog." src="_images/mplab-ipe-third-step.png" style="width: 600px;" /></a>
+<p>MPLabX IPE must outputs something like this:</p>
+<a class="reference internal image-reference" href="_images/mplab-ipe-fourth-step.png"><img alt="MPLabX IPE output after programming." src="_images/mplab-ipe-fourth-step.png" style="width: 600px;" /></a>
 </section>
-<section id="installing-inkcut">
-<h2>Installing InkCut<a class="headerlink" href="#installing-inkcut" title="Permalink to this heading"></a></h2>
-<p>We slightly modified the InkCut project in order to add support for the Cricut Maker. Our modified version can
-be found in our dedicated <a class="reference external" href="https://github.com/virtualabs/inkcut-cutcutgo">InkCut repository</a>.</p>
-<p>Install <em>InkCut</em> with the following commands (Debian-like machine):</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/virtualabs/inkcut-cutcutgo.git &amp;&amp; cd inkcut-cutcutgo
-$ sudo apt install python3-pip python3-pyqt5 python3-setuptools libcups2-dev python3-pyqt5.qtsvg
-$ sudo pip install .
-</pre></div>
-</div>
-</section>
-<section id="configuring-inkcut">
-<h2>Configuring InkCut<a class="headerlink" href="#configuring-inkcut" title="Permalink to this heading"></a></h2>
-<p>Launch <em>InkCut</em> and go straight to the <em>Device Setup</em> menu. Add a new device and select the <cite>Cricut Maker Champagne</cite>
-type. Once done, edit the device settings starting with the <em>Connection</em> tab. Use the following settings:</p>
-<a class="reference internal image-reference" href="_images/inkcut-device-connection.png"><img alt="Cricut Maker connection settings for InkCut (connection tab)" src="_images/inkcut-device-connection.png" style="width: 800px;" /></a>
-<p>Go to the <em>Protocol</em> tab, and select the <em>GCODE</em> protocol. Untick the <em>Use builtin and startup commands</em> option,
-set the decimal precision to <cite>4</cite> and set the lift mode to <cite>Custom</cite>. Set the raise GCODE to <cite>G01Z0F10</cite> and the lower
-GCODE to <cite>G01Z-10F10</cite>. These are GCODE commands used to raise and lower the tool heads.</p>
-<a class="reference internal image-reference" href="_images/inkcut-device-protocol.png"><img alt="Cricut Maker connection settings for InkCut (protocol tab)" src="_images/inkcut-device-protocol.png" style="width: 800px;" /></a>
-<p>Go to the <em>Device</em> tab and then to the <em>Connection commands</em> vertical sub-tab in order to set the following
-commands in the <em>after connect</em> text box:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>T0 ; home tool A
-$H
-T1 ; home tool B
-$H
-
-T0 ;select tool
-G21
-G01X0Y0F10
-</pre></div>
-</div>
-<p>Use <cite>T1</cite> to automatically select the B tool, or <cite>T0</cite> to use the A tool.</p>
-<a class="reference internal image-reference" href="_images/inkcut-device-connection-cmds.png"><img alt="Cricut Maker connection settings for InkCut (connection commands)" src="_images/inkcut-device-connection-cmds.png" style="width: 800px;" /></a>
-<p>Last, go to the device <em>Output</em> vertical sub-tab and set the X and Y scale to <cite>0.2</cite>.</p>
-<p>Your device is ready to draw/cut !</p>
-</section>
-<section id="cut-your-first-design">
-<h2>Cut your first design !<a class="headerlink" href="#cut-your-first-design" title="Permalink to this heading"></a></h2>
-<p>Select a SVG file, load it into <em>InkCut</em> and make sure to have set a left margin in the <em>Material</em> tab
-of at least 40mm (this measure has not already been precisely determined yet).</p>
-<p>Click on the <em>Device</em> menu and then <em>Send to device</em>. <em>InkCut</em> will connect to the Cricut Maker and send
-GCODE. The Cricut Maker is expected to home all axes (X and Z) and then start cutting/drawing depending on
-the selected tool.</p>
+<section id="flashing-the-cutcutgo-application">
+<h2>Flashing the CutcutGo application<a class="headerlink" href="#flashing-the-cutcutgo-application" title="Permalink to this heading"></a></h2>
+<a class="reference internal image-reference" href="_images/buttons-off.png"><img alt="_images/buttons-off.png" src="_images/buttons-off.png" style="width: 400px;" /></a>
+<p>After flashing the bootloader, connect the Cricut Maker to your computer with an USB cable
+and power on the Cricut Maker by a long-press on the power button. The power button will
+light up in red and the button below in white, indicating that the bootloader has started
+and is waiting for some application file to be programmed.</p>
+<a class="reference internal image-reference" href="_images/buttons-msd-on.png"><img alt="_images/buttons-msd-on.png" src="_images/buttons-msd-on.png" style="width: 400px;" /></a>
+<p>The Cricut Maker must appear as a USB thumb drive named “CutcutGo” on your host, as shown
+below:</p>
+<a class="reference internal image-reference" href="_images/msd-device.png"><img alt="_images/msd-device.png" src="_images/msd-device.png" style="width: 400px;" /></a>
+<p>Download the <a class="reference external" href="https://github.com/virtualabs/cutcutgo/releases/download/v0.9-alpha/Cutcutgo-app_v0.9-alpha.uf2">latest version of the CutcutGo application (UF2 file)</a> to your computer and
+copy it into the <cite>Cutcutgo</cite> drive. The Cricut Maker LEDs will blink during the copy, and reset
+once programmed (all lEDs are then off).</p>
+<p>Power up the Cricut Maker by a long-press on the power button, it will start the CutcutGo firmware and
+you should see the power button LED light up in white.</p>
+<a class="reference internal image-reference" href="_images/app-running.png"><img alt="_images/app-running.png" src="_images/app-running.png" style="width: 400px;" /></a>
+<p>Congratulations, you have successfully installed CutcutGo on your Cricut Maker !</p>
 </section>
 </section>
 
@@ -160,7 +148,7 @@ the selected tool.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="teardown.html" class="btn btn-neutral float-left" title="Teardown of the Cricut Maker Champagne" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tech.html" class="btn btn-neutral float-right" title="Technical resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="config.html" class="btn btn-neutral float-right" title="Configuring CutcutGo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

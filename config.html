@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuring CutcutGo &mdash; CutcutGo v1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Technical resources" href="tech.html" />
+    <link rel="prev" title="CutcutGo installation" href="setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CutcutGo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introducing CutcutGo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="teardown.html">Teardown of the Cricut Maker Champagne</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">CutcutGo installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuring CutcutGo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-inkcut">Installing InkCut</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-inkcut">Configuring InkCut</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cut-your-first-design">Cut your first design !</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tech.html">Technical resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CutcutGo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuring CutcutGo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuring-cutcutgo">
+<h1>Configuring CutcutGo<a class="headerlink" href="#configuring-cutcutgo" title="Permalink to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure to reprogram the micro-controller of your Cricut Maker before following these
+instructions ! See <a class="reference internal" href="setup.html#firmware-flashing"><span class="std std-ref">Flashing the CutcutGo bootloader</span></a> for more details.</p>
+</div>
+<section id="installing-inkcut">
+<h2>Installing InkCut<a class="headerlink" href="#installing-inkcut" title="Permalink to this heading"></a></h2>
+<p>We slightly modified the InkCut project in order to add support for the Cricut Maker. Our modified version can
+be found in our dedicated <a class="reference external" href="https://github.com/virtualabs/inkcut-cutcutgo">InkCut repository</a>.</p>
+<p>Install <em>InkCut</em> with the following commands (Debian-like machine):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/virtualabs/inkcut-cutcutgo.git &amp;&amp; cd inkcut-cutcutgo
+$ sudo apt install python3-pip python3-pyqt5 python3-setuptools libcups2-dev python3-pyqt5.qtsvg
+$ sudo pip install .
+</pre></div>
+</div>
+</section>
+<section id="configuring-inkcut">
+<h2>Configuring InkCut<a class="headerlink" href="#configuring-inkcut" title="Permalink to this heading"></a></h2>
+<p>Launch <em>InkCut</em> and go straight to the <em>Device Setup</em> menu. Add a new device and select the <cite>Cricut Maker Champagne</cite>
+type. Once done, edit the device settings starting with the <em>Connection</em> tab. Use the following settings:</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-connection.png"><img alt="Cricut Maker connection settings for InkCut (connection tab)" src="_images/inkcut-device-connection.png" style="width: 800px;" /></a>
+<p>Go to the <em>Protocol</em> tab, and select the <em>GCODE</em> protocol. Untick the <em>Use builtin and startup commands</em> option,
+set the decimal precision to <cite>4</cite> and set the lift mode to <cite>Custom</cite>. Set the raise GCODE to <cite>G01Z0F10</cite> and the lower
+GCODE to <cite>G01Z-10F10</cite>. These are GCODE commands used to raise and lower the tool heads.</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-protocol.png"><img alt="Cricut Maker connection settings for InkCut (protocol tab)" src="_images/inkcut-device-protocol.png" style="width: 800px;" /></a>
+<p>Go to the <em>Device</em> tab and then to the <em>Connection commands</em> vertical sub-tab in order to set the following
+commands in the <em>after connect</em> text box:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>T0 ; home tool A
+$H
+T1 ; home tool B
+$H
+
+T0 ;select tool
+G21
+G01X0Y0F10
+</pre></div>
+</div>
+<p>Use <cite>T1</cite> to automatically select the B tool, or <cite>T0</cite> to use the A tool.</p>
+<a class="reference internal image-reference" href="_images/inkcut-device-connection-cmds.png"><img alt="Cricut Maker connection settings for InkCut (connection commands)" src="_images/inkcut-device-connection-cmds.png" style="width: 800px;" /></a>
+<p>Last, go to the device <em>Output</em> vertical sub-tab and set the X and Y scale to <cite>0.2</cite>.</p>
+<p>Your device is ready to draw/cut !</p>
+</section>
+<section id="cut-your-first-design">
+<h2>Cut your first design !<a class="headerlink" href="#cut-your-first-design" title="Permalink to this heading"></a></h2>
+<p>Select a SVG file, load it into <em>InkCut</em> and make sure to have set a left margin in the <em>Material</em> tab
+of at least 40mm (this measure has not already been precisely determined yet).</p>
+<p>Click on the <em>Device</em> menu and then <em>Send to device</em>. <em>InkCut</em> will connect to the Cricut Maker and send
+GCODE. The Cricut Maker is expected to home all axes (X and Z) and then start cutting/drawing depending on
+the selected tool.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup.html" class="btn btn-neutral float-left" title="CutcutGo installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tech.html" class="btn btn-neutral float-right" title="Technical resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Damien &#34;virtualabs&#34; Cauquil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
