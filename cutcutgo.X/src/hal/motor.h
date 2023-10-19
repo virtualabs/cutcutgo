@@ -3,13 +3,10 @@
 
 #include "hal/config.h"
 
-#define HAL_MOTOR_SPEED_MAX         0
-//#define HAL_MOTOR_SPEED_MIN         1800
-#define HAL_MOTOR_SPEED_MIN         2100
-//#define HAL_MOTOR_SPEED_MIN         2000
-//#define HAL_MOTOR_SPEED_MIN         100
+#define HAL_MOTOR_SPEED_MAX         800
+#define HAL_MOTOR_SPEED_MIN         2300
+
 #define HAL_MOTOR_SPEED_KICK        100
-//#define HAL_MOTOR_SPEED_MIN         1000
 
 #define HAL_MOTOR_SPEED_X       2000
 #define HAL_MOTOR_SPEED_Y       1500
@@ -68,6 +65,7 @@ typedef struct {
     int command_steps;                  /* Number of steps to perform (if motor is driven by this driver). */
     int current_steps;                  /* Current number of steps performed. */
     bool inv_encoder;                   /* Invert encoder */
+    bool manual;                        /* Manual mode (not driven by our motion control planner. */
     
     int error_steps;
     int wd_prev_steps;                  /* Watchdog: number of steps previously monitored. */
@@ -106,12 +104,17 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
 void hal_motor_wait(hal_motor_driver_t *motor);
 hal_motor_state_t hal_motor_get_state(hal_motor_driver_t *motor);
 void hal_motor_stop(hal_motor_driver_t *motor);
+int hal_motor_get_current_steps(hal_motor_driver_t *motor);
+int hal_motor_set_direction(hal_motor_driver_t *motor, hal_motor_direction_t direction);
 
 /* Interrupt-driven callback for motors (don't use it, it's required by our interrupt manager). */
 void hal_motor_update_callback(void);
 
 /* Callback for motor stall detection. */
 void hal_motor_safety_checks(void);
+
+/* Manual mode. */
+void hal_motor_set_manual(hal_motor_driver_t *motor, bool manual_mode);
 
 
 #endif /* __INC_HAL_MOTOR_H */

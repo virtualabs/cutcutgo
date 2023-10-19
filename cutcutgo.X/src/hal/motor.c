@@ -426,6 +426,9 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     /* Initialize motor's relative position. */
     motor->rel_pos = 0;
     motor->rel_pos_th = 0;
+    
+    /* Manual mode disabled by default. */
+    motor->manual = false;
        
     /* Success. */
     return 0;
@@ -713,8 +716,11 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
                 /* Disarm watchdog. */
                 motor->wd_armed = false;
                 
-                /* Go to next move. */
-                st_execute_next_step();
+                /* Go to next move (if not manual mode). */
+                if (!motor->manual)
+                {
+                    st_execute_next_step();
+                }
             }
         }
         break;
@@ -787,6 +793,11 @@ void hal_motor_update_callback(void)
 hal_motor_state_t hal_motor_get_state(hal_motor_driver_t *motor)
 {
     return motor->state;
+}
+
+int hal_motor_get_current_steps(hal_motor_driver_t *motor)
+{
+    return motor->current_steps;
 }
 
 void hal_motor_stop(hal_motor_driver_t *motor)
@@ -869,3 +880,7 @@ void hal_motor_safety_checks(void)
     hal_motor_stall_detection(&HAL_MOTOR_TOOL2);
 }
 
+void hal_motor_set_manual(hal_motor_driver_t *motor, bool manual_mode)
+{
+    motor->manual = manual_mode;
+}
