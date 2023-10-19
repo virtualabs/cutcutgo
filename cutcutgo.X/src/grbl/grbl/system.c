@@ -33,7 +33,7 @@ void system_init()
   #endif
   CONTROL_PCMSK |= CONTROL_MASK;  // Enable specific pins of the Pin Change Interrupt
   PCICR |= (1 << CONTROL_INT);   // Enable Pin Change Interrupt
-#endif /* AVR */
+#endif /* AVR */ 
 }
 
 
@@ -360,13 +360,13 @@ uint8_t system_check_travel_limits(float *target)
 
 
 // Special handlers for setting and clearing Grbl's real-time execution flags.
-void system_set_exec_state_flag(uint8_t mask) {
+void system_set_exec_state_flag(uint32_t mask) {
     EVIC_INT_Disable();
     sys_rt_exec_state |= (mask);
     EVIC_INT_Enable();
 }
 
-void system_clear_exec_state_flag(uint8_t mask) {
+void system_clear_exec_state_flag(uint32_t mask) {
     EVIC_INT_Disable();
     sys_rt_exec_state &= ~(mask);
     EVIC_INT_Enable();

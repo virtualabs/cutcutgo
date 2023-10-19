@@ -20,6 +20,9 @@
 */
 
 #include "grbl.h"
+#include "reset.h"
+#include "hal/motor.h"
+#include "print.h"
 
 // Define line flags. Includes comment type tracking and line overflow detection.
 #define LINE_FLAG_OVERFLOW bit(0)
@@ -34,6 +37,10 @@ static void protocol_exec_rt_suspend(void);
 uint8_t line_flags = 0;
 uint8_t char_counter = 0;
 uint8_t c;
+
+/* LED blink */
+bool blinker_state = false;
+uint32_t blinker_ts = 0;
     
 /*
   GRBL PRIMARY LOOP:
@@ -354,7 +361,7 @@ void protocol_execute_realtime()
 // NOTE: Do not alter this unless you know exactly what you are doing!
 void protocol_exec_rt_system()
 {
-  uint8_t rt_exec; // Temp variable to avoid calling volatile multiple times.
+  uint32_t rt_exec; // Temp variable to avoid calling volatile multiple times.
   rt_exec = sys_rt_exec_alarm; // Copy volatile sys_rt_exec_alarm.
 
   if (rt_exec) { // Enter only if any bit flag is true
@@ -549,6 +556,172 @@ void protocol_exec_rt_system()
       system_clear_exec_state_flag(EXEC_CYCLE_STOP);
     }
   }
+  
+  /**
+   * Warmup state ?
+   * 
+   * This is a Cricut Maker dedicated step for motor setup and automatic homing.
+   */
+  if (rt_exec & EXEC_WARMUP)
+  {
+      /* Warmup can only be executed when in IDLE state. */
+      if (sys.state == STATE_IDLE)
+      {
+          /* Warm-up initialization. */
+          sys.wu_speed = 2300;
+          sys.wu_dir = 0; /* Go right first. */
+          sys.wu_start_time = timer_get_ms();
+          
+          /* Disable hard limits. */
+          limits_disable();
+          
+          /* Set Warm-up state. */
+          sys.state = STATE_WARMUP;
+          
+          /* X axis only. */
+          hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed);
+          
+          /* Manual mode. */
+          hal_motor_set_manual(&HAL_MOTOR_X, true);
+              
+          /* Start motor in the given direction. */
+          HAL_MOTOR_X.current_steps = 0;
+          hal_motor_set_direction(&HAL_MOTOR_X, HAL_MOTOR_DIR_CCW);
+      }
+      else /* Warmup state. */
+      {
+          /* Detect if motor has moved. */
+          if (sys.wu_dir == 0)
+          {
+              if (hal_motor_get_current_steps(&HAL_MOTOR_X) > 500)
+              {                 
+                  /* Motor has moved enough, we found the minimal speed. */
+                  hal_motor_stop(&HAL_MOTOR_X);
+                  
+                  /* Deduce optimal speed for X axis. */
+                  hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed - 200);
+                  
+                  /* Disable manual mode. */
+                  hal_motor_set_manual(&HAL_MOTOR_X, false);
+                  
+                  /* Warmup done. */
+                  system_clear_exec_state_flag(EXEC_WARMUP);
+                  
+                  /* Switch to homing. */
+                  mc_homing_cycle(HOMING_CYCLE_ALL);
+                  
+                  /* System is ready ! */
+                  sys.state = STATE_IDLE;
+              }
+              else
+              {
+                /* Decrement the motor speed each 10ms. */
+                if ((sys.wu_start_time + 10) < timer_get_ms())
+                {
+                    printPgmString("warmup: (rm) motor does not move, modifying speed\r\n");
+                    sys.wu_speed-= 10;
+                    sys.wu_start_time = timer_get_ms();
+                    if (sys.wu_speed < 1000)
+                    {
+                        hal_motor_stop(&HAL_MOTOR_X);
+                        
+                        printPgmString("warmup: (rm) motor does not move, stuck or dead\r\n");
+                        printPgmString("warmup: switch to left move\r\n");
+                        /* Nothing moved below 800 -> motor dead or stuck. */
+                        /* Invert direction and start again. */
+                        sys.wu_dir = 1;
+                        sys.wu_speed = HAL_MOTOR_SPEED_MIN;
+                        hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed);
+                        
+                        HAL_MOTOR_X.current_steps = 0;
+                        hal_motor_set_direction(&HAL_MOTOR_X, HAL_MOTOR_DIR_CW);
+                    }
+                    else
+                    {
+                      hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed);
+                    }
+                }
+              }
+          }
+          else
+          {
+            if (hal_motor_get_current_steps(&HAL_MOTOR_X) > 500)
+            {
+                /* Motor has moved enough, we found the minimal speed. */
+                hal_motor_stop(&HAL_MOTOR_X);
+
+                /* Deduce optimal speed for X axis. */
+                hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed - 200);
+
+                /* Disable manual mode. */
+                hal_motor_set_manual(&HAL_MOTOR_X, false);
+
+                /* Warmup done. */
+                system_clear_exec_state_flag(EXEC_WARMUP);
+
+                /* Switch to homing. */
+                mc_homing_cycle(HOMING_CYCLE_ALL);
+                
+                /* System is ready ! */
+                sys.state = STATE_IDLE;
+            }
+            else
+            {
+                /* Decrement the motor speed each 10ms. */
+                if ((sys.wu_start_time + 10) < timer_get_ms())
+                {
+                    printPgmString("warmup: (lm) motor does not move, modifying speed\r\n");
+                    sys.wu_speed-= 10;
+                    sys.wu_start_time = timer_get_ms();
+                    if (sys.wu_speed < 800)
+                    {
+                      /* Nothing moved below 800 -> motor dead ! */
+                      hal_motor_stop(&HAL_MOTOR_X);
+
+                      /* Alarm ! */
+                      system_clear_exec_state_flag(EXEC_WARMUP);
+                    }
+                    else
+                    {
+                      hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed);
+                    }
+                }
+            }
+        }    
+      }
+    }
+  
+  /**
+   * Shutdown state ?
+   * 
+   * This is a Cricut Maker dedicated step for motor setup and automatic homing.
+   */
+  if (rt_exec & EXEC_SHUTDOWN)
+  {
+
+        /* Clear shutdown flag. */
+        system_clear_exec_state_flag(EXEC_SHUTDOWN);
+        
+        /* Make power LED blink. */
+        led_blink_mode(LED_POWER_WHITE);
+        led_set(LED_POWER_WHITE);
+        
+        /* Home our tool head. */
+        mc_homing_cycle(HOMING_CYCLE_ALL);
+        
+        /* Switch off all LEDs. */
+        led_set_power(false, false, false);
+        led_set_updown(false);
+        led_set_logo(false);
+        led_set_updown(false);
+        
+        /* System is ready ! */
+        sys.state = STATE_IDLE;
+
+        /* Reset. */
+        reset_soft();
+  }
+  
 
   // Execute overrides.
   rt_exec = sys_rt_exec_motion_override; // Copy volatile sys_rt_exec_motion_override

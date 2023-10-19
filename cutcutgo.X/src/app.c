@@ -475,14 +475,8 @@ void APP_Tasks(void)
             /* Wait for ~4s before resetting. */
             if (counter > 0x36800)
             {
-                /* Switch off all LEDs. */
-                led_set_power(false, false, false);
-                led_set_updown(false);
-                led_set_logo(false);
-                led_set_updown(false);
-
-                /* Reset. */
-                reset_soft();
+                /* Initiate shutdown */
+                system_set_exec_state_flag(EXEC_SHUTDOWN);
             }
         }
         else

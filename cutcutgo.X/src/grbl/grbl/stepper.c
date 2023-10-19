@@ -462,6 +462,10 @@ void stepper_init()
     hal_motor_set_speed(&HAL_MOTOR_Y, HAL_MOTOR_SPEED_Y);
     hal_motor_set_speed(&HAL_MOTOR_TOOL1, HAL_MOTOR_SPEED_TOOL1);
     //hal_motor_set_speed(&HAL_MOTOR_TOOL2, HAL_MOTOR_SPEED_TOOL2);
+    
+    /* Set default tool. */
+    stepper_info.tool = &HAL_MOTOR_TOOL1;
+    
 }
 
 

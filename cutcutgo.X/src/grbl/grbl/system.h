@@ -28,14 +28,16 @@
 // NOTE: The system executor uses an unsigned 8-bit volatile variable (8 flag limit.) The default
 // flags are always false, so the realtime protocol only needs to check for a non-zero value to
 // know when there is a realtime command to execute.
-#define EXEC_STATUS_REPORT  bit(0) // bitmask 00000001
-#define EXEC_CYCLE_START    bit(1) // bitmask 00000010
-#define EXEC_CYCLE_STOP     bit(2) // bitmask 00000100
-#define EXEC_FEED_HOLD      bit(3) // bitmask 00001000
-#define EXEC_RESET          bit(4) // bitmask 00010000
-#define EXEC_SAFETY_DOOR    bit(5) // bitmask 00100000
-#define EXEC_MOTION_CANCEL  bit(6) // bitmask 01000000
-#define EXEC_SLEEP          bit(7) // bitmask 10000000
+#define EXEC_STATUS_REPORT  bit(0) // bitmask   00000001
+#define EXEC_CYCLE_START    bit(1) // bitmask   00000010
+#define EXEC_CYCLE_STOP     bit(2) // bitmask   00000100
+#define EXEC_FEED_HOLD      bit(3) // bitmask   00001000
+#define EXEC_RESET          bit(4) // bitmask   00010000
+#define EXEC_SAFETY_DOOR    bit(5) // bitmask   00100000
+#define EXEC_MOTION_CANCEL  bit(6) // bitmask   01000000
+#define EXEC_SLEEP          bit(7) // bitmask   10000000
+#define EXEC_WARMUP         bit(8) // bitmask  100000000
+#define EXEC_SHUTDOWN       bit(9) // bitmask 1000000000
 
 // Alarm executor codes. Valid values (1-255). Zero is reserved.
 #define EXEC_ALARM_HARD_LIMIT                 1
@@ -82,6 +84,8 @@
 #define STATE_JOG           bit(5) // Jogging mode.
 #define STATE_SAFETY_DOOR   bit(6) // Safety door is ajar. Feed holds and de-energizes system.
 #define STATE_SLEEP         bit(7) // Sleep state.
+#define STATE_WARMUP        bit(8) // Warmup State. Handles X axis and tools homing.
+#define STATE_SHUTDOWN      bit(9) // Shutdown state.
 
 // Define system suspend flags. Used in various ways to manage suspend states and procedures.
 #define SUSPEND_DISABLE           0      // Must be zero.
@@ -125,7 +129,7 @@
 
 // Define global system variables
 typedef struct {
-  uint8_t state;               // Tracks the current system state of Grbl.
+  uint32_t state;               // Tracks the current system state of Grbl.
   uint8_t abort;               // System abort flag. Forces exit back to main loop for reset.             
   uint8_t suspend;             // System suspend bitflag variable that manages holds, cancels, and safety door.
   uint8_t soft_limit;          // Tracks soft limit errors for the state machine. (boolean)
@@ -149,6 +153,13 @@ typedef struct {
   #endif
   uint8_t mat_loaded;          // Cutting mat or support loaded
   uint8_t pending_mat_loaded;
+  
+  /* Warmup */
+  uint8_t wu_dir;
+  volatile uint16_t wu_speed;
+  volatile uint32_t wu_start_time;
+  
+  
 } system_t;
 extern system_t sys;
 
@@ -157,8 +168,8 @@ extern int32_t sys_position[N_AXIS];      // Real-time machine (aka home) positi
 extern int32_t sys_probe_position[N_AXIS]; // Last probe position in machine coordinates and steps.
 
 extern volatile uint8_t sys_probe_state;   // Probing state value.  Used to coordinate the probing cycle with stepper ISR.
-extern volatile uint8_t sys_rt_exec_state;   // Global realtime executor bitflag variable for state management. See EXEC bitmasks.
-extern volatile uint8_t sys_rt_exec_alarm;   // Global realtime executor bitflag variable for setting various alarms.
+extern volatile uint32_t sys_rt_exec_state;   // Global realtime executor bitflag variable for state management. See EXEC bitmasks.
+extern volatile uint32_t sys_rt_exec_alarm;   // Global realtime executor bitflag variable for setting various alarms.
 extern volatile uint8_t sys_rt_exec_motion_override; // Global realtime executor bitflag variable for motion-based overrides.
 extern volatile uint8_t sys_rt_exec_accessory_override; // Global realtime executor bitflag variable for spindle/coolant overrides.
 
@@ -201,8 +212,8 @@ void system_convert_array_steps_to_mpos(float *position, int32_t *steps);
 uint8_t system_check_travel_limits(float *target);
 
 // Special handlers for setting and clearing Grbl's real-time execution flags.
-void system_set_exec_state_flag(uint8_t mask);
-void system_clear_exec_state_flag(uint8_t mask);
+void system_set_exec_state_flag(uint32_t mask);
+void system_clear_exec_state_flag(uint32_t mask);
 void system_set_exec_alarm(uint8_t code);
 void system_clear_exec_alarm(void);
 void system_set_exec_motion_override_flag(uint8_t mask);
