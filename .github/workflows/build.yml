@@ -1,31 +1,63 @@
-name: Build firmware binaries
+name: "Pre-release"
+
 on:
   push:
+    branches:
+      - "main"
     paths:
-      - 'cutcutgo.X/**'
+      - "cutcutgo.X/**"
+      - ".github/workflows/build.yml"
 
 jobs:
-  build:
-    name: Build project
+  pre-release:
+    name: "Pre-release"
     runs-on: ubuntu-latest
-    steps:
-      - name: Download source
-        uses: actions/checkout@v3
 
-      - name: Build binaries
+    env:
+      PROJECT_DIR: cutcutgo.X
+      TMP_DIR: tmp
+      RELEASE_DIR: release
+      APP_STANDALONE_NAME: Cutcutgo_maker1_standalone_app.hex
+      APP_UF2_NAME: Cutcutgo_maker1_bootloader_app.uf2
+
+    steps:
+      - id: step1
+        name: Checkout sources
+        uses: actions/checkout@v4
+
+      - id: step2
+        name: Create temporary directory
+        run: mkdir $TMP_DIR
+
+      - id: step3
+        name: Create release directory
+        run: mkdir $RELEASE_DIR
+ 
+      - id: step4
+        name: Build firmware
         uses: Rockman18/ghactions-mplabx@master
         with:
-          project: cutcutgo.X
-          configuration: cutcutgo
+          project: ${{ env.PROJECT_DIR }}
+          configuration: cutcutgo,cutcutgo_bl
 
-      - name: Move binaries
-        run: mkdir output && cp cutcutgo.X/dist/cutcutgo/production/cutcutgo.X.production.hex output/cricut_maker1_cutcutgo_cfw.hex
+      - id: step5
+        name: Move standalone firmware
+        run: cp $PROJECT_DIR/dist/cutcutgo/production/cutcutgo.X.production.hex $RELEASE_DIR/$APP_STANDALONE_NAME
 
-      - name: Upload firmware binaries
-        uses: actions/upload-artifact@v3
+      - id: step6
+        name: Convert bootloader app hex to bin
+        run: objcopy -Iihex -Obinary $PROJECT_DIR/dist/cutcutgo_bl/production/cutcutgo.X.production.hex $TMP_DIR/cutcutgo-app.bin 
+
+      - id: step7
+        name: Convert bootloader app bin to UF2
+        run: ./utils/uf2conv.py -c -f 0x4d414b52 -b 0x1d010000 -o $RELEASE_DIR/$APP_UF2_NAME $TMP_DIR/cutcutgo-app.bin
+
+      - id: step8
+        name: Create pre-release
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          name: cricut_maker1_cutcutgo_cfw.hex
-          path: output/cricut_maker1_cutcutgo_cfw.hex
-          if-no-files-found: error
-
-
+          repo_token: "${{ github.token }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: ${{ env.RELEASE_DIR }}/**        
