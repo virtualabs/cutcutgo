@@ -65,8 +65,8 @@ void hal_button_pressed(void)
     /* Is updown button pressed ? */
     if ((PORTD & (1 << (BTN_UPDOWN & 0x0F))) == 0)
     {
-        /* Updown button pressed. */
-        sys.pending_mat_loaded = 1;
+            /* Updown button pressed. */
+            sys.pending_mat_loaded = 1;
     }
     
     /* Is power button pressed ? */

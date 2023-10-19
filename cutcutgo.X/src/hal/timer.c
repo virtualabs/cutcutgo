@@ -41,6 +41,9 @@ void __ISR(_TIMER_1_VECTOR, ipl1SOFT) Timer1Handler (void) {
     /* Run our watchdog. */
     watchdog_callback();
     
+    /* Blink LED if required. */
+    led_handle_blink();
+    
     /* Clear interrupt flag for Timer1 interrupt. */
     IFS0 &= ~(1 << 4);
 } 
@@ -55,4 +58,15 @@ void _delay_ms(uint32_t ms)
 {
     g_ticks_count = 0;
     while(g_ticks_count < ms);
+}
+
+/**
+ * @brief   Retrieve the current number of elapsed milliseconds since boot time
+ * 
+ * @return  Number of milliseconds elapsed since boot time.
+ */
+
+uint32_t timer_get_ms(void)
+{
+    return g_ticks_count;
 }

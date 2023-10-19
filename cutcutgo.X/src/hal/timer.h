@@ -10,6 +10,7 @@
 /* Initialize system timers. */
 void timer_init(void);
 void timer_start(void);
+uint32_t timer_get_ms(void);
 
 void _delay_ms(uint32_t ms);
 
