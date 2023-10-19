@@ -1,5 +1,8 @@
 name: Build firmware binaries
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'cutcutgo.X/**'
 
 jobs:
   build:
