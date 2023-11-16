@@ -73,12 +73,12 @@ void GRBL_Init(void)
 
     // Reset system variables.
     uint8_t prior_state = sys.state;
-    memset(&sys, 0, sizeof(system_t)); // Clear system struct variable.
+    memset(&sys, 0, sizeof(system_t));                          // Clear system struct variable.
     sys.state = prior_state;
-    sys.f_override = DEFAULT_FEED_OVERRIDE;  // Set to 100%
-    sys.r_override = DEFAULT_RAPID_OVERRIDE; // Set to 100%
-    sys.spindle_speed_ovr = DEFAULT_SPINDLE_SPEED_OVERRIDE; // Set to 100%
-		memset(sys_probe_position,0,sizeof(sys_probe_position)); // Clear probe position.
+    sys.f_override = DEFAULT_FEED_OVERRIDE;                     // Set to 100%
+    sys.r_override = DEFAULT_RAPID_OVERRIDE;                    // Set to 100%
+    sys.spindle_speed_ovr = DEFAULT_SPINDLE_SPEED_OVERRIDE;     // Set to 100%
+	memset(sys_probe_position,0,sizeof(sys_probe_position));    // Clear probe position.
     sys_probe_state = 0;
     sys_rt_exec_state = 0;
     sys_rt_exec_alarm = 0;

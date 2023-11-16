@@ -286,19 +286,6 @@ void protocol_handler(void)
         break;
     }
     
-    /**
-     * Perform user-triggered actions:
-     * - mat loading/unloading
-     * - homing
-     * - cycle pause
-     */
-    
-    if (sys.pending_mat_loaded)
-    {
-        sys.pending_mat_loaded = 0;
-        mc_feed_mat();
-    }
-    
     // If there are no more characters in the serial read buffer to be processed and executed,
     // this indicates that g-code streaming has either filled the planner buffer or has
     // completed. In either case, auto-cycle start, if enabled, any queued moves.
@@ -546,7 +533,7 @@ void protocol_exec_rt_system()
           sys.suspend &= ~(SUSPEND_JOG_CANCEL);
           sys.suspend |= SUSPEND_HOLD_COMPLETE;
           sys.state = STATE_SAFETY_DOOR;
-        } else {
+        } else if (sys.state != STATE_MAT_LOAD_UNLOAD) {
           //printString("[protocol_rt_system(): sys.state=STATE_IDLE]\r\n");
           sys.suspend = SUSPEND_DISABLE;
           sys.state = STATE_IDLE;
@@ -722,6 +709,50 @@ void protocol_exec_rt_system()
         reset_soft();
   }
   
+  
+  /* Mat loading/unloading state ? */
+  if (rt_exec & EXEC_MAT_LOAD_UNLOAD)
+  {
+      switch (sys.state)
+      {
+          case STATE_IDLE:
+            {
+               sys.state = STATE_MAT_LOAD_UNLOAD;
+               
+               /* Load/unload mat. */
+               mc_feed_mat();
+            }
+          
+          case STATE_MAT_LOAD_UNLOAD:
+            {
+                /* Get Y motor state. */
+                hal_motor_state_t y_state = hal_motor_get_state(&HAL_MOTOR_Y);
+                
+                if (y_state == HAL_MOTOR_IDLE)
+                {
+                    /* Save mat state. */
+                    if (sys.mat_loaded == 0)
+                    {
+                        sys.mat_loaded = 1;
+                    }
+                    else
+                    {
+                        sys.mat_loaded = 0;
+                    }
+                         
+                    /* Clear shutdown flag. */
+                    system_clear_exec_state_flag(EXEC_MAT_LOAD_UNLOAD);
+
+                    /* Done, clear state. */
+                    sys.state = STATE_IDLE;
+                }
+            }
+            break;
+          
+          default:
+              break;
+      }
+  }
 
   // Execute overrides.
   rt_exec = sys_rt_exec_motion_override; // Copy volatile sys_rt_exec_motion_override

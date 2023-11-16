@@ -372,7 +372,7 @@ void mc_feed_mat(void)
   plan_line_data_t plan_data;
   plan_line_data_t *pl_data = &plan_data;
   
-  if (sys.state == STATE_IDLE)
+  if (sys.state == STATE_MAT_LOAD_UNLOAD)
   {
     memset(pl_data,0,sizeof(plan_line_data_t));
 
@@ -387,7 +387,7 @@ void mc_feed_mat(void)
     st_wake_up(); // Initiate motion
 
     protocol_execute_realtime(); // Check for reset and set system abort.
-    if (sys.abort) { return; } // Did not complete. Alarm state set by mc_alarm.
+    //if (sys.abort) { return; } // Did not complete. Alarm state set by mc_alarm.
 
     // Homing cycle complete! Setup system for normal operation.
     // -------------------------------------------------------------------------------------
@@ -395,26 +395,6 @@ void mc_feed_mat(void)
     // Sync gcode parser and planner positions to homed position.
     gc_sync_position();
     plan_sync_position();
-
-    /*
-     * Wait while mat is loading/unloading
-     *
-     * TODO: Improve this code !
-     * 
-     */
-    
-    while (sys.state != STATE_IDLE)
-        protocol_execute_realtime();
-    
-    /* Save mat state. */
-    if (sys.mat_loaded == 0)
-    {
-        sys.mat_loaded = 1;
-    }
-    else
-    {
-        sys.mat_loaded = 0;
-    }
   }
 }
   

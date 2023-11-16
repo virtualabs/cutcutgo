@@ -28,16 +28,17 @@
 // NOTE: The system executor uses an unsigned 8-bit volatile variable (8 flag limit.) The default
 // flags are always false, so the realtime protocol only needs to check for a non-zero value to
 // know when there is a realtime command to execute.
-#define EXEC_STATUS_REPORT  bit(0) // bitmask   00000001
-#define EXEC_CYCLE_START    bit(1) // bitmask   00000010
-#define EXEC_CYCLE_STOP     bit(2) // bitmask   00000100
-#define EXEC_FEED_HOLD      bit(3) // bitmask   00001000
-#define EXEC_RESET          bit(4) // bitmask   00010000
-#define EXEC_SAFETY_DOOR    bit(5) // bitmask   00100000
-#define EXEC_MOTION_CANCEL  bit(6) // bitmask   01000000
-#define EXEC_SLEEP          bit(7) // bitmask   10000000
-#define EXEC_WARMUP         bit(8) // bitmask  100000000
-#define EXEC_SHUTDOWN       bit(9) // bitmask 1000000000
+#define EXEC_STATUS_REPORT   bit(0)      // bitmask     00000001
+#define EXEC_CYCLE_START     bit(1)      // bitmask     00000010
+#define EXEC_CYCLE_STOP      bit(2)      // bitmask     00000100
+#define EXEC_FEED_HOLD       bit(3)      // bitmask     00001000
+#define EXEC_RESET           bit(4)      // bitmask     00010000
+#define EXEC_SAFETY_DOOR     bit(5)      // bitmask     00100000
+#define EXEC_MOTION_CANCEL   bit(6)      // bitmask     01000000
+#define EXEC_SLEEP           bit(7)      // bitmask     10000000
+#define EXEC_WARMUP          bit(8)      // bitmask    100000000
+#define EXEC_SHUTDOWN        bit(9)      // bitmask   1000000000
+#define EXEC_MAT_LOAD_UNLOAD bit(10)     // bitmask  10000000000
 
 // Alarm executor codes. Valid values (1-255). Zero is reserved.
 #define EXEC_ALARM_HARD_LIMIT                 1
@@ -75,17 +76,18 @@
 // Define system state bit map. The state variable primarily tracks the individual functions
 // of Grbl to manage each without overlapping. It is also used as a messaging flag for
 // critical events.
-#define STATE_IDLE          0      // Must be zero. No flags.
-#define STATE_ALARM         bit(0) // In alarm state. Locks out all g-code processes. Allows settings access.
-#define STATE_CHECK_MODE    bit(1) // G-code check mode. Locks out planner and motion only.
-#define STATE_HOMING        bit(2) // Performing homing cycle
-#define STATE_CYCLE         bit(3) // Cycle is running or motions are being executed.
-#define STATE_HOLD          bit(4) // Active feed hold
-#define STATE_JOG           bit(5) // Jogging mode.
-#define STATE_SAFETY_DOOR   bit(6) // Safety door is ajar. Feed holds and de-energizes system.
-#define STATE_SLEEP         bit(7) // Sleep state.
-#define STATE_WARMUP        bit(8) // Warmup State. Handles X axis and tools homing.
-#define STATE_SHUTDOWN      bit(9) // Shutdown state.
+#define STATE_IDLE              0      // Must be zero. No flags.
+#define STATE_ALARM             bit(0) // In alarm state. Locks out all g-code processes. Allows settings access.
+#define STATE_CHECK_MODE        bit(1) // G-code check mode. Locks out planner and motion only.
+#define STATE_HOMING            bit(2) // Performing homing cycle
+#define STATE_CYCLE             bit(3) // Cycle is running or motions are being executed.
+#define STATE_HOLD              bit(4) // Active feed hold
+#define STATE_JOG               bit(5) // Jogging mode.
+#define STATE_SAFETY_DOOR       bit(6) // Safety door is ajar. Feed holds and de-energizes system.
+#define STATE_SLEEP             bit(7) // Sleep state.
+#define STATE_WARMUP            bit(8) // Warmup State. Handles X axis and tools homing.
+#define STATE_SHUTDOWN          bit(9) // Shutdown state.
+#define STATE_MAT_LOAD_UNLOAD   bit(10)// Mat loading/unloading state.
 
 // Define system suspend flags. Used in various ways to manage suspend states and procedures.
 #define SUSPEND_DISABLE           0      // Must be zero.
