@@ -1,6 +1,44 @@
 CutcutGo installation
 =====================
 
+Is my Cricut Maker Compatible ?
+-------------------------------
+
+.. |ATH-84-100-X12| image:: _static/images/pcb/ATH-84-100-X12.jpg
+   :width: 20pt
+   :height: 20pt
+   :alt: The Maker 1 ATH-84-100-X12 PCB.
+
+.. |ATH-84-112-X3| image:: _static/images/pcb/ATH-84-112-X3.jpg
+   :width: 20pt
+   :height: 20pt
+   :alt: The Maker 1 ATH-84-112-X3 PCB.
+
+.. |ATH-84-113-X1| image:: _static/images/pcb/ATH-84-113-X1.jpg
+   :width: 20pt
+   :height: 20pt
+   :alt: The Maker 1 ATH-84-113-X1 PCB.
+
+.. |SCM-84-100-X7| image:: _static/images/pcb/SCM-84-100-X7.jpg
+   :width: 20pt
+   :height: 20pt
+   :alt: The Maker 3 SCM-84-100-X7 PCB.
+
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
+| Machine | Model # | S/N begins with | PCB revision   | PCB              | MCU Reference     | Compatible |
++=========+=========+=================+================+==================+===================+============+
+| Maker 1 | CXPL301 | ?               | ATH-84-100-X12 | |ATH-84-100-X12| | PICxxxxxxxxxxxx   | NOT YET    |
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
+| Maker 1 | CXPL301 | Q               | ATH-84-112-X3  | |ATH-84-112-X3|  | PIC32MX470F512L   | YES        |
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
+| Maker 1 | CXPL301 | T               | ATH-84-113-X1  | |ATH-84-113-X1|  | PIC32MK1024MCF100 | NOT YET    |
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
+| Maker 3 | CXPL303 | M               | SCM-84-100-X7  | |SCM-84-100-X7|  | PIC32MK1024MCF100 | NOT YET    |
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
+
+* If you own a Maker 1 with ATH-84-100-X12, please share your serial number.
+* If you own a Maker with an unknown PCB, please share your serial number, pictures of your PCB, and the MCU reference if possible (using MPLAB IPE).
+
 Prepare your Cricut Maker for programming
 -----------------------------------------
 
@@ -33,7 +71,7 @@ Flashing the CutcutGo bootloader
 
 First, download and install `Microchip MPLABX <https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide>`_ on your
 system. You will only need MPLabX' Integrated Programming Environment (IPE) utility to re-program the main micro-controller.
-Download the `latest version of CutcutGo Bootloader <https://github.com/virtualabs/cutcutgo-bl/releases/download/v1.0/cutcutgo_bootloader_v1.0.hex>`_ and save
+Download the `latest version of CutcutGo Bootloader <https://github.com/virtualabs/cutcutgo-bl/releases/tag/latest>`_ and save
 it.
 
 Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.
@@ -98,7 +136,7 @@ below:
 .. image:: _static/images/bootloader/msd-device.png
     :width: 400
 
-Download the `latest version of the CutcutGo application (UF2 file) <https://github.com/virtualabs/cutcutgo/releases/download/v0.9-alpha/Cutcutgo-app_v0.9-alpha.uf2>`_ to your computer and
+Download the `latest version of the CutcutGo application (UF2 file) <https://github.com/virtualabs/cutcutgo/releases/tag/latest>`_ to your computer and
 copy it into the `Cutcutgo` drive. The Cricut Maker LEDs will blink during the copy, and reset
 once programmed (all lEDs are then off). 
 
