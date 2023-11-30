@@ -468,6 +468,19 @@ void stepper_init()
     
 }
 
+void stepper_deinit(void)
+{
+    /* Initialize X/Y motors. */
+    hal_motor_deinit(&HAL_MOTOR_X);
+    hal_motor_deinit(&HAL_MOTOR_Y);
+    
+    /* Initialize Z motors. */
+    hal_motor_deinit(&HAL_MOTOR_TOOL1);
+    hal_motor_deinit(&HAL_MOTOR_TOOL2);
+    
+    /* Initialize our motor driver. */
+    hal_motor_driver_deinit();   
+}
 
 // Called by planner_recalculate() when the executing block is updated by the new plan.
 void st_update_plan_block_parameters()

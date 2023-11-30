@@ -740,6 +740,9 @@ void protocol_exec_rt_system()
             while (hal_motor_get_state(&HAL_MOTOR_Y) != HAL_MOTOR_IDLE);
         }
         
+        /* Gracefully stop our motors. */
+        stepper_deinit();
+        
         /* Switch off all LEDs. */
         led_set_power(false, false, false);
         led_set_updown(false);

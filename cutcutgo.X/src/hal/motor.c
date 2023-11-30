@@ -220,6 +220,29 @@ int hal_motor_pwm_init(void)
     return 0;
 }
 
+
+/**
+ * Deinitialize the motor HAL.
+ * 
+ * This function sets TIMER2 if not already initialized. This timer is used
+ * to drive PWM motor GPIOs. Motors are totally controlled by hardware and
+ * interrupts (full-async).
+ */
+
+int hal_motor_pwm_deinit(void)
+{
+    if (gb_pwm_init)
+    {
+        // Turn off timer 2
+        T2CONbits.TON  = 0;
+
+        gb_pwm_init = false;
+    }
+    
+    /* Success. */
+    return 0;
+}
+
 /**
  * Initialize a DC motor driver IN1/IN2 pins.
  * 
@@ -330,7 +353,7 @@ int hal_motor_set_direction(hal_motor_driver_t *motor, hal_motor_direction_t dir
                 {
                     /* Forward: IN1=1 IN2=0. */
                     GPIO_PinWrite(motor->in1, false);
-                    GPIO_PinWrite(motor->in2, false);             
+                    GPIO_PinWrite(motor->in2, false);       
                 }
                 break;
             }
@@ -429,6 +452,33 @@ int hal_motor_init(hal_motor_driver_t *motor, hal_motor_mode_t mode)
     
     /* Manual mode disabled by default. */
     motor->manual = false;
+       
+    /* Success. */
+    return 0;
+}
+
+
+/**
+ * Deinitializes a motor.
+ * 
+ * @param motor pointer to a motor structure (hal_motor_driver_t*)
+ * @return Always 0.
+ */
+
+int hal_motor_deinit(hal_motor_driver_t *motor)
+{   
+    /* Set direct mode and stop motor (in1 and in2 set to 0) */
+    hal_motor_set_mode(motor, HAL_MOTOR_DIRECT);
+    hal_motor_set_direction(motor, HAL_MOTOR_STOP);
+    
+    /* Enable pulldown for Change Notification. */
+    hal_motor_enable_encoder(motor, false);
+    
+    /* Disable change notification for port G. */
+    if (CNCONGbits.ON)
+    {
+        CNCONGbits.ON = 0;
+    }
        
     /* Success. */
     return 0;
@@ -828,6 +878,12 @@ void hal_motor_driver_init(void)
     /* Enable IEC1<18> (Change notification for Port G) */
     IEC1bits.CNGIE = 1;
     IFS1bits.CNGIF = 0;
+}
+
+void hal_motor_driver_deinit(void)
+{
+    /* Stop PWM timer. */
+    hal_motor_pwm_deinit();
 }
 
 void hal_motor_stall_detection(hal_motor_driver_t *motor)

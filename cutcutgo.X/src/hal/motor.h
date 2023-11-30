@@ -116,5 +116,9 @@ void hal_motor_safety_checks(void);
 /* Manual mode. */
 void hal_motor_set_manual(hal_motor_driver_t *motor, bool manual_mode);
 
+/* Deinit. */
+void hal_motor_driver_deinit(void);
+int hal_motor_deinit(hal_motor_driver_t *motor);
+
 
 #endif /* __INC_HAL_MOTOR_H */
