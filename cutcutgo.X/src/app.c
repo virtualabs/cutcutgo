@@ -440,6 +440,10 @@ void APP_Initialize(void)
     led_init();
     button_init();
     hal_motor_driver_init();
+    
+    /* Initialize GRBL layer. */
+    GRBL_Init();
+    appData.grblInitialized = true;
 }
 
 
@@ -510,11 +514,6 @@ void APP_Tasks(void)
             /* Check if the device was configured */
             if(appData.isConfigured)
             {
-                /* Initialize GRBL layer. */
-                GRBL_Init();
-
-                appData.grblInitialized = true;
-
                 /* If the device is configured then lets start reading */
                 appData.state = APP_STATE_SCHEDULE_READ;
             }
