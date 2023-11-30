@@ -60,7 +60,11 @@ void mc_override_ctrl_update(uint8_t override_state);
 // Plans and executes the single special motion case for parking. Independent of main planner buffer.
 void mc_parking_motion(float *parking_target, plan_line_data_t *pl_data);
 
-void mc_feed_mat(void);
+// Load/unload the mat.
+void mc_mat_load_unload(void);
+
+// Move tool head to the center.
+void mc_head_center(void);
 
 // Performs system reset. If in motion state, kills all motion and sets system alarm.
 void mc_reset(void);

@@ -366,7 +366,7 @@ uint8_t mc_probe_cycle(float *target, plan_line_data_t *pl_data, uint8_t parser_
 #endif
 
   
-void mc_feed_mat(void)
+void mc_mat_load_unload(void)
 {
   float target[N_AXIS];
   plan_line_data_t plan_data;
@@ -397,7 +397,42 @@ void mc_feed_mat(void)
     plan_sync_position();
   }
 }
+
+
+void mc_head_center(void)
+{
+  float target[N_AXIS];
+  plan_line_data_t plan_data;
+  plan_line_data_t *pl_data = &plan_data;
   
+  if (sys.state == STATE_WARMUP)
+  {
+    memset(pl_data,0,sizeof(plan_line_data_t));
+
+    plan_data.feed_rate = 10.0;
+    plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
+    target[X_AXIS] = DEFAULT_HEAD_CENTER;
+    target[Y_AXIS] = 0.0;
+    target[Z_AXIS] = 0.0;
+    plan_buffer_line(target, pl_data);
+    sys.step_control = STEP_CONTROL_EXECUTE_SYS_MOTION; // Set to execute homing motion and clear existing flags.
+    st_prep_buffer(); // Prep and fill segment buffer from newly planned block.
+    st_wake_up(); // Initiate motion
+
+    protocol_execute_realtime(); // Check for reset and set system abort.
+    //if (sys.abort) { return; } // Did not complete. Alarm state set by mc_alarm.
+
+    // Homing cycle complete! Setup system for normal operation.
+    // -------------------------------------------------------------------------------------
+
+    // Sync gcode parser and planner positions to homed position.
+    gc_sync_position();
+    plan_sync_position();
+    
+    // Wait for the tool head to move to the target position
+    while (hal_motor_get_state(&HAL_MOTOR_X) != HAL_MOTOR_IDLE);
+  }
+}
 
 // Method to ready the system to reset by setting the realtime reset command and killing any
 // active processes in the system. This also checks if a system reset is issued while Grbl
