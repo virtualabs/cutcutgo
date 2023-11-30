@@ -594,8 +594,20 @@ void protocol_exec_rt_system()
                   /* Warmup done. */
                   system_clear_exec_state_flag(EXEC_WARMUP);
                   
-                  /* Switch to homing. */
-                  mc_homing_cycle(HOMING_CYCLE_ALL);
+                  /* Homing tool 1. */
+                  st_select_tool(0);
+                  mc_homing_cycle(HOMING_CYCLE_Z);
+
+                  /* Homing tool 2. */
+                  st_select_tool(1);
+                  mc_homing_cycle(HOMING_CYCLE_Z);
+
+                  /* Homing X. */
+                  st_select_tool(0);
+                  mc_homing_cycle(HOMING_CYCLE_X);
+                  
+                  /* Center tool head. */
+                  mc_head_center();
                   
                   /* System is ready ! */
                   sys.state = STATE_IDLE;
@@ -646,8 +658,20 @@ void protocol_exec_rt_system()
                 /* Warmup done. */
                 system_clear_exec_state_flag(EXEC_WARMUP);
 
-                /* Switch to homing. */
-                mc_homing_cycle(HOMING_CYCLE_ALL);
+                /* Homing tool 1. */
+                st_select_tool(0);
+                mc_homing_cycle(HOMING_CYCLE_Z);
+                
+                /* Homing tool 2. */
+                st_select_tool(1);
+                mc_homing_cycle(HOMING_CYCLE_Z);
+                
+                /* Homing X. */
+                st_select_tool(0);
+                mc_homing_cycle(HOMING_CYCLE_X);
+
+                /* Center tool head. */
+                mc_head_center();
                 
                 /* System is ready ! */
                 sys.state = STATE_IDLE;
@@ -693,8 +717,28 @@ void protocol_exec_rt_system()
         led_blink_mode(LED_POWER_WHITE);
         led_set(LED_POWER_WHITE);
         
-        /* Home our tool head. */
-        mc_homing_cycle(HOMING_CYCLE_ALL);
+        /* Homing tool 1. */
+        st_select_tool(0);
+        mc_homing_cycle(HOMING_CYCLE_Z);
+
+        /* Homing tool 2. */
+        st_select_tool(1);
+        mc_homing_cycle(HOMING_CYCLE_Z);
+
+        /* Homing X. */
+        st_select_tool(0);
+        mc_homing_cycle(HOMING_CYCLE_X);
+        
+        /* Unload mat if still loaded. */
+        if (sys.mat_loaded)
+        {
+            /* Unload mat. */
+            sys.state = STATE_MAT_LOAD_UNLOAD;
+            mc_mat_load_unload();
+            
+            /* Wait until mat is unloaded. */
+            while (hal_motor_get_state(&HAL_MOTOR_Y) != HAL_MOTOR_IDLE);
+        }
         
         /* Switch off all LEDs. */
         led_set_power(false, false, false);
@@ -716,11 +760,10 @@ void protocol_exec_rt_system()
       switch (sys.state)
       {
           case STATE_IDLE:
-            {
-               sys.state = STATE_MAT_LOAD_UNLOAD;
-               
+            {                 
                /* Load/unload mat. */
-               mc_feed_mat();
+               sys.state = STATE_MAT_LOAD_UNLOAD;
+               mc_mat_load_unload();
             }
           
           case STATE_MAT_LOAD_UNLOAD:
