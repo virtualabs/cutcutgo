@@ -33,6 +33,7 @@ hal_motor_driver_t HAL_MOTOR_X = {
     &MOTOR_X_DRIVER_PWM_IN1,
     &MOTOR_X_DRIVER_PWM_IN2,
     0,
+    200, /* Hard limit threshold. */
     HAL_MOTOR_PWM,
     HAL_MOTOR_STOP,
     0,
@@ -53,6 +54,7 @@ hal_motor_driver_t HAL_MOTOR_Y = {
     &MOTOR_Y_DRIVER_PWM_IN1,
     &MOTOR_Y_DRIVER_PWM_IN2,
     0,
+    200, /* Hard limit threshold. */
     HAL_MOTOR_PWM,
     HAL_MOTOR_STOP,
     0,
@@ -73,6 +75,7 @@ hal_motor_driver_t HAL_MOTOR_TOOL1 = {
     &MOTOR_TOOL1_DRIVER_PWM_IN1,
     &MOTOR_TOOL1_DRIVER_PWM_IN2,
     0,
+    200, /* Hard limit threshold. */
     HAL_MOTOR_PWM,
     HAL_MOTOR_STOP,
     0,
@@ -93,6 +96,7 @@ hal_motor_driver_t HAL_MOTOR_TOOL2 = {
     &MOTOR_TOOL2_DRIVER_PWM_IN1,
     &MOTOR_TOOL2_DRIVER_PWM_IN2,
     0,
+    200, /* Hard limit threshold. */
     HAL_MOTOR_PWM,
     HAL_MOTOR_STOP,
     0,
@@ -756,6 +760,16 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
             /* Save current encoder state. */
             motor->enc_cur_state = enc_state;
 
+            /* Shall we reset limits for the axis ? */
+            if ((motor->current_steps > 0) && !motor->wd_armed)
+            {
+                /* motor is not blocked, no hard limit hit. */
+                limits_set_state(motor->grbl_axis, false);
+                
+                /* Hard limit has been set for this move. */
+                motor->wd_armed = true;
+            }
+            
             /* Shall we brake ? */
             if ((motor->state == HAL_MOTOR_DRIVEN) && (motor->current_steps >= motor->command_steps))
             {   
@@ -769,7 +783,7 @@ void hal_motor_update_encoder_state(hal_motor_driver_t *motor, uint8_t enc_state
                 /* Go to next move (if not manual mode). */
                 if (!motor->manual)
                 {
-                    st_execute_next_step();
+                    //st_execute_next_step();
                 }
             }
         }
@@ -886,10 +900,13 @@ void hal_motor_driver_deinit(void)
     hal_motor_pwm_deinit();
 }
 
+/** Called every 1ms. */
+
 void hal_motor_stall_detection(hal_motor_driver_t *motor)
 {
     if (motor->state == HAL_MOTOR_DRIVEN)
     {
+#if 0
         if (!motor->wd_armed)
         {
             if (motor->current_steps != 0)
@@ -902,19 +919,23 @@ void hal_motor_stall_detection(hal_motor_driver_t *motor)
                 limits_set_state(motor->grbl_axis, false);
             }
         }
-        else if (motor->current_steps == motor->wd_prev_steps)
+        else 
+#endif    
+        if ((motor->current_steps == motor->wd_prev_steps) && motor->wd_armed)
         {
-            if (motor->wd_stall_counter < 3)
-            {
-                motor->wd_stall_counter++;
-            }
-            else
+            //if (motor->wd_stall_counter < 5)
+            //{
+            //    motor->wd_stall_counter++;
+            //}
+            //else
             {
                 //printString("motor stalled !\r\n");
                 
                 /* Watchdog is armed and motor is stalled. First, cut motor. */
                 hal_motor_set_direction(motor, HAL_MOTOR_STOP);
                 motor->state = HAL_MOTOR_IDLE;
+                
+                motor->wd_armed = false;
 
                 /* Tell GRBL we hit an hard limit. */
                 limits_set_state(motor->grbl_axis, true);

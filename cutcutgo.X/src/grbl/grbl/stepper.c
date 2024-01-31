@@ -156,6 +156,12 @@ typedef struct {
     int x0, y0, x1, y1, z0, z1;
     int dx, dy, sx, sy, sz;
     int error;
+    
+    /* Data used for speed control. */
+    int step_dtx, step_dty;
+    int step_dtz;
+    int timer_slot;
+    hal_motor_driver_t *motor_current;
     hal_motor_driver_t *tool;
 } stepper_t;
 
@@ -349,7 +355,7 @@ void st_plan_next_move(void)
 
     busy = true;
 
-    bit_true(sys_rt_exec_state,EXEC_CYCLE_STOP);
+    bit_true(sys_rt_exec_state, EXEC_CYCLE_STOP);
     pl_block = NULL; // Set pointer to indicate check and load next planner block.
     plan_discard_current_block();
     
@@ -363,6 +369,9 @@ void st_plan_next_move(void)
         printString("[st_plan_next_move(): current plan block not NULL]\r\n");
     }
 #endif
+    
+    /* No motor active. */
+    stepper_info.motor_current = NULL;
   
     busy = false;
 }
@@ -442,6 +451,11 @@ void st_reset()
 
 }
 
+void stepper_timer_cb(void *p_data)
+{
+    /* Handle next step. */
+    st_execute_next_step();
+}
 
 // Initialize and start the stepper motor subsystem
 void stepper_init()
@@ -465,6 +479,9 @@ void stepper_init()
     
     /* Set default tool. */
     stepper_info.tool = &HAL_MOTOR_TOOL1;
+    
+    /* Create timer. */
+    stepper_info.timer_slot = timer_create_timer(1, stepper_timer_cb, NULL);
     
 }
 
@@ -542,11 +559,38 @@ static uint8_t st_next_block_index(uint8_t block_index)
     pl_block = NULL; // Set to reload next block.
   }
 #endif
-
+  
 void st_execute_next_step(void)
 {
     int e2;
-    
+
+    if (stepper_info.motor_current != NULL)
+    {
+        if (hal_motor_get_state(stepper_info.motor_current) == HAL_MOTOR_DRIVEN)
+        {
+            stepper_info.motor_current->wd_stall_counter++;
+            if (stepper_info.motor_current->wd_stall_counter > stepper_info.motor_current->hard_limit_threshold)
+            {
+                /* Watchdog is armed and motor is stalled. First, cut motor. */
+                hal_motor_set_direction(stepper_info.motor_current, HAL_MOTOR_STOP);
+                stepper_info.motor_current->state = HAL_MOTOR_IDLE;
+                
+                /* Tell GRBL we hit an hard limit. */
+                limits_set_state(stepper_info.motor_current->grbl_axis, true);
+                
+                /* No motor is driven. */
+                stepper_info.motor_current = NULL;
+            }
+            else
+            {
+                /* Restart timer. */
+                timer_start_timer(stepper_info.timer_slot);
+            }
+            return;
+        }
+    }
+
+#if 0
     /* If at least one motor is still moving, exit. */
     if (
         (hal_motor_get_state(&HAL_MOTOR_X) == HAL_MOTOR_DRIVEN) ||
@@ -556,6 +600,7 @@ void st_execute_next_step(void)
     {
         return;
     }
+#endif
     
     /* Are we done ? */
     /* Note: we don't need to check Z-axis because Z motor is stopped at this point. */
@@ -584,12 +629,19 @@ void st_execute_next_step(void)
             stepper_info.error += stepper_info.dy;
             stepper_info.x0 += stepper_info.sx;
 
+            /* We are moving the X axis. */
+            stepper_info.motor_current = &HAL_MOTOR_X;
+            
             /* Move X by 1 step. */
             hal_motor_step(
               &HAL_MOTOR_X,
               1,
               (stepper_info.sx < 0)?HAL_MOTOR_DIR_CW:HAL_MOTOR_DIR_CCW
             );
+            
+            /* Set timer. */
+            timer_set_interval(stepper_info.timer_slot, stepper_info.step_dtx);
+            timer_start_timer(stepper_info.timer_slot);
         }
     }
     if (e2 <= stepper_info.dx)
@@ -608,12 +660,19 @@ void st_execute_next_step(void)
             stepper_info.error += stepper_info.dx;
             stepper_info.y0 += stepper_info.sy;
 
+            /* We are moving the Y axis. */
+            stepper_info.motor_current = &HAL_MOTOR_Y;
+            
             /* Move Y by 1 step. */
             hal_motor_step(
               &HAL_MOTOR_Y,
               1,
               (stepper_info.sy < 0)?HAL_MOTOR_DIR_CW:HAL_MOTOR_DIR_CCW
             );
+            
+            /* Set timer. */
+            timer_set_interval(stepper_info.timer_slot, stepper_info.step_dty);
+            timer_start_timer(stepper_info.timer_slot);
         }
     }
     
@@ -622,6 +681,9 @@ void st_execute_next_step(void)
     {
         /* Update z0. */
         stepper_info.z0 += stepper_info.sz;
+
+        /* We are moving the X axis. */
+        stepper_info.motor_current = stepper_info.tool;
         
         /* Issue movement. */
         hal_motor_step(
@@ -629,6 +691,10 @@ void st_execute_next_step(void)
             1,
             (stepper_info.sz < 0)?HAL_MOTOR_DIR_CW:HAL_MOTOR_DIR_CCW
         );
+        
+        /* Set timer. */
+        timer_set_interval(stepper_info.timer_slot, stepper_info.step_dtz);
+        timer_start_timer(stepper_info.timer_slot);
     }
 }
 
@@ -677,11 +743,17 @@ void st_prep_buffer()
         stepper_info.dx = stepper_info.x1;
         stepper_info.dy = -stepper_info.y1;
         
+        /* Compute delay for steps on X and Y from feedrate. */
+        stepper_info.step_dtx = ceil(1.0/((pl_block->programmed_rate*DEFAULT_X_STEPS_PER_MM) / 60000));
+        stepper_info.step_dty = ceil(1.0/((pl_block->programmed_rate*DEFAULT_Y_STEPS_PER_MM) / 60000));
+
+        
         switch(selected_tool)
         {
             case 1:
                 {
                     stepper_info.tool = &HAL_MOTOR_TOOL2;
+                    stepper_info.step_dtz = ceil(1.0/((pl_block->programmed_rate*DEFAULT_A_STEPS_PER_MM) / 60000));
                 }
                 break;
 
@@ -689,6 +761,7 @@ void st_prep_buffer()
             default:
                 {
                     stepper_info.tool = &HAL_MOTOR_TOOL1;
+                    stepper_info.step_dtz = ceil(1.0/((pl_block->programmed_rate*DEFAULT_B_STEPS_PER_MM) / 60000));
                 }
                 break;
         }
@@ -731,6 +804,9 @@ void st_prep_buffer()
         /* Compute Bresenham error. */
         stepper_info.error = stepper_info.dx + stepper_info.dy;
        
+        /* Initialize current motor. */
+        stepper_info.motor_current = NULL;
+        
         /* Execute next step (X/Y axis). */
         st_execute_next_step();
 

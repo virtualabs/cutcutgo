@@ -586,7 +586,7 @@ void protocol_exec_rt_system()
                   hal_motor_stop(&HAL_MOTOR_X);
                   
                   /* Deduce optimal speed for X axis. */
-                  hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed - 200);
+                  hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed - 20);
                   
                   /* Disable manual mode. */
                   hal_motor_set_manual(&HAL_MOTOR_X, false);

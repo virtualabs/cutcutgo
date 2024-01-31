@@ -6,53 +6,39 @@
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/exceptions.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/pic32mx470_curiosity.mhc/core.yml</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/motor.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/usb/src/usb_device_msd.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/tasks.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/planner.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/system/system.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/led.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/planner.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/system/system_common.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/driver/usb/usbfs/src/drv_usbfs_device.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/led.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/limits.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/p32MX470F512H.ld</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/p32MX470F512H.bl.ld</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/bsp/bsp.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/grbl.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/peripheral/gpio/plib_gpio.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/peripheral/clk/plib_clk.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/probe.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/report.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/peripheral/gpio/plib_gpio.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/motion_control.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/pic32mx470_curiosity.mhc/settings.yml</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/bsp/bsp.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/system/system_common.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/stdio/xc32_monitor.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/settings.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/pic32mx470_curiosity.mhc/project.yml</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/bsp/bsp.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/tasks.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/driver/usb/usbfs/src/drv_usbfs_device.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/defaults.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/initialization.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/app.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/settings.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/system.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/app.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/main.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/gcode.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/system.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/report.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/print.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/reset.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/cpu_map.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/harmony-manifest-success.yml</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/protocol.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/peripheral/clk/plib_clk.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/driver/usb/usbfs/src/drv_usbfs.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/config.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/reset.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/stepper.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/driver/memory/src/drv_memory.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/toolchain_specifics.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/button.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/button.c</file>
@@ -60,39 +46,30 @@
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/stepper.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/usb/src/usb_device_cdc_acm.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/interrupts.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/usb/src/usb_device.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/usb/src/usb_device.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/initialization.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/pic32mx470_curiosity.mhc/usb_device_cdc.yml</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/nuts_bolts.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/device.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/peripheral/gpio/plib_gpio.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/configuration.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/main.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/fat12.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/peripheral/gpio/plib_gpio.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/motion_control.h</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/reset.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/app.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/definitions.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/Makefile</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/timer.c</file>
+            <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/app.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/limits.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/system/system.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/pic32mx470_curiosity.mhc/usb_device.yml</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/led.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/watchdog.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/led.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/main.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/config/cutcutgo/driver/usb/usbfs/src/templates/usb_BDTBaseAddress_Default.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/buttons.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/timer.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/serial.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/config.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/buttons.h</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/driver/memory/src/drv_memory_nvm.c</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/grbl/grbl/nuts_bolts.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/fat12.c</file>
-            <file>file:/home/virtualabs/projets/cutcutgo-bl/cutcutgo_bl.X/src/config/pic32mx470_curiosity/system/system_module.h</file>
             <file>file:/home/virtualabs/projets/CutcutGo/cutcutgo.X/src/hal/motor.h</file>
         </group>
     </open-files>

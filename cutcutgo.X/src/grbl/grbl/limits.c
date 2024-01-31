@@ -27,7 +27,7 @@
   #define HOMING_AXIS_SEARCH_SCALAR  1.5 // Must be > 1 to ensure limit switch will be engaged.
 #endif
 #ifndef HOMING_AXIS_LOCATE_SCALAR
-  #define HOMING_AXIS_LOCATE_SCALAR  5.0 // Must be > 1 to ensure limit switch is cleared.
+  #define HOMING_AXIS_LOCATE_SCALAR  100.0 // Must be > 1 to ensure limit switch is cleared.
 #endif
 
 #ifdef ENABLE_DUAL_AXIS
@@ -170,6 +170,7 @@ void limits_go_home(uint8_t cycle_mask)
       max_travel = max(max_travel,(-HOMING_AXIS_SEARCH_SCALAR)*settings.max_travel[idx]);
     }
   }
+
   #ifdef ENABLE_DUAL_AXIS
     step_pin_dual = (1<<DUAL_STEP_BIT);
   #endif
@@ -323,6 +324,10 @@ void limits_go_home(uint8_t cycle_mask)
 
     // After first cycle, homing enters locating phase. Shorten search to pull-off distance.
     if (approach) {
+      // Clear the EXEC_CYCLE_STOP bit (workaround due to motor driver).
+      system_clear_exec_state_flag(EXEC_CYCLE_STOP);
+      
+      // Plan next move.
       max_travel = settings.homing_pulloff*HOMING_AXIS_LOCATE_SCALAR;
       homing_rate = settings.homing_feed_rate;
     } else {

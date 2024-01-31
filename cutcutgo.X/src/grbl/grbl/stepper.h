@@ -23,6 +23,7 @@
 #define stepper_h
 
 #include "hal/motor.h"
+#include "hal/timer.h"
 
 #ifndef SEGMENT_BUFFER_SIZE
   #define SEGMENT_BUFFER_SIZE 6

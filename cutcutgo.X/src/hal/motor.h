@@ -52,6 +52,7 @@ typedef struct {
     
     /* Motor mode, speed and direction. */
     int speed;                          /* Motor current speed */
+    int hard_limit_threshold;           /* Hard limit detection threshold. */
 
     hal_motor_mode_t mode;              /* Motor mode (PWM, direct) */
     hal_motor_direction_t direction;    /* Current motor direction (CW, CCW, STOP). */
@@ -77,7 +78,10 @@ typedef struct {
     int rel_pos_th;
     
     /* GRBL axis number. */
-    int grbl_axis;   
+    int grbl_axis;
+    
+    /* Free wheel. */
+    bool free;
 } hal_motor_driver_t;
 
 /* Hardware motors declaration (export). */
@@ -104,6 +108,7 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
 void hal_motor_wait(hal_motor_driver_t *motor);
 hal_motor_state_t hal_motor_get_state(hal_motor_driver_t *motor);
 void hal_motor_stop(hal_motor_driver_t *motor);
+int hal_motor_set_free(hal_motor_driver_t *motor);
 int hal_motor_get_current_steps(hal_motor_driver_t *motor);
 int hal_motor_set_direction(hal_motor_driver_t *motor, hal_motor_direction_t direction);
 
