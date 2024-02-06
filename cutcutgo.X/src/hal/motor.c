@@ -200,7 +200,7 @@ int hal_motor_pwm_init(void)
         T2CON   = 0x0;      // Disable timer 2 when setting it up
         TMR2    = 0;        // Set timer 2 counter to 0
 
-        /* Set up the period. Period = PBCLK3 frequency, which is SYS_FREQ / 2, divided by 1000Hz and then divided by 8 for our chosen pre-scaler. */
+        /* Set up the period. Period = PBCLK3 frequency, which is SYS_FREQ / 2, divided by 20000Hz and then divided by 8 for our chosen pre-scaler. */
         PR2 = SYS_FREQ / 2 / 20000;
         
 #if 0

@@ -587,6 +587,7 @@ void protocol_exec_rt_system()
                   
                   /* Deduce optimal speed for X axis. */
                   hal_motor_set_speed(&HAL_MOTOR_X, sys.wu_speed - 20);
+                  //hal_motor_set_speed(&HAL_MOTOR_X, 1200);
                   
                   /* Disable manual mode. */
                   hal_motor_set_manual(&HAL_MOTOR_X, false);
@@ -605,6 +606,8 @@ void protocol_exec_rt_system()
                   /* Homing X. */
                   st_select_tool(0);
                   mc_homing_cycle(HOMING_CYCLE_X);
+                  
+                  hal_motor_set_speed(&HAL_MOTOR_X, 1800);
                   
                   /* Center tool head. */
                   mc_head_center();

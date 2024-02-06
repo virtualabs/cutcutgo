@@ -409,7 +409,7 @@ void mc_head_center(void)
   {
     memset(pl_data,0,sizeof(plan_line_data_t));
 
-    plan_data.feed_rate =  2000.0;
+    plan_data.feed_rate =  5000.0;
     plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
     target[X_AXIS] = DEFAULT_HEAD_CENTER;
     target[Y_AXIS] = 0.0;

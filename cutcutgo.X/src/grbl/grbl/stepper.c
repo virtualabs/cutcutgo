@@ -744,8 +744,8 @@ void st_prep_buffer()
         stepper_info.dy = -stepper_info.y1;
         
         /* Compute delay for steps on X and Y from feedrate. */
-        stepper_info.step_dtx = ceil(1.0/((pl_block->programmed_rate*DEFAULT_X_STEPS_PER_MM) / 60000));
-        stepper_info.step_dty = ceil(1.0/((pl_block->programmed_rate*DEFAULT_Y_STEPS_PER_MM) / 60000));
+        stepper_info.step_dtx = ceil(60000/(pl_block->programmed_rate*DEFAULT_X_STEPS_PER_MM));
+        stepper_info.step_dty = ceil(60000/(pl_block->programmed_rate*DEFAULT_Y_STEPS_PER_MM));
 
         
         switch(selected_tool)
