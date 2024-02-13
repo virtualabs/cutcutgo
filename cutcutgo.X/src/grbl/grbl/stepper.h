@@ -29,6 +29,9 @@
   #define SEGMENT_BUFFER_SIZE 6
 #endif
 
+#define     STEPPER_FEEDRATE_MIN    (1500.0)
+#define     STEPPER_FEEDRATE_MAX    (5000.0)
+
 // Initialize and setup the stepper motor subsystem
 void stepper_init(void);
 void stepper_deinit(void);
