@@ -465,6 +465,9 @@ void stepper_init()
 
     /* Initialize X/Y motors. */
     hal_motor_init(&HAL_MOTOR_X, HAL_MOTOR_PWM);
+    
+    /* Invert X axis encoder. */
+    HAL_MOTOR_X.inv_encoder = true;
     hal_motor_init(&HAL_MOTOR_Y, HAL_MOTOR_PWM);
     
     /* Initialize Z motors. */
