@@ -1,5 +1,5 @@
-CutcutGo installation
-=====================
+Flashing CutcutGo into your Cricut
+==================================
 
 Is my Cricut Maker Compatible ?
 -------------------------------
@@ -71,12 +71,12 @@ Flashing the CutcutGo bootloader
 
 First, download and install `Microchip MPLABX <https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide>`_ on your
 system. You will only need MPLabX' Integrated Programming Environment (IPE) utility to re-program the main micro-controller.
-Download the `latest version of CutcutGo Bootloader <https://github.com/virtualabs/cutcutgo-bl/releases/tag/latest>`_ and save
+Download the `latest version of CutcutGo Bootloader <https://github.com/virtualabs/cutcutgo-bl/releases/tag/v2.0>`_ and save
 it.
 
 Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.
 
-.. image:: _static/images/setup/microchip-snap.jpg
+.. image:: _static/images/setup/connect-snap.png
     :width: 600
     :alt: Microchip SNAP connected to our Cricut Maker debug port.
 
@@ -139,6 +139,12 @@ below:
 Download the `latest version of the CutcutGo application (UF2 file) <https://github.com/virtualabs/cutcutgo/releases/tag/latest>`_ to your computer and
 copy it into the `Cutcutgo` drive. The Cricut Maker LEDs will blink during the copy, and reset
 once programmed (all lEDs are then off). 
+
+.. warning::
+
+    An error may appear on the computer due to the sudden
+    disconnection of the mass-storage device, but the firmware has been successfully programmed
+    into the micro-controller.
 
 Power up the Cricut Maker by a long-press on the power button, it will start the CutcutGo firmware and
 you should see the power button LED light up in white.
