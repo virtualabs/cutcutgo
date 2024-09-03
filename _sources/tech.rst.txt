@@ -9,7 +9,7 @@ Cricut Maker Reverse-engineering
 --------------------------------
 
 * `Reversed PCB schematics (PDF) <_static/documents/CricutMaker-schematics.pdf>`_
-* `Reversed tracks & vias (SVG, 107 MB !) <_static/documents/reverse-pcb-release.svg>`_
+* `Reversed tracks & vias (SVG, zipped) <_static/documents/reverse-pcb-release.svg.zip>`_
 
 Datasheets
 ----------
