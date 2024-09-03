@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CutcutGo installation &mdash; CutcutGo v1.0 documentation</title>
+  <title>Flashing CutcutGo into your Cricut &mdash; CutcutGo v1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Configuring CutcutGo" href="config.html" />
+    <link rel="next" title="Configuring CutcutGo" href="inkscape.html" />
     <link rel="prev" title="Teardown of the Cricut Maker Champagne" href="teardown.html" /> 
 </head>
 
@@ -47,14 +47,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introducing CutcutGo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="teardown.html">Teardown of the Cricut Maker Champagne</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CutcutGo installation</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Flashing CutcutGo into your Cricut</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#is-my-cricut-maker-compatible">Is my Cricut Maker Compatible ?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#prepare-your-cricut-maker-for-programming">Prepare your Cricut Maker for programming</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#flashing-the-cutcutgo-bootloader">Flashing the CutcutGo bootloader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#flashing-the-cutcutgo-application">Flashing the CutcutGo application</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuring CutcutGo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inkscape.html">Configuring CutcutGo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tech.html">Technical resources</a></li>
 </ul>
 
@@ -72,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">CutcutGo installation</li>
+      <li class="breadcrumb-item active">Flashing CutcutGo into your Cricut</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/setup.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -82,8 +82,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cutcutgo-installation">
-<h1>CutcutGo installation<a class="headerlink" href="#cutcutgo-installation" title="Permalink to this heading"></a></h1>
+  <section id="flashing-cutcutgo-into-your-cricut">
+<h1>Flashing CutcutGo into your Cricut<a class="headerlink" href="#flashing-cutcutgo-into-your-cricut" title="Permalink to this heading"></a></h1>
 <section id="is-my-cricut-maker-compatible">
 <h2>Is my Cricut Maker Compatible ?<a class="headerlink" href="#is-my-cricut-maker-compatible" title="Permalink to this heading"></a></h2>
 <table class="docutils align-default">
@@ -153,10 +153,10 @@ as shown below.</p>
 <span id="firmware-flashing"></span><h2>Flashing the CutcutGo bootloader<a class="headerlink" href="#flashing-the-cutcutgo-bootloader" title="Permalink to this heading"></a></h2>
 <p>First, download and install <a class="reference external" href="https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide">Microchip MPLABX</a> on your
 system. You will only need MPLabX’ Integrated Programming Environment (IPE) utility to re-program the main micro-controller.
-Download the <a class="reference external" href="https://github.com/virtualabs/cutcutgo-bl/releases/tag/latest">latest version of CutcutGo Bootloader</a> and save
+Download the <a class="reference external" href="https://github.com/virtualabs/cutcutgo-bl/releases/tag/v2.0">latest version of CutcutGo Bootloader</a> and save
 it.</p>
 <p>Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as shown below.</p>
-<a class="reference internal image-reference" href="_images/microchip-snap.jpg"><img alt="Microchip SNAP connected to our Cricut Maker debug port." src="_images/microchip-snap.jpg" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="_images/connect-snap.png"><img alt="Microchip SNAP connected to our Cricut Maker debug port." src="_images/connect-snap.png" style="width: 600px;" /></a>
 <p>Connect your SNAP (or PicKit3) device into your computer, and launch MPLabX IPE.</p>
 <a class="reference internal image-reference" href="_images/mplab-ipe-first-step.png"><img alt="MPLabX IPE main view." src="_images/mplab-ipe-first-step.png" style="width: 600px;" /></a>
 <p>Follow these steps to connect your SNAP (or PicKit3) to MPLabX IPE:</p>
@@ -190,6 +190,12 @@ below:</p>
 <p>Download the <a class="reference external" href="https://github.com/virtualabs/cutcutgo/releases/tag/latest">latest version of the CutcutGo application (UF2 file)</a> to your computer and
 copy it into the <cite>Cutcutgo</cite> drive. The Cricut Maker LEDs will blink during the copy, and reset
 once programmed (all lEDs are then off).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>An error may appear on the computer due to the sudden
+disconnection of the mass-storage device, but the firmware has been successfully programmed
+into the micro-controller.</p>
+</div>
 <p>Power up the Cricut Maker by a long-press on the power button, it will start the CutcutGo firmware and
 you should see the power button LED light up in white.</p>
 <a class="reference internal image-reference" href="_images/app-running.png"><img alt="_images/app-running.png" src="_images/app-running.png" style="width: 400px;" /></a>
@@ -202,7 +208,7 @@ you should see the power button LED light up in white.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="teardown.html" class="btn btn-neutral float-left" title="Teardown of the Cricut Maker Champagne" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="config.html" class="btn btn-neutral float-right" title="Configuring CutcutGo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="inkscape.html" class="btn btn-neutral float-right" title="Configuring CutcutGo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
