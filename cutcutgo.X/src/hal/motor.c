@@ -624,7 +624,7 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
         break;
         
         case HAL_MOTOR_DIR_CW:
-        {
+        {      
             offset = motor->rel_pos_th - motor->rel_pos;            
         }
         break;
@@ -632,7 +632,13 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
         default:
             break;
     }
-
+    
+    /* Do not exceed an extra step. */
+    if (offset > 8)
+    {
+        offset = 8;
+    }
+    
     motor->command_steps = 8 + offset;
     motor->current_steps = 0;
     motor->error_steps = 0;
