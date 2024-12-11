@@ -81,6 +81,7 @@ Connect 6 wires from the debug interface to a Microchip SNAP (or PicKit3), as sh
     :alt: Microchip SNAP connected to our Cricut Maker debug port.
 
 Connect your SNAP (or PicKit3) device into your computer, and launch MPLabX IPE.
+Enable "Advanced Mode" for MPLabX IPE: Settings -> Advanced Mode -> (default password: microchip) -> Log in.
 
 .. image:: _static/images/setup/mplab-ipe-first-step.png
     :width: 600
