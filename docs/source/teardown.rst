@@ -57,7 +57,7 @@ Bluetooth Low Energy module
 The Cricut Maker relies on a Microchip *RN4678* Bluetooth/Bluetooth LE module driven by a dedicated
 UART interface. **This module interface has not been totally reversed yet**.
 
-The datasheet of this module is `available here <_static/documents/rn4678.pdf>`_
+The datasheet of this module is `available here <_static/documents/RN4678.pdf>`_
 
 Mechanical details
 ------------------
