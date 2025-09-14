@@ -29,6 +29,8 @@ Is my Cricut Maker Compatible ?
 +=========+=========+=================+================+==================+===================+============+
 | Maker 1 | CXPL301 | ?               | ATH-84-100-X12 | |ATH-84-100-X12| | PICxxxxxxxxxxxx   | NOT YET    |
 +---------+---------+-----------------+----------------+------------------+-------------------+------------+
+| Maker 1 | CXPL301 | Q               | ATH-84-112-X3  | |ATH-84-110-X2|  | ???               | ???        |
++---------+---------+-----------------+----------------+------------------+-------------------+------------+
 | Maker 1 | CXPL301 | Q               | ATH-84-112-X3  | |ATH-84-112-X3|  | PIC32MX470F512L   | YES        |
 +---------+---------+-----------------+----------------+------------------+-------------------+------------+
 | Maker 1 | CXPL301 | T               | ATH-84-113-X1  | |ATH-84-113-X1|  | PIC32MK1024MCF100 | NOT YET    |
@@ -123,7 +125,7 @@ Flashing the CutcutGo application
     :width: 400
 
 After flashing the bootloader, connect the Cricut Maker to your computer with an USB cable
-and power on the Cricut Maker by a long-press on the power button. The power button will
+and power on the Cricut Maker by a long-press on the power button while also pressing the pause button. The power button will
 light up in red and the button below in white, indicating that the bootloader has started
 and is waiting for some application file to be programmed.
 
