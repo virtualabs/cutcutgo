@@ -18,6 +18,7 @@ Moreover, current version of CutcutGo still has issues and missing features that
 a short list of what needs to be done to free all Cricut Makers and let users control them through different means.
 
 **Core issues and features**
+
 [ ] Improve GRBL to drive DC motors not like steppers but with a decent PID-based algorithm (smoother movements, reduce vibrations when X and Y axes are driven together)
 [ ] Add support for Cricut's color sensor located in the tool holder (at least for loading/unloading cutting mat)
 [ ] Add support for motorized tool located in the head (DC motor driver as well as position sensing through the associated IR LED ?)
@@ -25,5 +26,6 @@ a short list of what needs to be done to free all Cricut Makers and let users co
 [ ] Get rid of MPLABX because it's just a nightmare to use for development
 
 **Cricut Maker 3 reverse-engineering**
+
 [ ] Reverse-engineering and documentation of its hardware (micro-controller used, debug port, schematics, motors' characteristics like reduction ratio, etc...)
 [ ] Implement specific compilation directives to allow CutcutGo to compile on different targets (if possible)
