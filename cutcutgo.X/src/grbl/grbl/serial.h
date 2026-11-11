@@ -22,7 +22,11 @@
 #ifndef serial_h
 #define serial_h
 
+#ifdef BOARD_MAKER3
+#include "config/maker3/osal/osal.h"
+#else
 #include "config/cutcutgo/osal/osal.h"
+#endif
 
 
 #ifndef RX_BUFFER_SIZE

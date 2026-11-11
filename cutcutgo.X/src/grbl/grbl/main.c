@@ -20,6 +20,7 @@
 */
 
 #include "grbl.h"
+#include "hal/config.h"
 
 
 // Declare system global variable structure
@@ -67,14 +68,43 @@ void GRBL_Init(void)
     if (bit_istrue(settings.flags,BITFLAG_HOMING_ENABLE)) { sys.state = STATE_ALARM; }
   #endif
 
-  // Grbl initialization loop upon power-up or a system abort. For the latter, all processes
-  // will return to this loop to be cleanly re-initialized.
-  //for(;;) {
+  GRBL_Reset();
+
+#if defined(BOARD_MAKER3)
+  /* Maker 3, power-up only: home tools and X so every position is known
+   * (run by protocol_handler() on its first pass). Not after a soft reset or
+   * a failed homing: Grbl must not start moving by itself then. */
+  {
+    extern volatile bool g_boot_home_pending;
+    g_boot_home_pending = true;
+  }
+#endif
+
+#ifndef BOARD_MAKER3
+  /* Original Maker, power-up only: warm-up (find X minimal speed), then home
+   * tools and X. (The Maker 3's servo needs no warm-up; it homes above.) */
+  system_set_exec_state_flag(EXEC_WARMUP);
+#endif
+}
+
+/*
+ * (Re)initialise Grbl's runtime state. This is the body of stock Grbl's
+ * for(;;) loop in main(): it runs at power-up and again after every system
+ * abort (soft reset / Ctrl-X). cutcutgo runs Grbl from the USB task loop, so
+ * APP_Tasks() calls this whenever sys.abort is set; without it, Grbl ignored
+ * all input after a soft reset until the machine was power-cycled.
+ */
+void GRBL_Reset(void)
+{
+  // Grbl initialization upon power-up or a system abort.
+  {
 
     // Reset system variables.
     uint8_t prior_state = sys.state;
+    uint8_t prior_mat_loaded = sys.mat_loaded;
     memset(&sys, 0, sizeof(system_t));                          // Clear system struct variable.
     sys.state = prior_state;
+    sys.mat_loaded = prior_mat_loaded;                          // A reset doesn't remove the mat.
     sys.f_override = DEFAULT_FEED_OVERRIDE;                     // Set to 100%
     sys.r_override = DEFAULT_RAPID_OVERRIDE;                    // Set to 100%
     sys.spindle_speed_ovr = DEFAULT_SPINDLE_SPEED_OVERRIDE;     // Set to 100%
@@ -106,12 +136,12 @@ void GRBL_Init(void)
 
     // Start Grbl main loop. Processes program inputs and executes them.
     
-    /* Start with a warmup. */
-    system_set_exec_state_flag(EXEC_WARMUP);
+    /* (The power-up warm-up is requested by GRBL_Init(), not here: after a
+     * soft reset or a failed homing, Grbl must not start moving by itself.) */
     
     /* TODO: enable main loop */
     protocol_main_loop();
 
-  //}
+  }
   //return 0;   /* Never reached */
 }

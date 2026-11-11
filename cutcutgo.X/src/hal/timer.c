@@ -76,6 +76,11 @@ void __ISR(_TIMER_1_VECTOR, ipl1SOFT) Timer1Handler (void) {
     /* Check our timer slots. */
     timer_trigger();
     
+#ifdef BOARD_MAKER3
+    /* Motor position servo (1 kHz). */
+    hal_motor_servo_tick();
+#endif
+
     /* Run our watchdog. */
     //watchdog_callback();
     

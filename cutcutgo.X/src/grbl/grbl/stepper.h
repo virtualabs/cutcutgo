@@ -29,7 +29,12 @@
   #define SEGMENT_BUFFER_SIZE 6
 #endif
 
+#ifdef BOARD_MAKER3
+/* Upstream forced >= 1500 mm/min, so slower F words were silently ignored. */
+#define     STEPPER_FEEDRATE_MIN    (30.0)
+#else
 #define     STEPPER_FEEDRATE_MIN    (1500.0)
+#endif
 #define     STEPPER_FEEDRATE_MAX    (5000.0)
 
 // Initialize and setup the stepper motor subsystem
@@ -69,5 +74,15 @@ void st_plan_next_move(void);
 
 // Tool selection
 void st_select_tool(uint8_t tool);
+#ifdef BOARD_MAKER3
+/* After homing: both tools' remembered Z positions = 0 (top). */
+void st_reset_tool_z(void);
+/* true while a block is being executed (servo mode has no per-motor busy state). */
+bool st_motion_busy(void);
+/* Carriage position = sys_position + this (holder B is offset from holder A). */
+int32_t st_carriage_offset_steps(uint8_t axis);
+/* M3 just turned steering on: find the tool angle. false = failed. */
+bool st_steer_job_home(void);
+#endif
 
 #endif

@@ -41,6 +41,12 @@ static planner_t pl;
 
 
 // Returns the index of the next block in the ring buffer. Also called by stepper segment buffer.
+#ifdef BOARD_MAKER3
+/* Exact (not step-rounded) end of the last block: an arc's short segments
+ * are only a step or two long, and their step counts give false directions. */
+static float pl_prev_target[N_AXIS];
+#endif
+
 uint8_t plan_next_block_index(uint8_t block_index)
 {
   block_index++;
@@ -238,6 +244,13 @@ plan_block_t *plan_get_current_block()
 }
 
 
+plan_block_t *plan_get_block_after_current(void)
+{
+  uint8_t block_index = plan_next_block_index(block_buffer_tail);
+  if ((block_buffer_tail == block_buffer_head) || (block_index == block_buffer_head)) { return NULL; }
+  return &block_buffer[block_index];
+}
+
 float plan_get_exec_block_exit_speed_sqr()
 {
   uint8_t block_index = plan_next_block_index(block_buffer_tail);
@@ -377,6 +390,16 @@ uint8_t plan_buffer_line(float *target, plan_line_data_t *pl_data)
     if (delta_mm < 0.0 ) { block->direction_bits |= get_direction_pin_mask(idx); }
   }
 
+#ifdef BOARD_MAKER3
+  {
+    float sx = target[X_AXIS] - pl_prev_target[X_AXIS];
+    float sy = target[Y_AXIS] - pl_prev_target[Y_AXIS];
+
+    if ((sx == 0.0f) && (sy == 0.0f)) { sx = unit_vec[X_AXIS]; sy = unit_vec[Y_AXIS]; }
+    block->steer_dx = sx;
+    block->steer_dy = sy;
+  }
+#endif
   // Bail if this is a zero-length block. Highly unlikely to occur.
   if (block->step_event_count == 0) { return(PLAN_EMPTY_BLOCK); }
 
@@ -460,6 +483,9 @@ uint8_t plan_buffer_line(float *target, plan_line_data_t *pl_data)
     // Update previous path unit_vector and planner position.
     memcpy(pl.previous_unit_vec, unit_vec, sizeof(unit_vec)); // pl.previous_unit_vec[] = unit_vec[]
     memcpy(pl.position, target_steps, sizeof(target_steps)); // pl.position[] = target_steps[]
+#ifdef BOARD_MAKER3
+    memcpy(pl_prev_target, target, sizeof(pl_prev_target));
+#endif
 
     // New block is all set. Update buffer head and next buffer head indices.
     block_buffer_head = next_buffer_head;
@@ -490,6 +516,9 @@ void plan_sync_position()
     #else
       pl.position[idx] = sys_position[idx];
     #endif
+#ifdef BOARD_MAKER3
+    pl_prev_target[idx] = (float)pl.position[idx] / settings.steps_per_mm[idx];
+#endif
   }
 }
 

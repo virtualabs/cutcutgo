@@ -29,17 +29,38 @@
 
 #ifdef DEFAULTS_GENERIC
   // Grbl generic default settings. Should work across different machines.
-  #define DEFAULT_X_STEPS_PER_MM 11.76
-  #define DEFAULT_Y_STEPS_PER_MM 29.14
-  #define DEFAULT_A_STEPS_PER_MM 11.16
+  #ifdef BOARD_MAKER3
+    // Cricut Maker 3, measured with a ruler (2026-11-08): 100 mm commanded at
+    // 11.76 gave 131 mm on X; at 29.14 gave 280 mm on Y.
+    #define DEFAULT_X_STEPS_PER_MM 8.977
+    #define DEFAULT_Y_STEPS_PER_MM 10.407
+  #else
+    #define DEFAULT_X_STEPS_PER_MM 11.76
+    #define DEFAULT_Y_STEPS_PER_MM 29.14
+  #endif
+  #ifdef BOARD_MAKER3
+    // Pen holder (A): full 10 mm stroke = 1573 encoder counts (ruler, 2026-11-08).
+    // Blade holder (B): 5 mm = 1720 counts, so 43.26 (original Maker) is right.
+    #define DEFAULT_A_STEPS_PER_MM 19.66
+  #else
+    #define DEFAULT_A_STEPS_PER_MM 11.16
+  #endif
   #define DEFAULT_B_STEPS_PER_MM 43.26
   #define DEFAULT_X_MAX_RATE 1500.0 // mm/min
   #define DEFAULT_Y_MAX_RATE 1500.0 // mm/min
   #define DEFAULT_Z_MAX_RATE 1500.0 // mm/min
-  #define DEFAULT_X_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_Y_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_Z_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_X_MAX_TRAVEL 330.0 // mm NOTE: Must be a positive value.
+  #ifdef BOARD_MAKER3
+    // Used for real since v36 (the motion code used to ignore acceleration).
+    // Y is lower: it moves the mat, which can slip in the rollers.
+    #define DEFAULT_X_ACCELERATION (200.0*60*60) // 200 mm/sec^2
+    #define DEFAULT_Y_ACCELERATION (150.0*60*60) // 150 mm/sec^2
+    #define DEFAULT_Z_ACCELERATION (200.0*60*60) // 200 mm/sec^2
+  #else
+    #define DEFAULT_X_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+    #define DEFAULT_Y_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+    #define DEFAULT_Z_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #endif
+  #define DEFAULT_X_MAX_TRAVEL 340.0 // mm (X340 reached with a tiny gap still left) NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 9999.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 100.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm

@@ -213,6 +213,27 @@ void mc_dwell(float seconds)
 // executing the homing cycle. This prevents incorrect buffered plans after homing.
 void mc_homing_cycle(uint8_t cycle_mask)
 {
+#ifdef BOARD_MAKER3
+  /* No limit switches: encoder-based homing in the motor HAL (see
+   * hal_motor_home()). $H = tools up, then X to its right-hand stop. */
+  {
+    uint8_t mask = (cycle_mask != 0U) ? cycle_mask : (uint8_t)((1U << X_AXIS) | (1U << Z_AXIS));
+    if (!hal_motor_home(mask))
+    {
+      if (!(sys_rt_exec_state & EXEC_RESET))
+      {
+        mc_reset();
+        system_set_exec_alarm(EXEC_ALARM_HOMING_FAIL_APPROACH);
+      }
+      return;
+    }
+    if (mask & (1U << X_AXIS)) { sys_position[X_AXIS] = -st_carriage_offset_steps(X_AXIS); }   /* carriage at X0 */
+    if (mask & (1U << Z_AXIS)) { sys_position[Z_AXIS] = 0; st_reset_tool_z(); }
+    gc_sync_position();
+    plan_sync_position();
+    return;
+  }
+#endif
   // Check and abort homing cycle, if hard limits are already enabled. Helps prevent problems
   // with machines with limits wired on both ends of travel to one limit pin.
   // TODO: Move the pin-specific LIMIT_PIN call to limits.c as a function.
@@ -376,6 +397,23 @@ void mc_mat_load_unload(void)
   {
     memset(pl_data,0,sizeof(plan_line_data_t));
 
+#ifdef BOARD_MAKER3
+    /* Upstream asked for 10 mm/min (its 1500 minimum hid that) and absolute
+     * X0 Z0 Y+-50, which only worked because its position stayed at 0.
+     * Now: X and Z stay put. Load feeds 45 mm in from here; Y = 0 is then
+     * defined at the loaded position (see protocol.c), the top edge of the mat's
+     * work area, so unload is simply
+     * "go to Y = -50", from wherever a job left the mat. */
+    plan_data.feed_rate = 1000.0;
+    plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
+    system_convert_array_steps_to_mpos(target, sys_position);
+    target[Y_AXIS] = (sys.mat_loaded == 0) ? (target[Y_AXIS] + 45.0f) : -50.0f;   /* 45: Y0 = top edge of the mat work area (50 went 5 mm past it) */
+    if (plan_buffer_line(target, pl_data) == PLAN_EMPTY_BLOCK) { return; }
+    sys.step_control = STEP_CONTROL_EXECUTE_SYS_MOTION;
+    st_prep_buffer();
+    st_wake_up();
+    return;
+#endif
     plan_data.feed_rate = 10.0;
     plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
     target[X_AXIS] = 0.0;

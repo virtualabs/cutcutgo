@@ -26,8 +26,17 @@ void led_init(void)
 {
     int i;
     
+#ifdef BOARD_MAKER3
+    /* Make every LED pin digital (ANSELxCLR; ports repeat every 0x100 bytes). */
+    for (i=0; i<LED_MAX_ID; i++)
+    {
+        uint32_t port = ((uint32_t)g_leds[i].gpio) >> 4;
+        *(volatile uint32_t *)((uint32_t)&ANSELA + (port * 0x100U) + 0x04U) = (1UL << (g_leds[i].gpio & 0x0FU));
+    }
+#else
     /* Force RE4 to digital I/O. */
     ANSELEbits.ANSE4 = 0;
+#endif
     
     /* Initialize LEDs */
     for (i=0; i<LED_MAX_ID; i++)

@@ -111,6 +111,26 @@ void hal_motor_stop(hal_motor_driver_t *motor);
 int hal_motor_set_free(hal_motor_driver_t *motor);
 int hal_motor_get_current_steps(hal_motor_driver_t *motor);
 int hal_motor_set_direction(hal_motor_driver_t *motor, hal_motor_direction_t direction);
+/* Maker 3 adaptive duty: the stepper tells the HAL each step's time budget
+ * and when a chunk is still running at the end of it. */
+void hal_motor_set_step_period(hal_motor_driver_t *motor, uint32_t period_ms);
+void hal_motor_step_late(hal_motor_driver_t *motor);
+/* Maker 3 position servo, called every 1 ms from the Timer1 interrupt. */
+void hal_motor_servo_tick(void);
+/* true when the position servo drives the motors (stepper then interpolates). */
+bool hal_motor_servo_active(void);
+/* Stop every motor now: the servo lets go and targets are dropped (reset, stall). */
+void hal_motor_abort_all(void);
+/* true while the IR sensor before the rollers sees a mat (polled while idle). */
+bool hal_motor_mat_present(void);
+/* Knife job start: go to the tool sensor position, find the tool's angle from
+ * its marks, and come back. x_steps/z_steps = current Grbl X and blade Z. */
+bool hal_motor_tool_home(int32_t x_steps, int32_t z_steps);
+/* Knife steering (motor T): face deg (direction of travel). In material, big
+ * changes lift the blade by up to lift_mm, turn it, and lower it again. */
+void hal_motor_gear_steer(float deg, bool in_material, float lift_mm);
+/* Maker 3 homing ($H): mask of (1<<X_AXIS) and/or (1<<Z_AXIS). false = failed or aborted. */
+bool hal_motor_home(uint8_t mask);
 
 /* Interrupt-driven callback for motors (don't use it, it's required by our interrupt manager). */
 void hal_motor_update_callback(void);

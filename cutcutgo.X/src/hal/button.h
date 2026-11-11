@@ -11,12 +11,20 @@
 #include "configuration.h"
 #include "definitions.h"
 
+#ifdef BOARD_MAKER3
+/* Cricut Maker 3 main board: active low, external pull-ups (PINS.TXT). */
+#define     BTN_PAUSE       GPIO_PIN_RE14
+#define     BTN_LOGO        GPIO_PIN_RE15
+#define     BTN_POWER       GPIO_PIN_RF13
+#define     BTN_UPDOWN      GPIO_PIN_RF12
+#else
 #define     BTN_PAUSE       GPIO_PIN_RB12
 #define     BTN_LOGO        GPIO_PIN_RB13
 #define     BTN_POWER       GPIO_PIN_RF3
 #define     BTN_UPDOWN      GPIO_PIN_RD13
 
 #define     BTN_IFS1_MASK   ((1 << 13) | (1 << 15) | (1 << 17))
+#endif
 
 void button_init(void);
 void hal_button_pressed(void);

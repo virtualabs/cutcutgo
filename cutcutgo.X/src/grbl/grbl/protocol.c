@@ -22,6 +22,9 @@
 #include "grbl.h"
 #include "reset.h"
 #include "hal/motor.h"
+#include "hal/button.h"
+#include "hal/led.h"
+extern void APP_ServiceSerialOnly(void);   /* app.c: USB/serial only, no Grbl */
 #include "print.h"
 
 // Define line flags. Includes comment type tracking and line overflow detection.
@@ -175,8 +178,28 @@ void protocol_main_loop(void)
 #endif
 }
 
+#ifdef BOARD_MAKER3
+volatile bool g_boot_home_pending = false;   /* set by GRBL_Init() at power-up */
+#endif
+
 void protocol_handler(void)
 {
+#ifdef BOARD_MAKER3
+    if (g_boot_home_pending && !sys.abort)
+    {
+      /* Power-on homing, same as $H. */
+      g_boot_home_pending = false;
+      printPgmString("[MSG:Power-on homing]"); serial_write(13); serial_write(10);
+      sys.state = STATE_HOMING;
+      mc_homing_cycle(0);
+      if (!sys.abort)
+      {
+        sys.state = STATE_IDLE;
+        st_go_idle();
+      }
+      return;
+    }
+#endif
     // ---------------------------------------------------------------------------------
     // Primary loop! Upon a system abort, this exits back to main() to reset the system.
     // This is also where Grbl idles while waiting for something to do.
@@ -302,6 +325,17 @@ void protocol_buffer_synchronize()
 {
   // If system is queued, ensure cycle resumes if the auto start flag is present.
   protocol_auto_cycle_start();
+#ifdef BOARD_MAKER3
+  /* Upstream disabled this wait (#if 0 below), so tool changes, dwells and
+   * other sync points did not wait for queued moves: e.g. "T1" mid-move swapped
+   * the Z position under a running pen move. Keep USB alive while waiting. */
+  do {
+    protocol_auto_cycle_start();   /* start the next queued block (the main loop does this when idle) */
+    protocol_execute_realtime();
+    APP_ServiceSerialOnly();
+    if (sys.abort) { return; }
+  } while (plan_get_current_block() || (sys.state == STATE_CYCLE));
+#endif
 #if 0
   do {
     protocol_execute_realtime();   // Check and execute run-time commands
@@ -368,6 +402,7 @@ void protocol_exec_rt_system()
         // incoming stream. The same could be said about soft limits. While the position is not
         // lost, continued streaming could cause a serious crash if by chance it gets executed.
         led_set_power(false, false, true);
+        APP_ServiceSerialOnly();   /* keep USB alive so Ctrl-X can arrive */
       } while (bit_isfalse(sys_rt_exec_state,EXEC_RESET));
     }
     system_clear_exec_alarm(); // Clear alarm
@@ -720,6 +755,12 @@ void protocol_exec_rt_system()
         led_blink_mode(LED_POWER_WHITE);
         led_set(LED_POWER_WHITE);
         
+#ifdef BOARD_MAKER3
+        /* One homing pass parks both tool holders (up) and X; the original's
+         * per-tool Z passes would each home both holders on the Maker 3. */
+        st_select_tool(0);
+        mc_homing_cycle(0);
+#else
         /* Homing tool 1. */
         st_select_tool(0);
         mc_homing_cycle(HOMING_CYCLE_Z);
@@ -731,6 +772,7 @@ void protocol_exec_rt_system()
         /* Homing X. */
         st_select_tool(0);
         mc_homing_cycle(HOMING_CYCLE_X);
+#endif
         
         /* Unload mat if still loaded. */
         if (sys.mat_loaded)
@@ -740,7 +782,11 @@ void protocol_exec_rt_system()
             mc_mat_load_unload();
             
             /* Wait until mat is unloaded. */
+#ifdef BOARD_MAKER3
+            while (st_motion_busy() && !(sys_rt_exec_state & EXEC_RESET)) { APP_ServiceSerialOnly(); }
+#else
             while (hal_motor_get_state(&HAL_MOTOR_Y) != HAL_MOTOR_IDLE);
+#endif
         }
         
         /* Gracefully stop our motors. */
@@ -755,6 +801,12 @@ void protocol_exec_rt_system()
         /* System is ready ! */
         sys.state = STATE_IDLE;
 
+#ifdef BOARD_MAKER3
+        /* The bootloader powers back on after a 3 s press: if the button is
+         * still held from the 4 s "off" press, it would switch straight back
+         * on. Wait for it to be released (USB kept alive meanwhile). */
+        while (is_power_button_pressed()) { APP_ServiceSerialOnly(); }
+#endif
         /* Reset. */
         reset_soft();
   }
@@ -774,6 +826,24 @@ void protocol_exec_rt_system()
           
           case STATE_MAT_LOAD_UNLOAD:
             {
+#ifdef BOARD_MAKER3
+                /* The servo leaves motors "idle" while a move runs: ask the stepper. */
+                if (!st_motion_busy())
+                {
+                    sys.mat_loaded = (sys.mat_loaded == 0) ? 1 : 0;
+                    led_set_updown(sys.mat_loaded != 0);    /* feed button lit = mat loaded */
+
+                    /* Y = 0 is the loaded position (the origin of a job). */
+                    sys_position[Y_AXIS] = -st_carriage_offset_steps(Y_AXIS);   /* carriage frame */
+                    sys.step_control = STEP_CONTROL_NORMAL_OP;
+                    plan_sync_position();
+                    gc_sync_position();
+
+                    system_clear_exec_state_flag(EXEC_MAT_LOAD_UNLOAD);
+                    sys.state = STATE_IDLE;
+                }
+                break;
+#endif
                 /* Get Y motor state. */
                 hal_motor_state_t y_state = hal_motor_get_state(&HAL_MOTOR_Y);
                 
@@ -946,6 +1016,9 @@ static void protocol_exec_rt_suspend()
   #endif
 
   while (sys.suspend) {
+#ifdef BOARD_MAKER3
+    APP_ServiceSerialOnly();    /* keep USB alive so "~" and Ctrl-X can arrive */
+#endif
 
     if (sys.abort) { return; }
 

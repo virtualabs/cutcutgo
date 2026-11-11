@@ -1,0 +1,344 @@
+/*******************************************************************************
+  EVIC PLIB Header
+
+  Company:
+    Microchip Technology Inc.
+
+  File Name:
+    plib_evic.h
+
+  Summary:
+    PIC32MZ Interrupt Module PLIB Header File
+
+  Description:
+    None
+
+*******************************************************************************/
+
+// DOM-IGNORE-BEGIN
+/*******************************************************************************
+* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
+*
+* Subject to your compliance with these terms, you may use Microchip software
+* and any derivatives exclusively with Microchip products. It is your
+* responsibility to comply with third party license terms applicable to your
+* use of third party software (including open source software) that may
+* accompany Microchip software.
+*
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
+* EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED
+* WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A
+* PARTICULAR PURPOSE.
+*
+* IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+* INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
+* WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
+* BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+*******************************************************************************/
+// DOM-IGNORE-END
+
+#ifndef PLIB_EVIC_H
+#define PLIB_EVIC_H
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
+#include <device.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <device.h>
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
+// DOM-IGNORE-END
+
+
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Data Types
+// *****************************************************************************
+// *****************************************************************************
+
+typedef enum
+{
+    INT_SOURCE_CORE_TIMER = 0,
+    INT_SOURCE_CORE_SOFTWARE_0 = 1,
+    INT_SOURCE_CORE_SOFTWARE_1 = 2,
+    INT_SOURCE_EXTERNAL_0 = 3,
+    INT_SOURCE_TIMER_1 = 4,
+    INT_SOURCE_INPUT_CAPTURE_1_ERROR = 5,
+    INT_SOURCE_INPUT_CAPTURE_1 = 6,
+    INT_SOURCE_OUTPUT_COMPARE_1 = 7,
+    INT_SOURCE_EXTERNAL_1 = 8,
+    INT_SOURCE_TIMER_2 = 9,
+    INT_SOURCE_INPUT_CAPTURE_2_ERROR = 10,
+    INT_SOURCE_INPUT_CAPTURE_2 = 11,
+    INT_SOURCE_OUTPUT_COMPARE_2 = 12,
+    INT_SOURCE_EXTERNAL_2 = 13,
+    INT_SOURCE_TIMER_3 = 14,
+    INT_SOURCE_INPUT_CAPTURE_3_ERROR = 15,
+    INT_SOURCE_INPUT_CAPTURE_3 = 16,
+    INT_SOURCE_OUTPUT_COMPARE_3 = 17,
+    INT_SOURCE_EXTERNAL_3 = 18,
+    INT_SOURCE_TIMER_4 = 19,
+    INT_SOURCE_INPUT_CAPTURE_4_ERROR = 20,
+    INT_SOURCE_INPUT_CAPTURE_4 = 21,
+    INT_SOURCE_OUTPUT_COMPARE_4 = 22,
+    INT_SOURCE_EXTERNAL_4 = 23,
+    INT_SOURCE_TIMER_5 = 24,
+    INT_SOURCE_INPUT_CAPTURE_5_ERROR = 25,
+    INT_SOURCE_INPUT_CAPTURE_5 = 26,
+    INT_SOURCE_OUTPUT_COMPARE_5 = 27,
+    INT_SOURCE_RTCC = 30,
+    INT_SOURCE_FLASH_CONTROL = 31,
+    INT_SOURCE_COMPARATOR_1 = 32,
+    INT_SOURCE_COMPARATOR_2 = 33,
+    INT_SOURCE_USB_1 = 34,
+    INT_SOURCE_SPI1_FAULT = 35,
+    INT_SOURCE_SPI1_RX = 36,
+    INT_SOURCE_SPI1_TX = 37,
+    INT_SOURCE_UART1_FAULT = 38,
+    INT_SOURCE_UART1_RX = 39,
+    INT_SOURCE_UART1_TX = 40,
+    INT_SOURCE_I2C1_BUS = 41,
+    INT_SOURCE_I2C1_SLAVE = 42,
+    INT_SOURCE_I2C1_MASTER = 43,
+    INT_SOURCE_CHANGE_NOTICE_A = 44,
+    INT_SOURCE_CHANGE_NOTICE_B = 45,
+    INT_SOURCE_CHANGE_NOTICE_C = 46,
+    INT_SOURCE_CHANGE_NOTICE_D = 47,
+    INT_SOURCE_CHANGE_NOTICE_E = 48,
+    INT_SOURCE_CHANGE_NOTICE_F = 49,
+    INT_SOURCE_CHANGE_NOTICE_G = 50,
+    INT_SOURCE_PMP = 51,
+    INT_SOURCE_PMP_ERROR = 52,
+    INT_SOURCE_SPI2_FAULT = 53,
+    INT_SOURCE_SPI2_RX = 54,
+    INT_SOURCE_SPI2_TX = 55,
+    INT_SOURCE_UART2_FAULT = 56,
+    INT_SOURCE_UART2_RX = 57,
+    INT_SOURCE_UART2_TX = 58,
+    INT_SOURCE_I2C2_BUS = 59,
+    INT_SOURCE_I2C2_SLAVE = 60,
+    INT_SOURCE_I2C2_MASTER = 61,
+    INT_SOURCE_UART3_FAULT = 62,
+    INT_SOURCE_UART3_RX = 63,
+    INT_SOURCE_UART3_TX = 64,
+    INT_SOURCE_UART4_FAULT = 65,
+    INT_SOURCE_UART4_RX = 66,
+    INT_SOURCE_UART4_TX = 67,
+    INT_SOURCE_UART5_FAULT = 68,
+    INT_SOURCE_UART5_RX = 69,
+    INT_SOURCE_UART5_TX = 70,
+    INT_SOURCE_CTMU = 71,
+    INT_SOURCE_DMA0 = 72,
+    INT_SOURCE_DMA1 = 73,
+    INT_SOURCE_DMA2 = 74,
+    INT_SOURCE_DMA3 = 75,
+    INT_SOURCE_TIMER_6 = 76,
+    INT_SOURCE_INPUT_CAPTURE_6_ERROR = 77,
+    INT_SOURCE_INPUT_CAPTURE_6 = 78,
+    INT_SOURCE_OUTPUT_COMPARE_6 = 79,
+    INT_SOURCE_TIMER_7 = 80,
+    INT_SOURCE_INPUT_CAPTURE_7_ERROR = 81,
+    INT_SOURCE_INPUT_CAPTURE_7 = 82,
+    INT_SOURCE_OUTPUT_COMPARE_7 = 83,
+    INT_SOURCE_TIMER_8 = 84,
+    INT_SOURCE_INPUT_CAPTURE_8_ERROR = 85,
+    INT_SOURCE_INPUT_CAPTURE_8 = 86,
+    INT_SOURCE_OUTPUT_COMPARE_8 = 87,
+    INT_SOURCE_TIMER_9 = 88,
+    INT_SOURCE_INPUT_CAPTURE_9_ERROR = 89,
+    INT_SOURCE_INPUT_CAPTURE_9 = 90,
+    INT_SOURCE_OUTPUT_COMPARE_9 = 91,
+    INT_SOURCE_ADC = 92,
+    INT_SOURCE_ADC_DC1 = 94,
+    INT_SOURCE_ADC_DC2 = 95,
+    INT_SOURCE_ADC_DF1 = 96,
+    INT_SOURCE_ADC_DF2 = 97,
+    INT_SOURCE_ADC_DF3 = 98,
+    INT_SOURCE_ADC_DF4 = 99,
+    INT_SOURCE_ADC_FAULT = 100,
+    INT_SOURCE_ADC_EOS = 101,
+    INT_SOURCE_ADC_ARDY = 102,
+    INT_SOURCE_ADC_URDY = 103,
+    INT_SOURCE_ADC_DMA = 104,
+    INT_SOURCE_ADC_EARLY = 105,
+    INT_SOURCE_ADC_DATA0 = 106,
+    INT_SOURCE_ADC_DATA1 = 107,
+    INT_SOURCE_ADC_DATA2 = 108,
+    INT_SOURCE_ADC_DATA3 = 109,
+    INT_SOURCE_ADC_DATA4 = 110,
+    INT_SOURCE_ADC_DATA5 = 111,
+    INT_SOURCE_ADC_DATA6 = 112,
+    INT_SOURCE_ADC_DATA7 = 113,
+    INT_SOURCE_ADC_DATA8 = 114,
+    INT_SOURCE_ADC_DATA9 = 115,
+    INT_SOURCE_ADC_DATA10 = 116,
+    INT_SOURCE_ADC_DATA11 = 117,
+    INT_SOURCE_ADC_DATA12 = 118,
+    INT_SOURCE_ADC_DATA13 = 119,
+    INT_SOURCE_ADC_DATA14 = 120,
+    INT_SOURCE_ADC_DATA15 = 121,
+    INT_SOURCE_ADC_DATA16 = 122,
+    INT_SOURCE_ADC_DATA17 = 123,
+    INT_SOURCE_ADC_DATA18 = 124,
+    INT_SOURCE_ADC_DATA19 = 125,
+    INT_SOURCE_ADC_DATA20 = 126,
+    INT_SOURCE_ADC_DATA21 = 127,
+    INT_SOURCE_ADC_DATA22 = 128,
+    INT_SOURCE_ADC_DATA23 = 129,
+    INT_SOURCE_ADC_DATA24 = 130,
+    INT_SOURCE_ADC_DATA25 = 131,
+    INT_SOURCE_ADC_DATA26 = 132,
+    INT_SOURCE_ADC_DATA27 = 133,
+    INT_SOURCE_ADC_DATA33 = 139,
+    INT_SOURCE_ADC_DATA34 = 140,
+    INT_SOURCE_ADC_DATA35 = 141,
+    INT_SOURCE_ADC_DATA36 = 142,
+    INT_SOURCE_ADC_DATA37 = 143,
+    INT_SOURCE_ADC_DATA38 = 144,
+    INT_SOURCE_ADC_DATA39 = 145,
+    INT_SOURCE_ADC_DATA40 = 146,
+    INT_SOURCE_ADC_DATA41 = 147,
+    INT_SOURCE_ADC_DATA45 = 151,
+    INT_SOURCE_ADC_DATA46 = 152,
+    INT_SOURCE_ADC_DATA47 = 153,
+    INT_SOURCE_ADC_DATA48 = 154,
+    INT_SOURCE_ADC_DATA49 = 155,
+    INT_SOURCE_ADC_DATA50 = 156,
+    INT_SOURCE_ADC_DATA51 = 157,
+    INT_SOURCE_ADC_DATA52 = 158,
+    INT_SOURCE_ADC_DATA53 = 159,
+    INT_SOURCE_COMPARATOR_3 = 160,
+    INT_SOURCE_COMPARATOR_4 = 161,
+    INT_SOURCE_COMPARATOR_5 = 162,
+    INT_SOURCE_UART6_FAULT = 164,
+    INT_SOURCE_UART6_RX = 165,
+    INT_SOURCE_UART6_TX = 166,
+    INT_SOURCE_CAN1 = 167,
+    INT_SOURCE_CAN2 = 168,
+    INT_SOURCE_QEI1 = 169,
+    INT_SOURCE_QEI2 = 170,
+    INT_SOURCE_PWM_PRI = 171,
+    INT_SOURCE_PWM_SEC = 172,
+    INT_SOURCE_PWM1 = 173,
+    INT_SOURCE_PWM2 = 174,
+    INT_SOURCE_PWM3 = 175,
+    INT_SOURCE_PWM4 = 176,
+    INT_SOURCE_PWM5 = 177,
+    INT_SOURCE_PWM6 = 178,
+    INT_SOURCE_I2C3_BUS = 179,
+    INT_SOURCE_I2C3_SLAVE = 180,
+    INT_SOURCE_I2C3_MASTER = 181,
+    INT_SOURCE_DMA4 = 182,
+    INT_SOURCE_DMA5 = 183,
+    INT_SOURCE_DMA6 = 184,
+    INT_SOURCE_DMA7 = 185,
+    INT_SOURCE_DATA_EE = 186,
+    INT_SOURCE_CAN3 = 187,
+    INT_SOURCE_CAN4 = 188,
+    INT_SOURCE_QEI3 = 189,
+    INT_SOURCE_QEI4 = 190,
+    INT_SOURCE_QEI5 = 191,
+    INT_SOURCE_QEI6 = 192,
+    INT_SOURCE_I2C4_BUS = 194,
+    INT_SOURCE_I2C4_SLAVE = 195,
+    INT_SOURCE_I2C4_MASTER = 196,
+    INT_SOURCE_INPUT_CAPTURE_10_ERROR = 197,
+    INT_SOURCE_INPUT_CAPTURE_10 = 198,
+    INT_SOURCE_OUTPUT_COMPARE_10 = 199,
+    INT_SOURCE_INPUT_CAPTURE_11_ERROR = 200,
+    INT_SOURCE_INPUT_CAPTURE_11 = 201,
+    INT_SOURCE_OUTPUT_COMPARE_11 = 202,
+    INT_SOURCE_INPUT_CAPTURE_12_ERROR = 203,
+    INT_SOURCE_INPUT_CAPTURE_12 = 204,
+    INT_SOURCE_OUTPUT_COMPARE_12 = 205,
+    INT_SOURCE_INPUT_CAPTURE_13_ERROR = 206,
+    INT_SOURCE_INPUT_CAPTURE_13 = 207,
+    INT_SOURCE_OUTPUT_COMPARE_13 = 208,
+    INT_SOURCE_INPUT_CAPTURE_14_ERROR = 209,
+    INT_SOURCE_INPUT_CAPTURE_14 = 210,
+    INT_SOURCE_OUTPUT_COMPARE_14 = 211,
+    INT_SOURCE_INPUT_CAPTURE_15_ERROR = 212,
+    INT_SOURCE_INPUT_CAPTURE_15 = 213,
+    INT_SOURCE_OUTPUT_COMPARE_15 = 214,
+    INT_SOURCE_INPUT_CAPTURE_16_ERROR = 215,
+    INT_SOURCE_INPUT_CAPTURE_16 = 216,
+    INT_SOURCE_OUTPUT_COMPARE_16 = 217,
+    INT_SOURCE_SPI3_FAULT = 218,
+    INT_SOURCE_SPI3_RX = 219,
+    INT_SOURCE_SPI3_TX = 220,
+    INT_SOURCE_SPI4_FAULT = 221,
+    INT_SOURCE_SPI4_RX = 222,
+    INT_SOURCE_SPI4_TX = 223,
+    INT_SOURCE_SPI5_FAULT = 224,
+    INT_SOURCE_SPI5_RX = 225,
+    INT_SOURCE_SPI5_TX = 226,
+    INT_SOURCE_SPI6_FAULT = 227,
+    INT_SOURCE_SPI6_RX = 228,
+    INT_SOURCE_SPI6_TX = 229,
+    INT_SOURCE_SYSTEM_BUS_PROTECTION = 230,
+    INT_SOURCE_PWM7 = 238,
+    INT_SOURCE_PWM8 = 239,
+    INT_SOURCE_PWM9 = 240,
+    INT_SOURCE_PWM10 = 241,
+    INT_SOURCE_PWM11 = 242,
+    INT_SOURCE_PWM12 = 243,
+    INT_SOURCE_USB_2 = 244,
+    INT_SOURCE_ADC_DC3 = 245,
+    INT_SOURCE_ADC_DC4 = 246,
+    INT_SOURCE_CORE_PERF_COUNT = 254,
+    INT_SOURCE_CORE_FAST_DEBUG_CHAN = 255,
+
+    /* Compatibility alias used by this project */
+    INT_SOURCE_USB = INT_SOURCE_USB_1,
+} INT_SOURCE;
+
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Interface Routines
+// *****************************************************************************
+// *****************************************************************************
+
+void EVIC_Initialize ( void );
+
+void EVIC_SourceEnable( INT_SOURCE source );
+
+void EVIC_SourceDisable( INT_SOURCE source );
+
+bool EVIC_SourceIsEnabled( INT_SOURCE source );
+
+bool EVIC_SourceStatusGet( INT_SOURCE source );
+
+void EVIC_SourceStatusSet( INT_SOURCE source );
+
+void EVIC_SourceStatusClear( INT_SOURCE source );
+
+void EVIC_INT_Enable( void );
+
+bool EVIC_INT_Disable( void );
+
+void EVIC_INT_Restore( bool state );
+
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+// DOM-IGNORE-END
+
+#endif // PLIB_EVIC_H

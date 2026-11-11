@@ -4,12 +4,23 @@
 #include "configuration.h"
 #include "definitions.h"
 
+#ifdef BOARD_MAKER3
+/* Cricut Maker 3 main board (PIC32MK1024MCF100), all active high.
+ * NEVER drive RB10 on the Maker 3: it moves the blade-down actuator. */
+#define     GPIO_LED_LOGO        GPIO_PIN_RD13
+#define     GPIO_LED_PAUSE       GPIO_PIN_RD14
+#define     GPIO_LED_UPDOWN      GPIO_PIN_RD12
+#define     GPIO_LED_PWR_WHITE   GPIO_PIN_RB7
+#define     GPIO_LED_PWR_RED     GPIO_PIN_RC10
+#define     GPIO_LED_PWR_BLUE    GPIO_PIN_RD15
+#else
 #define     GPIO_LED_LOGO        GPIO_PIN_RB11
 #define     GPIO_LED_PAUSE       GPIO_PIN_RB10
 #define     GPIO_LED_UPDOWN      GPIO_PIN_RF13
 #define     GPIO_LED_PWR_WHITE   GPIO_PIN_RF4
 #define     GPIO_LED_PWR_RED     GPIO_PIN_RF5
 #define     GPIO_LED_PWR_BLUE    GPIO_PIN_RE4
+#endif /* BOARD_MAKER3 */
 
 #define     LED_BLINK_PERIOD     (250) /* Blink period: 500ms */
 

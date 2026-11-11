@@ -27,6 +27,17 @@
 #define __INC_HAL_CONFIG_H
 
 #include <stdint.h>
+#ifdef BOARD_MAKER3
+/*
+ * Cricut Maker 3 main board (PIC32MK1024MCF100, 12 MHz crystal, SYSCLK 120 MHz
+ * set by the cutcutgo-bl bootloader). Motor drivers (DRV8876) and encoders are
+ * driven by hal/motor_maker3.c; pins are listed there and in MAKER3_PORT.md.
+ */
+#include "config/maker3/peripheral/gpio/plib_gpio.h"
+
+#define SYS_FREQ                 120000000
+
+#else /* original Cricut Maker (PIC32MX470) */
 #include "config/cutcutgo/peripheral/gpio/plib_gpio.h"
 
 #define SYS_FREQ                 96000000
@@ -72,5 +83,7 @@
 #define MOTOR_ACCESSORY_DRIVER_ENC_B     GPIO_PIN_RG9
 #define MOTOR_ACCESSORY_OCM      4
 
+
+#endif /* BOARD_MAKER3 */
 
 #endif /* __INC_HAL_CONFIG_H */

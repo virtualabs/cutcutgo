@@ -27,6 +27,7 @@
 */
 
 #include "grbl.h"
+#include "hal/motor.h"   /* Maker 3: encoder positions in status reports */
 
 
 // Internal report utilities to reduce flash with repetitive tasks turned into functions.
@@ -519,8 +520,10 @@ void report_realtime_status()
     }
   }
 
+#ifndef BOARD_MAKER3
   /* Debug: report PORTG value */
   print_uint32_base10(PORTG);
+#endif /* (Maker 3: keeps the Grbl status line standard for senders) */
   
   // Report machine position
   if (bit_istrue(settings.status_report_mask,BITFLAG_RT_STATUS_POSITION_TYPE)) {

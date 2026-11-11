@@ -19,7 +19,11 @@
 */
 
 #include "grbl.h"
+#ifdef BOARD_MAKER3
+#include "config/maker3/peripheral/evic/plib_evic.h"
+#else
 #include "config/cutcutgo/peripheral/evic/plib_evic.h"
+#endif
 
 
 void system_init()

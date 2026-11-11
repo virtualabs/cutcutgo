@@ -950,6 +950,16 @@ uint8_t gc_execute_line(char *line)
     // NOTE: All spindle state changes are synced, even in laser mode. Also, pl_data,
     // rather than gc_state, is used to manage laser state for non-laser motions.
     spindle_sync(gc_block.modal.spindle, pl_data->spindle_speed);
+#ifdef BOARD_MAKER3
+    /* M3 = knife steering on: work out which way round the tool is first. */
+    if ((gc_state.modal.spindle == SPINDLE_DISABLE) && (gc_block.modal.spindle != SPINDLE_DISABLE) &&
+        (sys.state != STATE_CHECK_MODE) && !st_steer_job_home())
+    {
+      gc_block.modal.spindle = SPINDLE_DISABLE;
+      mc_reset();
+      system_set_exec_alarm(EXEC_ALARM_HOMING_FAIL_APPROACH);
+    }
+#endif
     gc_state.modal.spindle = gc_block.modal.spindle;
   }
   pl_data->condition |= gc_state.modal.spindle; // Set condition flag for planner use.

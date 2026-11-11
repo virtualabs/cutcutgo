@@ -78,6 +78,7 @@ typedef struct {
   float max_junction_speed_sqr; // Junction entry speed limit based on direction vectors in (mm/min)^2
   float rapid_rate;             // Axis-limit adjusted maximum rate for this block direction in (mm/min)
   float programmed_rate;        // Programmed rate of this block (mm/min).
+  float steer_dx, steer_dy;     // Maker 3: exact XY direction of this block (mm), for knife steering.
 
   #ifdef VARIABLE_SPINDLE
     // Stored spindle speed data used by spindle overrides and resuming methods.
@@ -121,6 +122,9 @@ uint8_t plan_next_block_index(uint8_t block_index);
 
 // Called by step segment buffer when computing executing block velocity profile.
 float plan_get_exec_block_exit_speed_sqr(void);
+
+// Maker 3: the block queued after the one executing, or NULL.
+plan_block_t *plan_get_block_after_current(void);
 
 // Called by main program during planner calculations and step segment buffer during initialization.
 float plan_compute_profile_nominal_speed(plan_block_t *block);

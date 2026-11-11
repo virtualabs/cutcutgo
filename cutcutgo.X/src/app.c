@@ -56,6 +56,7 @@
 #include "app.h"
 #include "grbl/grbl/grbl.h"
 #include "reset.h"
+#include <stdio.h>
 
 
 // *****************************************************************************
@@ -68,6 +69,7 @@ uint8_t CACHE_ALIGN switchPromptUSB[] = "\r\nPUSH BUTTON PRESSED";
 char CACHE_ALIGN banner[] = "This is foo";
 
 uint8_t CACHE_ALIGN cdcReadBuffer[APP_READ_BUFFER_SIZE];
+
 uint8_t CACHE_ALIGN cdcWriteBuffer[APP_READ_BUFFER_SIZE];
 
 uint32_t counter = 0;
@@ -88,6 +90,24 @@ uint32_t counter = 0;
 */
 
 APP_DATA appData;
+
+/* Set while Grbl waits in a blocking loop (critical alarm): APP_Tasks() then
+ * only services the USB serial port, so a Ctrl-X reset can still arrive. */
+static volatile bool g_serial_only = false;
+
+/* Called from Grbl's blocking loops: run the USB/serial tasks without
+ * re-entering Grbl (cutcutgo reads serial input in APP_Tasks, not in an
+ * interrupt as on AVR, so blocking loops would otherwise deadlock). */
+void APP_ServiceSerialOnly(void)
+{
+    if (g_serial_only)
+    {
+        return;
+    }
+    g_serial_only = true;
+    SYS_Tasks();
+    g_serial_only = false;
+}
 
 
 // *****************************************************************************
@@ -290,6 +310,7 @@ void APP_USBDeviceEventHandler
 // *****************************************************************************
 // *****************************************************************************
 
+#ifndef BOARD_MAKER3 /* demo code for the PIC32MX470 Curiosity switch; unused */
 void APP_ProcessSwitchPress(void)
 {
     /* This function checks if the switch is pressed and then
@@ -340,6 +361,7 @@ void APP_ProcessSwitchPress(void)
         appData.sofEventHasOccurred = false;
     }
 }
+#endif
 
 /*****************************************************
  * This function is called in every step of the
@@ -444,6 +466,7 @@ void APP_Initialize(void)
     /* Initialize GRBL layer. */
     GRBL_Init();
     appData.grblInitialized = true;
+
 }
 
 
@@ -464,11 +487,19 @@ void APP_Tasks(void)
     /* Update the application state machine based
      * on the current state */
 
-    if (appData.grblInitialized)
+    if (appData.grblInitialized && !g_serial_only)
     {
+        /* Soft reset (Ctrl-X) or other system abort: re-initialise Grbl, as
+         * stock Grbl's main() loop does. */
+        if (sys.abort)
+        {
+            GRBL_Reset();
+        }
+
         /* GRBL protocol handler */
         protocol_handler();
     }
+
     
     if (system_is_idle())
     {
@@ -487,6 +518,7 @@ void APP_Tasks(void)
             counter=0;
     }
     
+
     switch(appData.state)
     {
         case APP_STATE_INIT:
@@ -562,6 +594,42 @@ void APP_Tasks(void)
 
             if(appData.isReadComplete)
             {
+#if defined(BOARD_MAKER3)
+                /* Maker 3 commands "#Y..." (registration mark scan etc., see hal_motor_y_cmd()):
+                 * handled here, not passed to Grbl. */
+                if ((appData.numBytesRead >= 3U) && (appData.cdcReadBuffer[0] == '#') &&
+                    (appData.cdcReadBuffer[1] == 'Y'))
+                {
+                    extern void hal_motor_y_cmd(const char *line);
+                    char yline[48];
+                    uint32_t k;
+                    for (k = 0; (k < appData.numBytesRead) && (k < sizeof(yline) - 1U); k++)
+                    {
+                        char ch = (char)appData.cdcReadBuffer[k];
+                        yline[k] = ((ch == 13) || (ch == 10)) ? 0 : ch;   /* CR / LF end the line */
+                    }
+                    yline[k] = 0;
+                    /* Mark the line as read first: a command that keeps USB alive while it
+                     * runs would otherwise be dispatched again by this same code. */
+                    appData.numBytesRead = 0;
+                    {
+                        extern volatile bool g_y_cmd_busy;
+
+                        if (!g_y_cmd_busy)
+                        {
+                            g_y_cmd_busy = true;
+                            hal_motor_y_cmd(yline);
+                            g_y_cmd_busy = false;
+                        }
+                    }
+                    /* A long command services USB itself while it prints, which can leave a
+                     * write in flight or a new read scheduled: keep that state, don't reset it. */
+                    if ((appData.state != APP_STATE_WAIT_FOR_READ_COMPLETE) || !appData.isReadComplete)
+                    {
+                        break;
+                    }
+                }
+#endif
                 if (serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead) < 0)
                 {
                     memset(&notificationData, 0, sizeof(USB_CDC_SERIAL_STATE));
@@ -587,7 +655,9 @@ void APP_Tasks(void)
             else
             {
                 nb_pending_bytes = serial_get_tx_buffer_count();
-                if (nb_pending_bytes > 0)
+                /* Only one write at a time: starting another while one is in flight fails
+                 * and drops the whole USB link (and Grbl) into APP_STATE_ERROR. */
+                if ((nb_pending_bytes > 0) && appData.isWriteComplete)
                 {
                     /* Setup the write */
                     appData.writeTransferHandle = USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;

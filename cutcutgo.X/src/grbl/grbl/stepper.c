@@ -167,6 +167,9 @@ typedef struct {
 
 static stepper_t stepper_info;
 static uint8_t selected_tool = 0;
+#ifdef BOARD_MAKER3
+static volatile bool st_ip_hold_stopped = false;  /* at rest in a feed hold, block kept */
+#endif
 
 
 // Used to avoid ISR nesting of the "Stepper Driver Interrupt". Should never occur though.
@@ -252,8 +255,72 @@ static st_prep_t prep;
 */
 
 
+#ifdef BOARD_MAKER3
+static int32_t tool_z_steps[2] = { 0, 0 };   /* per-tool Z position, steps */
+
+/*
+ * Holder B (blade) cuts 39.0 mm lower in X and 3.3 mm lower in Y than holder A
+ * (pen) at the same carriage position (measured 2026-11-10). With T1 selected,
+ * X/Y are the blade tip's position, so the same coordinates mean the same spot
+ * on the paper for both tools: carriage = position + st_carriage_offset_steps().
+ */
+#define ST_B_DX_MM  39.0f   /* 39.4 from the sensor; draw-then-cut tests: 39.8 was the wrong way */
+#define ST_B_DY_MM  3.3f    /* 3.7 from the sensor; 4.1 was the wrong way */
+
+static int32_t st_tool_xy_steps(uint8_t axis, uint8_t tool)
+{
+    float mm;
+
+    if (tool != 1U) { return 0; }
+    mm = (axis == X_AXIS) ? ST_B_DX_MM : ((axis == Y_AXIS) ? ST_B_DY_MM : 0.0f);
+    return (int32_t)((mm * settings.steps_per_mm[axis]) + 0.5f);
+}
+
+int32_t st_carriage_offset_steps(uint8_t axis)
+{
+    return st_tool_xy_steps(axis, selected_tool);
+}
+
+bool st_steer_job_home(void)
+{
+    if ((selected_tool != 1U) || !hal_motor_servo_active()) { return true; }
+    return hal_motor_tool_home(sys_position[X_AXIS] + st_carriage_offset_steps(X_AXIS), sys_position[Z_AXIS]);
+}
+
+bool st_motion_busy(void)
+{
+    return (pl_block != NULL);
+}
+
+void st_reset_tool_z(void)
+{
+    tool_z_steps[0] = 0;
+    tool_z_steps[1] = 0;
+}
+#endif
+
 void st_select_tool(uint8_t tool)
 {
+#ifdef BOARD_MAKER3
+    /* Each tool holder is its own Z axis with its own steps/mm, but Grbl has
+     * a single Z position. Keep one Z step position per tool and swap it in
+     * on a tool change (otherwise the old tool's step count is read with the
+     * new tool's steps/mm and the next Z move drives the holder into a stop). */
+    if ((tool <= 1U) && (tool != selected_tool))
+    {
+        protocol_buffer_synchronize();          /* finish the old tool's moves */
+        tool_z_steps[selected_tool & 1U] = sys_position[Z_AXIS];
+        sys_position[Z_AXIS] = tool_z_steps[tool];
+        /* X/Y follow the selected tool's tip; nothing moves. */
+        sys_position[X_AXIS] -= st_tool_xy_steps(X_AXIS, tool) - st_tool_xy_steps(X_AXIS, selected_tool);
+        sys_position[Y_AXIS] -= st_tool_xy_steps(Y_AXIS, tool) - st_tool_xy_steps(Y_AXIS, selected_tool);
+        selected_tool = tool;
+        settings.steps_per_mm[Z_AXIS] = (tool == 1U) ? DEFAULT_B_STEPS_PER_MM : DEFAULT_A_STEPS_PER_MM;
+        plan_sync_position();
+        gc_sync_position();
+        return;
+    }
+#endif
     /* Keep track of current tool. */
     selected_tool = tool;
     
@@ -292,6 +359,13 @@ void st_wake_up()
 void st_go_idle()
 {
     //printString("[st_go_idle()]");
+#ifdef BOARD_MAKER3
+    /* Reset or stall: end the running block now. Without this the 1 ms motion
+     * timer ran on to the end of the block and the servo re-drove the motors. */
+    timer_stop_timer(stepper_info.timer_slot);
+    st_ip_hold_stopped = false;
+    hal_motor_abort_all();
+#endif
     hal_motor_stop(&HAL_MOTOR_X);
     hal_motor_stop(&HAL_MOTOR_Y);
     hal_motor_stop(&HAL_MOTOR_TOOL1);
@@ -563,9 +637,141 @@ static uint8_t st_next_block_index(uint8_t block_index)
   }
 #endif
   
+/* Commanded Z direction (+1/-1) of the current block, before the tool-B
+ * motor inversion: used to keep sys_position[Z] in machine coordinates. */
+static int8_t st_zdir = 1;
+
+#ifdef BOARD_MAKER3
+/*
+ * Servo mode (v28): time-based interpolation instead of the Bresenham tracer.
+ * The tracer moves one axis at a time (X step, wait, Y step, wait, ...), so a
+ * diagonal is a staircase. With the position servo following each motor's
+ * target, all axes can advance together: every 1 ms the block's elapsed
+ * fraction gives each axis' step target, and the steps needed to reach it
+ * are issued at once. Since v36 the elapsed distance follows the planner's
+ * acceleration and corner-speed limits.
+ */
+/* Motion profile. Runs in the 1 ms timer interrupt, so integers only:
+ * distance in nm, speed in nm/ms (= um/s), acceleration in nm/ms per ms. */
+static uint32_t st_ip_L;        /* block length */
+static uint32_t st_ip_s;        /* distance done */
+static uint32_t st_ip_v;        /* current speed */
+static uint32_t st_ip_vnom;     /* cruise speed (feed rate) */
+static uint32_t st_ip_vmin;     /* floor, so a block always finishes */
+static uint32_t st_ip_a;        /* acceleration */
+static volatile uint32_t st_ip_vexit;   /* speed to leave the block at (refreshed by st_prep_buffer) */
+
+static uint32_t st_isqrt64(uint64_t n)
+{
+    uint64_t bit = 1ULL << 62, r = 0;
+
+    while (bit > n) { bit >>= 2; }
+    while (bit != 0U)
+    {
+        if (n >= r + bit) { n -= r + bit; r = (r >> 1) + bit; }
+        else              { r >>= 1; }
+        bit >>= 2;
+    }
+    return (uint32_t)r;
+}
+
+static void st_execute_interp(void)
+{
+    int tx, ty, tz;
+
+    if (pl_block == NULL) { return; }           /* aborted by a reset */
+
+    /* Stopped by a feed hold: wait here, keeping the block, until "~". */
+    if (st_ip_hold_stopped)
+    {
+        if ((sys.step_control & STEP_CONTROL_EXECUTE_HOLD) || (sys.state != STATE_CYCLE))
+        {
+            timer_set_interval(stepper_info.timer_slot, 1);
+            timer_start_timer(stepper_info.timer_slot);
+            return;
+        }
+        st_ip_hold_stopped = false;
+    }
+
+    if (sys.step_control & STEP_CONTROL_EXECUTE_HOLD)
+    {
+        /* Feed hold: slow down at the block's acceleration, then report the
+         * stop so Grbl completes the hold. The block is resumed, not lost. */
+        uint32_t rem = st_ip_L - st_ip_s;
+        uint32_t v = (st_ip_v > st_ip_a) ? (st_ip_v - st_ip_a) : 0U;
+
+        if (v == 0U)
+        {
+            st_ip_v = 0U;
+            st_ip_hold_stopped = true;
+            bit_true(sys_rt_exec_state, EXEC_CYCLE_STOP);
+            timer_set_interval(stepper_info.timer_slot, 1);
+            timer_start_timer(stepper_info.timer_slot);
+            return;
+        }
+        st_ip_v = v;
+        st_ip_s = (v >= rem) ? st_ip_L : (st_ip_s + v);
+    }
+    else
+    {
+        /* Speed up by a per ms, but never above the speed from which the
+         * block's exit speed can still be reached in the distance left. */
+        uint32_t rem = st_ip_L - st_ip_s;
+        uint64_t limit2 = ((uint64_t)st_ip_vexit * st_ip_vexit) + (2ULL * st_ip_a * rem);
+        uint32_t v = st_ip_v + st_ip_a;
+
+        if (v > st_ip_vnom) { v = st_ip_vnom; }
+        if (((uint64_t)v * v) > limit2) { v = st_isqrt64(limit2); }
+        if (v < st_ip_vmin) { v = st_ip_vmin; }
+        st_ip_v = v;
+        st_ip_s = (v >= rem) ? st_ip_L : (st_ip_s + v);
+    }
+    if (st_ip_s >= st_ip_L)
+    {
+        tx = stepper_info.x1; ty = stepper_info.y1; tz = stepper_info.z1;
+    }
+    else
+    {
+        tx = (int)(((int64_t)stepper_info.x1 * st_ip_s) / st_ip_L);
+        ty = (int)(((int64_t)stepper_info.y1 * st_ip_s) / st_ip_L);
+        tz = (int)(((int64_t)stepper_info.z1 * st_ip_s) / st_ip_L);
+    }
+    while (stepper_info.x0 != tx)
+    {
+        stepper_info.x0 += stepper_info.sx;
+        sys_position[X_AXIS] += stepper_info.sx;
+        hal_motor_step(&HAL_MOTOR_X, 1, (stepper_info.sx < 0) ? HAL_MOTOR_DIR_CW : HAL_MOTOR_DIR_CCW);
+    }
+    while (stepper_info.y0 != ty)
+    {
+        stepper_info.y0 += stepper_info.sy;
+        sys_position[Y_AXIS] += stepper_info.sy;
+        hal_motor_step(&HAL_MOTOR_Y, 1, (stepper_info.sy < 0) ? HAL_MOTOR_DIR_CW : HAL_MOTOR_DIR_CCW);
+    }
+    while (stepper_info.z0 != tz)
+    {
+        stepper_info.z0 += stepper_info.sz;
+        sys_position[Z_AXIS] += st_zdir;
+        hal_motor_step(stepper_info.tool, 1, (stepper_info.sz < 0) ? HAL_MOTOR_DIR_CW : HAL_MOTOR_DIR_CCW);
+    }
+    if ((stepper_info.x0 == stepper_info.x1) && (stepper_info.y0 == stepper_info.y1) &&
+        (stepper_info.z0 == stepper_info.z1))
+    {
+        st_plan_next_move();
+        return;
+    }
+    timer_set_interval(stepper_info.timer_slot, 1);
+    timer_start_timer(stepper_info.timer_slot);
+}
+#endif
+
 void st_execute_next_step(void)
 {
     int e2;
+
+#ifdef BOARD_MAKER3
+    if (hal_motor_servo_active()) { st_execute_interp(); return; }
+#endif
 
     if (stepper_info.motor_current != NULL)
     {
@@ -586,6 +792,9 @@ void st_execute_next_step(void)
             }
             else
             {
+#ifdef BOARD_MAKER3
+                hal_motor_step_late(stepper_info.motor_current);
+#endif
                 /* Restart timer. */
                 timer_start_timer(stepper_info.timer_slot);
             }
@@ -631,10 +840,14 @@ void st_execute_next_step(void)
         {
             stepper_info.error += stepper_info.dy;
             stepper_info.x0 += stepper_info.sx;
+            sys_position[X_AXIS] += stepper_info.sx;   /* MPos (was never updated) */
 
             /* We are moving the X axis. */
             stepper_info.motor_current = &HAL_MOTOR_X;
             
+#ifdef BOARD_MAKER3
+            hal_motor_set_step_period(&HAL_MOTOR_X, stepper_info.step_dtx);
+#endif
             /* Move X by 1 step. */
             hal_motor_step(
               &HAL_MOTOR_X,
@@ -662,10 +875,14 @@ void st_execute_next_step(void)
         {
             stepper_info.error += stepper_info.dx;
             stepper_info.y0 += stepper_info.sy;
+            sys_position[Y_AXIS] += stepper_info.sy;
 
             /* We are moving the Y axis. */
             stepper_info.motor_current = &HAL_MOTOR_Y;
             
+#ifdef BOARD_MAKER3
+            hal_motor_set_step_period(&HAL_MOTOR_Y, stepper_info.step_dty);
+#endif
             /* Move Y by 1 step. */
             hal_motor_step(
               &HAL_MOTOR_Y,
@@ -684,10 +901,14 @@ void st_execute_next_step(void)
     {
         /* Update z0. */
         stepper_info.z0 += stepper_info.sz;
+        sys_position[Z_AXIS] += st_zdir;
 
         /* We are moving the X axis. */
         stepper_info.motor_current = stepper_info.tool;
         
+#ifdef BOARD_MAKER3
+        hal_motor_set_step_period(stepper_info.tool, stepper_info.step_dtz);
+#endif
         /* Issue movement. */
         hal_motor_step(
             stepper_info.tool,
@@ -714,8 +935,83 @@ void st_execute_next_step(void)
    Currently, the segment buffer conservatively holds roughly up to 40-50 msec of steps.
    NOTE: Computation units are in steps, millimeters, and minutes.
 */
+#ifdef BOARD_MAKER3
+/* Knife steering is on with M3, off with M5. Only T1 with the servo running. */
+#define ST_STEER_DOWN_MM   (-0.5f)  /* blade counts as in the material below this */
+#define ST_STEER_LIFT_MM   2.5f     /* lift for a sharp corner */
+#define ST_STEER_WAIT_MS   1000U    /* how long a plunge waits for the next line */
+
+static float st_block_angle(const plan_block_t *b)
+{
+    return atan2f(b->steer_dy, b->steer_dx) * (180.0f / 3.14159265f);
+}
+
+/* Returns false to hold this block back (a plunge waiting for its next line). */
+static bool st_steer_prepare(const plan_block_t *b)
+{
+    static bool waiting = false;
+    static uint32_t wait_from = 0U;
+    float z;
+
+    if ((gc_state.modal.spindle == SPINDLE_DISABLE) || (selected_tool != 1U) ||
+        (sys.step_control & STEP_CONTROL_EXECUTE_SYS_MOTION) || !hal_motor_servo_active())
+    {
+        return true;
+    }
+    z = (float)sys_position[Z_AXIS] / settings.steps_per_mm[Z_AXIS];
+
+    if ((b->steps[X_AXIS] != 0U) || (b->steps[Y_AXIS] != 0U))
+    {
+        waiting = false;
+        if (z < ST_STEER_DOWN_MM)
+        {
+            float lift = -z;
+            if (lift > ST_STEER_LIFT_MM) { lift = ST_STEER_LIFT_MM; }
+            hal_motor_gear_steer(st_block_angle(b), true, lift);
+        }
+        return true;
+    }
+
+    /* A plunge: face the direction of the cut that follows, in the air. */
+    if ((b->steps[Z_AXIS] != 0U) && (b->direction_bits & (1 << Z_DIRECTION_BIT)))
+    {
+        const plan_block_t *next = plan_get_block_after_current();
+
+        if ((next != NULL) && ((next->steps[X_AXIS] != 0U) || (next->steps[Y_AXIS] != 0U)))
+        {
+            waiting = false;
+            hal_motor_gear_steer(st_block_angle(next), false, 0.0f);
+            return true;
+        }
+        if (next == NULL)
+        {
+            if (!waiting) { waiting = true; wait_from = timer_get_ms(); }
+            if ((timer_get_ms() - wait_from) < ST_STEER_WAIT_MS) { return false; }
+        }
+    }
+    waiting = false;
+    return true;
+}
+
+/* The exit speed rises as later blocks arrive, so it is re-read while a block
+ * runs. System motions (mat load) sit outside the queue and always stop. */
+static void st_prep_refresh_exit(void)
+{
+    float v2 = 0.0f;
+
+    if (!(sys.step_control & STEP_CONTROL_EXECUTE_SYS_MOTION))
+    {
+        v2 = plan_get_exec_block_exit_speed_sqr();
+    }
+    st_ip_vexit = (uint32_t)(sqrt(v2) * (1.0e6f / 60000.0f));
+}
+#endif
+
 void st_prep_buffer()
-{  
+{
+#ifdef BOARD_MAKER3
+    if (pl_block != NULL) { st_prep_refresh_exit(); }
+#endif
     //char dbg[256];
     
     // Block step prep buffer, while in a suspend state and there is no suspend motion to execute.
@@ -728,6 +1024,9 @@ void st_prep_buffer()
         if (sys.step_control & STEP_CONTROL_EXECUTE_SYS_MOTION) { pl_block = plan_get_system_motion_block(); }
         else { pl_block = plan_get_current_block(); }
         if (pl_block == NULL) { return; } // No planner blocks. Exit.
+#ifdef BOARD_MAKER3
+        if (!st_steer_prepare(pl_block)) { pl_block = NULL; return; }
+#endif
 
         
         /* Initialize our Bresenham tracer. */
@@ -758,8 +1057,14 @@ void st_prep_buffer()
         }
         
         /* Compute delay for steps on X and Y from feedrate. */
+#ifdef BOARD_MAKER3
+        /* Pace from the live steps/mm ($100-$102; Z = the active tool's). */
+        stepper_info.step_dtx = ceil(60000/(pl_block->programmed_rate*settings.steps_per_mm[X_AXIS]));
+        stepper_info.step_dty = ceil(60000/(pl_block->programmed_rate*settings.steps_per_mm[Y_AXIS]));
+#else
         stepper_info.step_dtx = ceil(60000/(pl_block->programmed_rate*DEFAULT_X_STEPS_PER_MM));
         stepper_info.step_dty = ceil(60000/(pl_block->programmed_rate*DEFAULT_Y_STEPS_PER_MM));
+#endif
         
         switch(selected_tool)
         {
@@ -790,6 +1095,16 @@ void st_prep_buffer()
             stepper_info.sy = -1;
         }
         
+        st_zdir = (pl_block->direction_bits & (1 << Z_DIRECTION_BIT)) ? -1 : 1;
+#ifdef BOARD_MAKER3
+        /* Maker 3: tool B is NOT inverted (with the original Maker's flip, Z+ on
+         * T1 drove the blade holder down). Same direction for both tools. */
+        if (pl_block->direction_bits & (1 << Z_DIRECTION_BIT))
+        {
+            stepper_info.z1 = -stepper_info.z1;
+            stepper_info.sz = -1;
+        }
+#else
         if (pl_block->direction_bits & (1 << Z_DIRECTION_BIT))
         {
             if (selected_tool == 0)
@@ -814,9 +1129,35 @@ void st_prep_buffer()
             }
         }
         
+#endif
+#ifdef BOARD_MAKER3
+        /* Upstream paced T0 with B's steps/mm and T1 with A's (swapped). */
+        stepper_info.step_dtz = ceil(60000/(pl_block->programmed_rate*settings.steps_per_mm[Z_AXIS]));
+#endif
         /* Compute Bresenham error. */
         stepper_info.error = stepper_info.dx + stepper_info.dy;
        
+#ifdef BOARD_MAKER3
+        {
+            /* The planner's profile for this block, in the interrupt's units. */
+            const float MM_MIN_TO_NM_MS = 1.0e6f / 60000.0f;
+            float nom = plan_compute_profile_nominal_speed(pl_block);
+            float entry = sqrt(pl_block->entry_speed_sqr);
+
+            if (nom < STEPPER_FEEDRATE_MIN) { nom = STEPPER_FEEDRATE_MIN; }
+            if (entry > nom) { entry = nom; }
+            st_ip_L = (uint32_t)(pl_block->millimeters * 1.0e6f);
+            if (st_ip_L == 0U) { st_ip_L = 1U; }
+            st_ip_s = 0U;
+            st_ip_hold_stopped = false;
+            st_ip_vnom = (uint32_t)(nom * MM_MIN_TO_NM_MS);
+            st_ip_v = (uint32_t)(entry * MM_MIN_TO_NM_MS);
+            st_ip_a = (uint32_t)(pl_block->acceleration / 3600.0f);
+            if (st_ip_a == 0U) { st_ip_a = 1U; }
+            st_ip_vmin = (st_ip_vnom < 500U) ? st_ip_vnom : 500U;     /* 30 mm/min */
+            st_prep_refresh_exit();
+        }
+#endif
         /* Initialize current motor. */
         stepper_info.motor_current = NULL;
         

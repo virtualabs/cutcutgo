@@ -136,5 +136,7 @@
 // ---------------------------------------------------------------------------------------
 
 void GRBL_Init(void);
+void GRBL_Reset(void);   /* re-init after a system abort (soft reset) */
+void APP_ServiceSerialOnly(void);   /* app.c: service USB serial from blocking loops */
 
 #endif

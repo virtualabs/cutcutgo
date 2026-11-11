@@ -2,30 +2,32 @@
 
 MPLABX project for a custom Cricut Maker compatible firmware.
 
+## Cricut Maker 3 port
+
+This tree also runs on the **Cricut Maker 3** (main board SCM-84-100-X7, PIC32MK1024MCF100), under the [cutcutgo-bl](https://github.com/DnG-Crafts/cutcutgo-bl) bootloader port for that chip.
+
+- **Build:** run `./build_maker3.sh` in Git Bash, with XC32 v5.10 and the `PIC32MK-MC_DFP` pack. Copy `build_maker3/cutcutgo_maker3.uf2` onto the bootloader's drive.
+- **What works:**
+  - all five motors are driven by an encoder position servo, and the machine homes at power-on
+  - the pen and blade holders, with the blade holder's offset applied by the firmware
+  - mat load and eject with the feed button and mat sensor
+  - holder-B drive tools are identified and steered (rotary blade, knife, scoring, perforation, wavy, debossing, engraving)
+  - registration-mark scanning for print then cut.
+
+
+## Download Boolloader
+The latest pre-compiled maker3 compatible bootloader is available on this [Release page](https://github.com/DnG-Crafts/cutcutgo-bl/releases)
+
+
 ## Download Firmware
-The latest pre-compiled firmwares (standalone and bootloader versions) are available on this [Release page](https://github.com/virtualabs/cutcutgo/releases/tag/latest)
+The latest pre-compiled maker3 compatible firmware is available on this [Release page](https://github.com/DnG-Crafts/cutcutgo/releases)
+
+
+## Download CutCraft
+The latest pre-compiled design and send software with maker3(cutcutgo) support is available on this [Release page](https://github.com/DnG-Crafts/CutCraft/releases)
+
 
 ## Documentation
 The documentation is available on [GitHub Pages](https://virtualabs.github.io/cutcutgo/)
 
-## How to contribute ?
 
-Current version of CutcutGo has been developed for the Cricut Maker Champagne (version 1) which is quite old now. Support for
-newer versions like the Cricut Maker 3 require a complete reverse-engineering of their electronics and critical modifications
-made to the firmware to make it compile and run on multiple targets (and same for our custom bootloader).
-
-Moreover, current version of CutcutGo still has issues and missing features that really need to be taken care of. Below is
-a short list of what needs to be done to free all Cricut Makers and let users control them through different means.
-
-**Core issues and features**
-
-- [ ] Improve GRBL to drive DC motors not like steppers but with a decent PID-based algorithm (smoother movements, reduce vibrations when X and Y axes are driven together)
-- [ ] Add support for Cricut's color sensor located in the tool holder (at least for loading/unloading cutting mat)
-- [ ] Add support for motorized tool located in the head (DC motor driver as well as position sensing through the associated IR LED ?)
-- [ ] Add a Bluetooth Low Energy communication channel to allow wireless cutting (serial communication over BLE through a standard GATT profile ?)
-- [ ] Get rid of MPLABX because it's just a nightmare to use for development
-
-**Cricut Maker 3 reverse-engineering**
-
-- [ ] Reverse-engineering and documentation of its hardware (micro-controller used, debug port, schematics, motors' characteristics like reduction ratio, etc...)
-- [ ] Implement specific compilation directives to allow CutcutGo to compile on different targets (if possible)
