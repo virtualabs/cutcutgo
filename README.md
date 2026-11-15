@@ -26,10 +26,17 @@ The same tree also builds for the **Cricut Explore 3** (main board VLD-84-100-X5
   - registration-mark scanning for print then cut (`#YE`), using the Explore 3's own colour sensor.
 
 
+## Download Boolloader
+The latest pre-compiled maker3 compatible bootloader is available on this [Release page](https://github.com/DnG-Crafts/cutcutgo-bl/releases)
+
+
 ## Download Firmware
 The latest pre-compiled firmwares are available on this [Release page](https://github.com/DnG-Crafts/cutcutgo/releases/tag/latest)
 
+
+## Download CutCraft
+The latest pre-compiled design and send software with maker3(cutcutgo) support is available on this [Release page](https://github.com/DnG-Crafts/CutCraft/releases)
+
+
 ## Documentation
 The documentation is available on [GitHub Pages](https://virtualabs.github.io/cutcutgo/)
-
-
