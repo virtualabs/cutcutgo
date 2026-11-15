@@ -93,7 +93,14 @@ typedef struct {
  * sets (X, TOOL1, TOOL2 inverted; Y not), the encoder counts forwards while
  * a move is driven. Derived from the motor-finder measurements.
  */
+#ifdef BOARD_EXPLORE3
+/* Explore 3: same X driver and encoder pins, but the carriage runs the other way
+ * round, so home (right) was reached by driving left. Swapping the encoder's A/B
+ * and inverting PH reverses the whole axis while the servo stays consistent. */
+static const m3_hw_t hw_x  = { 4,  GPIO_PIN_RA10, GPIO_PIN_RD8,  0, GPIO_PIN_RF9, GPIO_PIN_RA15, GPIO_PIN_RA14, 0, 0, 0 };
+#else
 static const m3_hw_t hw_x  = { 4,  GPIO_PIN_RA10, GPIO_PIN_RD8,  1, GPIO_PIN_RF9, GPIO_PIN_RA14, GPIO_PIN_RA15, 0, 0, 0 };
+#endif
 /* Y: RD2 + RD3 together move it, but which is EN and which nSLEEP isn't
  * known yet, so both candidates are tried at start-up (m3_calibrate_y()):
  *   A: EN = RD2 (PWM5H), nSLEEP = RD3
@@ -133,8 +140,10 @@ static const m3_hw_t *m3_hw(const hal_motor_driver_t *motor)
 {
     if (motor == &HAL_MOTOR_X)     { return &hw_x; }
     if (motor == &HAL_MOTOR_Y)     { return g_y_ok ? &hw_y : NULL; }
+#ifndef BOARD_EXPLORE3     /* Explore 3: clamps A/B are steppers (m3_clamp_*), not servos */
     if (motor == &HAL_MOTOR_TOOL1) { return &hw_t1; }
     if (motor == &HAL_MOTOR_TOOL2) { return &hw_t2; }
+#endif
     return NULL;
 }
 
@@ -355,18 +364,22 @@ static void m3_hw_init(void)
     PTCON = 0;
     PTPER = PWM_PERIOD;
     m3_pwm_generator_init(&hw_x);
+#ifndef BOARD_EXPLORE3     /* Explore 3: tool and gear pins are not known; leave them alone */
     m3_pwm_generator_init(&hw_t1);
     m3_pwm_generator_init(&hw_t2);
     m3_pwm_generator_init(&hw_gear);
-    /* Mat sensor light: RB12 = PWM2H, off until the sensor is polled. */
+#endif
+    /* Mat sensor light: RB12 = PWM2H, off until the sensor is polled (same on the Explore 3). */
     PWMCONx(2) = 0; PHASEx(2) = 0; DTRx(2) = 0; ALTDTRx(2) = 0; PDCx(2) = 0; SDCx(2) = 0;
     IOCONx(2) = (1UL << _IOCON3_PENH_POSITION) | (3UL << _IOCON3_PMOD_POSITION) | (3UL << _IOCON3_FLTMOD_POSITION);
+#ifndef BOARD_EXPLORE3
     /* Pen holder PH (RF0) is PWM11H: as GPIO it is held by the MCPWM module
      * (bring-up v15: pen moved the same way for Z-1 and Z+1), so drive it
      * through generator 11 at 0 % / 100 %. */
     PWMCONx(11) = 0; PHASEx(11) = 0; DTRx(11) = 0; ALTDTRx(11) = 0; PDCx(11) = 0; SDCx(11) = 0;
     IOCONx(11) = (1UL << _IOCON3_PENH_POSITION) | (3UL << _IOCON3_PMOD_POSITION)
                | (3UL << _IOCON3_FLTMOD_POSITION);
+#endif
     PTCONSET = _PTCON_PTEN_MASK;
 
     g_hw_init = true;
@@ -526,7 +539,11 @@ static hal_motor_driver_t *const g_servo_motor[M3_SERVO_MOTORS] = { &HAL_MOTOR_X
 /* Motor T is deliberately not known to m3_hw()/m3_index(): it is not a Grbl axis. */
 static const m3_hw_t *m3_servo_hw(int idx)
 {
+#ifdef BOARD_EXPLORE3
+    return (idx == M3_SERVO_GEAR) ? NULL : m3_hw(g_servo_motor[idx]);   /* no blade gear */
+#else
     return (idx == M3_SERVO_GEAR) ? &hw_gear : m3_hw(g_servo_motor[idx]);
+#endif
 }
 
 static void m3_servo_release(int idx)
@@ -587,9 +604,292 @@ static void m3_servo_one(int idx)
     m3_set_duty(hw, (uint32_t)(fwd ? u : -u));
 }
 
+#ifdef BOARD_EXPLORE3
+/* --------------------------------------------------------------------------
+ * Explore 3 clamps A and B: stepper motors on two Allegro A4985 drivers (U700,
+ * U701), run in half step (20 steps per mm, ~10 mm stroke). Same pins as the
+ * Maker 3's tool motors:
+ *   clamp A: STEP RD5 (PWM12H)  DIR RF0 (PWM11H)  ENABLE RG14  home sensor RG10
+ *   clamp B: STEP RB10 (PWM3H)  DIR RG15 (GPIO)   ENABLE RG13  home sensor RG11
+ * ENABLE low = on. DIR low = up. Home sensors read 1 at the top.
+ * PWM pins can't be driven as GPIO while the MCPWM runs, so STEP (and A's DIR)
+ * are set through their generator's duty, which latches at the next PWM
+ * period (50 us).
+ * Positions are in steps, 0 = home (top), positive = down. Grbl's Z steps for
+ * the selected tool (T0 = A, T1 = B) move the target; a 10 kHz timer interrupt
+ * follows it with a trapezoidal ramp.
+ * -------------------------------------------------------------------------- */
+#define M3_CLAMP_MAX_STEPS   170     /* soft limit below home: ~8.5 mm (half steps), clear of the bottom stop */
+#define M3_CLAMP_IDLE_OFF_MS 2000U   /* driver off after this long idle at the top */
+/* Half step: MS2 is tied to GND on the board; MS1 is driven by the MCU (U700 pin 8 = RB14,
+ * U701 pin 8 = RG9). MS1 high = half step. */
+/* Fast, ramped moves: slow stepping sits in the motors' rough band and grinds, so the clamps
+ * are snapped like the original machine does: start speed, acceleration and top speed per
+ * clamp, in half steps. */
+#define M3_CLAMP_ISR_HZ      10000
+/* Profile picked by ear on the machine: start 800, top 2500, 150000 /s^2. Both clamps held
+ * every step on it (back on their sensors after G0 snaps). */
+static const int32_t g_clamp_vstart[2] = { 800, 800 };       /* half steps/s: A, B */
+static const int32_t g_clamp_vmax[2]   = { 2500, 2500 };     /* half steps/s: A, B */
+static const int32_t g_clamp_accel[2]  = { 150000, 150000 }; /* half steps/s^2: A, B */
+static const uint32_t g_clamp_home_sps[2] = { 40U, 20U };   /* homing speed: A, B */
+#define M3_CLAMP_TICKS_S     (SYS_FREQ / 2U)   /* core timer counts per second */
+
+typedef struct
+{
+    uint8_t  step_gen;               /* generator driving STEP (H output) */
+    uint8_t  dir_gen;                /* generator driving DIR, 0 = DIR is a GPIO */
+    GPIO_PIN dir_pin;
+    GPIO_PIN en_pin;
+    GPIO_PIN home_pin;
+} m3_clamp_hw_t;
+
+typedef struct
+{
+    volatile int32_t pos;            /* steps, 0 = home, + = down */
+    volatile int32_t target;
+    int32_t  v;                      /* steps/s */
+    int32_t  acc;                    /* step phase accumulator, 1000 = one step */
+    int8_t   dir;                    /* direction the DIR pin is set to: +1 down, -1 up, 0 unknown */
+    bool     high;                   /* STEP is high this tick */
+    bool     enabled;
+} m3_clamp_t;
+
+static const m3_clamp_hw_t g_clamp_hw[2] = {
+    { 12U, 11U, GPIO_PIN_RF0,  GPIO_PIN_RG14, GPIO_PIN_RG10 },     /* A */
+    {  3U,  0U, GPIO_PIN_RG15, GPIO_PIN_RG13, GPIO_PIN_RG11 },     /* B */
+};
+static m3_clamp_t g_clamp[2];
+static volatile bool g_clamp_homed = false;
+static volatile bool g_clamp_busy = false;     /* homing: the tick leaves the clamps alone */
+uint32_t g_clamp_home_steps[2];                /* steps up to the sensor on the last homing */
+
+extern void APP_ServiceSerialOnly(void);
+
+static void m3_gen_take_h(uint8_t gen)
+{
+    PWMCONx(gen) = 0; PHASEx(gen) = 0; DTRx(gen) = 0; ALTDTRx(gen) = 0; PDCx(gen) = 0; SDCx(gen) = 0;
+    IOCONx(gen) = (1UL << _IOCON3_PENH_POSITION) | (3UL << _IOCON3_PMOD_POSITION) | (3UL << _IOCON3_FLTMOD_POSITION);
+}
+
+static void m3_clamp_step_write(int c, bool high)
+{
+    PDCx(g_clamp_hw[c].step_gen) = high ? (PWM_PERIOD + 1U) : 0U;
+}
+
+static void m3_clamp_dir_write(int c, int8_t dir)
+{
+    const bool high = (dir > 0);                /* high = down */
+    if (g_clamp_hw[c].dir_gen != 0U) { PDCx(g_clamp_hw[c].dir_gen) = high ? (PWM_PERIOD + 1U) : 0U; }
+    else if (high) { GPIO_PinSet(g_clamp_hw[c].dir_pin); }
+    else           { GPIO_PinClear(g_clamp_hw[c].dir_pin); }
+    g_clamp[c].dir = dir;
+}
+
+static void m3_clamp_enable(int c, bool on)
+{
+    if (on) { GPIO_PinClear(g_clamp_hw[c].en_pin); } else { GPIO_PinSet(g_clamp_hw[c].en_pin); }
+    g_clamp[c].enabled = on;
+}
+
+static bool m3_clamp_at_top(int c)
+{
+    return GPIO_PinRead(g_clamp_hw[c].home_pin);
+}
+
+static void m3_clamp_init(void)
+{
+    int c;
+    for (c = 0; c < 2; c++)
+    {
+        const m3_clamp_hw_t *h = &g_clamp_hw[c];
+        m3_make_digital(h->en_pin);
+        GPIO_PinSet(h->en_pin);                 /* off */
+        GPIO_PinOutputEnable(h->en_pin);
+        m3_make_digital(h->home_pin);
+        GPIO_PinInputEnable(h->home_pin);
+        m3_gen_take_h(h->step_gen);
+        if (h->dir_gen != 0U) { m3_gen_take_h(h->dir_gen); }
+        else
+        {
+            m3_make_digital(h->dir_pin);
+            GPIO_PinClear(h->dir_pin);
+            GPIO_PinOutputEnable(h->dir_pin);
+        }
+        g_clamp[c].pos = 0; g_clamp[c].target = 0; g_clamp[c].v = 0; g_clamp[c].acc = 0;
+        g_clamp[c].high = false; g_clamp[c].enabled = false;
+        m3_clamp_dir_write(c, -1);
+    }
+    /* MS1 high = half step. A: RB14 (PWM1H, MCPWM-owned while the PWM runs). B: RG9 (GPIO). */
+    m3_gen_take_h(1U);
+    PDCx(1U) = PWM_PERIOD + 1U;
+    m3_make_digital(GPIO_PIN_RG9);
+    GPIO_PinSet(GPIO_PIN_RG9);
+    GPIO_PinOutputEnable(GPIO_PIN_RG9);
+}
+
+/* One Grbl Z step for clamp c: +1 = down. Ignored until the clamps are homed;
+ * the target is kept inside 0..M3_CLAMP_MAX_STEPS. */
+static void m3_clamp_step(int c, int dir)
+{
+    int32_t t;
+    if (!g_clamp_homed) { return; }
+    t = g_clamp[c].target + dir;
+    if (t < 0) { t = 0; }
+    if (t > M3_CLAMP_MAX_STEPS) { t = M3_CLAMP_MAX_STEPS; }
+    g_clamp[c].target = t;
+}
+
+/* 10 kHz timer: follow the target with a trapezoidal ramp. A step is high for one tick (100 us,
+ * at least one 50 us PWM period so the duty latches) and low for the next; the DIR pin is set
+ * at least one tick before stepping the other way. */
+static uint32_t g_clamp_idle_ticks[2];
+
+static void m3_clamp_tick_one(int c)
+{
+    m3_clamp_t *k = &g_clamp[c];
+    int32_t d, ad, dv;
+    int8_t sgn;
+
+    if (k->high) { m3_clamp_step_write(c, false); k->high = false; return; }
+
+    d = k->target - k->pos;
+    if ((d == 0) && (k->v == 0))
+    {
+        k->acc = 0;
+        if (k->enabled && (k->pos == 0) && (++g_clamp_idle_ticks[c] >= (M3_CLAMP_IDLE_OFF_MS * (M3_CLAMP_ISR_HZ / 1000))))
+        {
+            m3_clamp_enable(c, false);          /* resting at the top: nothing to hold */
+        }
+        return;
+    }
+    g_clamp_idle_ticks[c] = 0U;
+    if (!k->enabled) { m3_clamp_enable(c, true); return; }
+
+    sgn = (d > 0) ? 1 : ((d < 0) ? -1 : k->dir);
+    ad = (d < 0) ? -d : d;
+    dv = g_clamp_accel[c] / M3_CLAMP_ISR_HZ;
+    if (dv < 1) { dv = 1; }
+
+    if (sgn != k->dir)
+    {
+        /* wrong way (or overshoot): brake to a stop, then turn the DIR pin round */
+        if (k->v > g_clamp_vstart[c]) { k->v -= dv; }
+        else { k->v = 0; k->acc = 0; m3_clamp_dir_write(c, sgn); return; }
+    }
+    else if (ad == 0)
+    {
+        if (k->v > g_clamp_vstart[c]) { k->v -= dv; } else { k->v = 0; k->acc = 0; return; }
+    }
+    else if ((k->v * k->v) >= (2 * g_clamp_accel[c] * ad))
+    {
+        k->v -= dv;                             /* braking distance reached */
+        if (k->v < g_clamp_vstart[c]) { k->v = g_clamp_vstart[c]; }
+    }
+    else
+    {
+        if (k->v < g_clamp_vstart[c]) { k->v = g_clamp_vstart[c]; }
+        else if (k->v < g_clamp_vmax[c]) { k->v += dv; if (k->v > g_clamp_vmax[c]) { k->v = g_clamp_vmax[c]; } }
+    }
+
+    k->acc += k->v;
+    if (k->acc >= M3_CLAMP_ISR_HZ)
+    {
+        k->acc -= M3_CLAMP_ISR_HZ;
+        m3_clamp_step_write(c, true);
+        k->high = true;
+        k->pos += k->dir;
+    }
+}
+
+void __attribute__((vector(_TIMER_3_VECTOR), interrupt(IPL2SOFT), nomips16)) m3_clamp_timer_isr(void)
+{
+    IFS0CLR = _IFS0_T3IF_MASK;
+    if (!g_clamp_busy)
+    {
+        m3_clamp_tick_one(0);
+        m3_clamp_tick_one(1);
+    }
+}
+
+static void m3_clamp_timer_start(void)
+{
+    static bool started = false;
+    if (started) { return; }
+    started = true;
+    T3CON = 0;
+    TMR3 = 0;
+    PR3 = ((SYS_FREQ / 2U) / M3_CLAMP_ISR_HZ) - 1U;     /* timers run at SYSCLK/2 (as Timer 1) */
+    IPC3CLR = _IPC3_T3IP_MASK | _IPC3_T3IS_MASK;
+    IPC3SET = (2UL << _IPC3_T3IP_POSITION);
+    IFS0CLR = _IFS0_T3IF_MASK;
+    IEC0SET = _IEC0_T3IE_MASK;
+    T3CONSET = _T3CON_ON_MASK;
+}
+
+static void m3_clamp_stop(void)
+{
+    int c;
+    for (c = 0; c < 2; c++) { g_clamp[c].target = g_clamp[c].pos; }
+}
+
+static void m3_clamp_delay_us(uint32_t us)
+{
+    const uint32_t t0 = _CP0_GET_COUNT();
+    while ((uint32_t)(_CP0_GET_COUNT() - t0) < (us * (M3_CLAMP_TICKS_S / 1000000U))) { }
+}
+
+/* Blocking single step for homing, at 'sps' steps/s. */
+static void m3_clamp_step_blocking(int c, int8_t dir, uint32_t sps)
+{
+    if (g_clamp[c].dir != dir) { m3_clamp_dir_write(c, dir); m3_clamp_delay_us(2000U); }
+    m3_clamp_step_write(c, true);
+    m3_clamp_delay_us(1000U);
+    m3_clamp_step_write(c, false);
+    m3_clamp_delay_us((1000000U / sps) - 1000U);
+    APP_ServiceSerialOnly();
+}
+
+/* Home one clamp: off the sensor if it is already there, then up slowly to it. */
+static bool m3_clamp_home_one(int c)
+{
+    uint32_t n;
+
+    m3_clamp_enable(c, true);
+    m3_clamp_delay_us(10000U);
+    if (m3_clamp_at_top(c))
+    {
+        for (n = 0U; (n < 80U) && m3_clamp_at_top(c); n++) { m3_clamp_step_blocking(c, 1, g_clamp_home_sps[c]); }
+        if (m3_clamp_at_top(c)) { return false; }
+        for (n = 0U; n < 10U; n++) { m3_clamp_step_blocking(c, 1, g_clamp_home_sps[c]); }
+    }
+    for (n = 0U; (n < 240U) && !m3_clamp_at_top(c); n++) { m3_clamp_step_blocking(c, -1, g_clamp_home_sps[c]); }
+    g_clamp_home_steps[c] = n;
+    if (!m3_clamp_at_top(c)) { return false; }
+    g_clamp[c].pos = 0; g_clamp[c].target = 0; g_clamp[c].v = 0; g_clamp[c].acc = 0;
+    g_clamp_idle_ticks[c] = 0U;
+    return true;
+}
+
+static bool m3_clamp_home(void)
+{
+    bool ok;
+    g_clamp_busy = true;
+    g_clamp_homed = false;
+    ok = m3_clamp_home_one(0);
+    if (ok) { ok = m3_clamp_home_one(1); }
+    g_clamp_homed = ok;
+    g_clamp_busy = false;
+    return ok;
+}
+#endif /* BOARD_EXPLORE3 */
+
 void hal_motor_abort_all(void)
 {
     int i;
+#ifdef BOARD_EXPLORE3
+    m3_clamp_stop();
+#endif
 
     for (i = 0; i < M3_SERVO_MOTORS; i++)
     {
@@ -855,6 +1155,20 @@ bool hal_motor_home(uint8_t mask)
     m3_servo_off();
     g_homing = true;
 
+#ifdef BOARD_EXPLORE3
+    if (ok && (mask & (1U << Z_AXIS)))
+    {
+        /* Clamps: up to their home sensors. Grbl's Z: 20 steps/mm (half step) for both. */
+        char hb[64];
+        ok = m3_clamp_home();
+        settings.steps_per_mm[Z_AXIS] = DEFAULT_A_STEPS_PER_MM;
+        settings.max_rate[Z_AXIS] = EXPLORE3_Z_RATE_A;
+        settings.acceleration[Z_AXIS] = EXPLORE3_Z_ACCEL_A;
+        snprintf(hb, sizeof(hb), "[MSG:Clamp home %s, steps up A=%lu B=%lu]", ok ? "ok" : "FAILED",
+                 (unsigned long)g_clamp_home_steps[0], (unsigned long)g_clamp_home_steps[1]);
+        printString(hb); printString(M3_EOL);
+    }
+#else
     if (ok && (mask & (1U << Z_AXIS)))
     {
         /* v30: gentle, speed-controlled homing through the servo (was 35 %
@@ -884,6 +1198,7 @@ bool hal_motor_home(uint8_t mask)
             HAL_MOTOR_TOOL2.rel_pos_th = HAL_MOTOR_TOOL2.rel_pos;
         }
     }
+#endif
     if (ok && (mask & (1U << X_AXIS)))
     {
         r = m3_home_drive(&HAL_MOTOR_X, true, 20U, 30000, 150U, 30000U);         /* right, to the stop */
@@ -908,6 +1223,16 @@ int hal_motor_step(hal_motor_driver_t *motor, int steps, hal_motor_direction_t d
     int idx = m3_index(motor);
 
     (void)steps;
+#ifdef BOARD_EXPLORE3
+    /* Clamps A (T0) and B (T1): steppers. CW = Z down. */
+    if ((motor == &HAL_MOTOR_TOOL1) || (motor == &HAL_MOTOR_TOOL2))
+    {
+        m3_clamp_step((motor == &HAL_MOTOR_TOOL1) ? 0 : 1, (direction == HAL_MOTOR_DIR_CW) ? 1 : -1);
+        motor->direction = direction;
+        motor->state = HAL_MOTOR_IDLE;
+        return 0;
+    }
+#endif
     if (idx < 0)
     {
         return -1;                              /* blade gear: not available */
@@ -1339,6 +1664,10 @@ static const m3_tool_t *m3_tool(void)
 
 void hal_motor_gear_steer(float deg, bool in_material, float lift_mm)
 {
+#ifdef BOARD_EXPLORE3
+    (void)deg; (void)in_material; (void)lift_mm;
+    return;                 /* no steered tools on the Explore 3 */
+#endif
     hal_motor_driver_t *g = &HAL_MOTOR_ACCESSORY;
     hal_motor_driver_t *b = &HAL_MOTOR_TOOL2;
     int32_t want, d, goal, count, moved;
@@ -1620,6 +1949,11 @@ static int m3_find_tool_marks(int32_t *gap_out, uint32_t *nr_out, int32_t *zero_
  */
 bool hal_motor_tool_home(int32_t x_steps, int32_t z_steps)
 {
+#ifdef BOARD_EXPLORE3
+    (void)x_steps; (void)z_steps;
+    printString("[MSG:Tool detection not available on the Explore 3]"); printString(M3_EOL);
+    return true;
+#else
     const int32_t Z_BOTTOM_STEPS = -433;                       /* Z-10 mm, blade holder */
     int32_t gap = 0, zero = 0, moved, d;
     uint32_t nr = 0U, ms;
@@ -1645,6 +1979,7 @@ bool hal_motor_tool_home(int32_t x_steps, int32_t z_steps)
     M3_RAMP(3, -8 * z_steps, 1720U);                           /* and Z */
 #undef M3_RAMP
     return (r == 1);
+#endif
 }
 
 /* The TX ring drops text when full: wait for room, briefly. */
@@ -1676,9 +2011,16 @@ static void m3_i2c_wait(void)
  * Registration sensor (ISL29125 colour sensor): I2C address 0x44, SCL RE13, SDA RE12.
  * Bit-banged: pins are only pulled low or released.
  */
+#ifdef BOARD_EXPLORE3
+/* Explore 3: same bus pins, but its registration sensor answers at 0x38. */
+#define M3_BUS_SCL   ((GPIO_PIN)77U)
+#define M3_BUS_SDA   ((GPIO_PIN)76U)
+#define M3_BUS_ADDR  0x38U        /* the Maker 3 sensor is 0x44 */
+#else
 #define M3_BUS_SCL   ((GPIO_PIN)77U)
 #define M3_BUS_SDA   ((GPIO_PIN)76U)
 #define M3_BUS_ADDR  0x44U
+#endif
 
 static void m3_bus_scl_up(void)
 {
@@ -1769,8 +2111,15 @@ static bool m3_bus_read_reg(uint32_t reg, uint32_t *b0, uint32_t *b1)
  * sits M3_REG_DX_MM / M3_REG_DY_MM from the pen: it is over a mark when the
  * machine is at the mark's position plus that offset (measured 2026-11-10).
  */
+#ifdef BOARD_EXPLORE3
+/* Explore 3 (2026-11-15): pen bands at X160 / Y40 drawn at Z-4.5, scanned both ways with the
+ * Maker offsets: X read 165.94 (+5.94), Y read 37.17 (-2.83). Sensor = pen + (22.04, -0.83). */
+#define M3_REG_DX_MM       22.04f
+#define M3_REG_DY_MM       (-0.83f)
+#else
 #define M3_REG_DX_MM       16.1f
 #define M3_REG_DY_MM       2.0f   /* 1.5 by 1 mm steps; #YE scans both ways then read 0.5 high */
+#endif
 #define M3_REG_MAX_SAMPLES 2500U
 #define M3_REG_SCAN_MM_S   5.0f
 #define M3_REG_MOVE_MM_S   25.0f
@@ -1791,7 +2140,12 @@ static bool m3_reg_sensor_on(void)
     GPIO_PinClear(M3_BUS_SCL); GPIO_PinClear(M3_BUS_SDA);
     GPIO_PinInputEnable(M3_BUS_SCL); GPIO_PinInputEnable(M3_BUS_SDA);
     m3_bus_start();
+#ifdef BOARD_EXPLORE3
+    /* Explore 3 sensor (0x38, 5 channels at 0x1C-0x25): register 0 = 3 starts measuring. */
+    ok = m3_bus_write(M3_BUS_ADDR << 1) && m3_bus_write(0U) && m3_bus_write(0x03U);
+#else
     ok = m3_bus_write(M3_BUS_ADDR << 1) && m3_bus_write(1U) && m3_bus_write(0x19U);
+#endif
     m3_bus_stop();
     return ok;
 }
@@ -1800,7 +2154,11 @@ static int32_t m3_reg_read(void)
 {
     uint32_t b0 = 0U, b1 = 0U;
 
+#ifdef BOARD_EXPLORE3
+    if (!m3_bus_read_reg(0x22U, &b0, &b1)) { return -1; }    /* clear channel: the biggest signal */
+#else
     if (!m3_bus_read_reg(0x09U, &b0, &b1)) { return -1; }
+#endif
     return (int32_t)((b1 << 8) | b0);
 }
 
@@ -1836,10 +2194,11 @@ void hal_motor_y_cmd(const char *line)
 {
     char out[64];
     uint32_t a[4] = { 0, 0, 0, 0 };
+    const uint32_t n_max = 4U;
     uint32_t n = 0;
     const char *p = line + 3;
 
-    while ((*p != 0) && (n < 4U))
+    while ((*p != 0) && (n < n_max))
     {
         while (*p == ' ') { p++; }
         if ((*p < '0') || (*p > '9')) { break; }
@@ -1847,6 +2206,15 @@ void hal_motor_y_cmd(const char *line)
         while ((*p >= '0') && (*p <= '9')) { a[n] = a[n] * 10U + (uint32_t)(*p - '0'); p++; }
         n++;
     }
+
+#ifdef BOARD_EXPLORE3
+    /* The Explore 3 has #YE (registration scan) and #YZ (sensor registers) only. */
+    if ((line[2] != 'E') && (line[2] != 'e') && (line[2] != 'Z') && (line[2] != 'z'))
+    {
+        printString("[Y? Explore 3: #YE axis from to | #YZ]"); printString(M3_EOL);
+        return;
+    }
+#endif
 
     if ((line[2] == 'E') || (line[2] == 'e'))
     {
@@ -1968,7 +2336,13 @@ void hal_motor_y_cmd(const char *line)
          * and 0x7E-0x7F, two bytes each. light 1 = white light (RG7) on. With reg
          * and val, writes that first (val2 makes it a 16-bit write). Numbers are decimal.
          */
+#ifdef BOARD_EXPLORE3
+        /* Explore 3: the sensor answers at 0x38 (#YB), probably a ROHM BH1745/BH1749: system
+         * control / part ID 0x40, mode 0x41-0x44, colour data 0x50-0x5D, manufacturer ID 0x92. */
+        static const uint8_t regs[] = { 0x40U, 0x41U, 0x42U, 0x44U, 0x50U, 0x52U, 0x54U, 0x56U, 0x58U, 0x5AU, 0x5CU, 0x60U, 0x62U, 0x92U };
+#else
         static const uint8_t regs[] = { 0U, 1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 0x7EU, 0x7FU };
+#endif
         volatile uint32_t *ansel = (volatile uint32_t *)&ANSELE;
         const uint32_t saved_e = *ansel;
         const bool light = (n >= 1U) && (a[0] != 0U);
@@ -2079,6 +2453,7 @@ void hal_motor_driver_init(void)
     m3_hw_init();
     m3_pins_init(&hw_x);
     m3_pins_init(&hw_y);
+#ifndef BOARD_EXPLORE3     /* Explore 3: tool, gear, mat sensor and light pins are left as inputs */
     m3_pins_init(&hw_t1);
     m3_pins_init(&hw_t2);
     m3_pins_init(&hw_gear);
@@ -2086,15 +2461,22 @@ void hal_motor_driver_init(void)
     HAL_MOTOR_ACCESSORY.rel_pos = 0;
     HAL_MOTOR_ACCESSORY.rel_pos_th = 0;
     HAL_MOTOR_ACCESSORY.grbl_axis = Z_AXIS;
-    m3_make_digital(GPIO_PIN_RG6);              /* mat sensor output */
+#endif
+#ifdef BOARD_EXPLORE3
+    m3_clamp_init();
+    m3_clamp_timer_start();
+#endif
+    m3_make_digital(GPIO_PIN_RG6);              /* mat sensor output (same on the Explore 3) */
     GPIO_PinInputEnable(GPIO_PIN_RG6);
-    m3_make_digital(GPIO_PIN_RG7);              /* carriage white light: off except during sensor reads */
+    m3_make_digital(GPIO_PIN_RG7);              /* carriage white light (both machines): off except during sensor reads */
     GPIO_PinSet(GPIO_PIN_RG7);
     GPIO_PinOutputEnable(GPIO_PIN_RG7);
 
     g_pwm_selftest_x = m3_pwm_selftest(&hw_x);
+#ifndef BOARD_EXPLORE3
     g_pwm_selftest_t1 = m3_pwm_selftest_short(&hw_t1);
     g_pwm_selftest_t2 = m3_pwm_selftest_short(&hw_t2);
+#endif
     m3_calibrate_y();
 
     HAL_MOTOR_X.grbl_axis = X_AXIS;

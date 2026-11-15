@@ -417,6 +417,15 @@ uint8_t plan_buffer_line(float *target, plan_line_data_t *pl_data)
     block->programmed_rate = pl_data->feed_rate;
     if (block->condition & PL_COND_FLAG_INVERSE_TIME) { block->programmed_rate *= block->millimeters; }
   }
+#ifdef BOARD_EXPLORE3
+  /* Explore 3: the clamps are steppers that grind when stepped slowly. A Z-only move (tool
+   * down/up) always runs at the Z rapid rate, whatever F was given; the clamp's own ramp
+   * shapes it. Moves that also go along X/Y keep their feed. */
+  if ((block->steps[X_AXIS] == 0U) && (block->steps[Y_AXIS] == 0U) && (block->steps[Z_AXIS] != 0U))
+  {
+    block->programmed_rate = block->rapid_rate;
+  }
+#endif
 
   // TODO: Need to check this method handling zero junction speeds when starting from rest.
   if ((block_buffer_head == block_buffer_tail) || (block->condition & PL_COND_FLAG_SYSTEM_MOTION)) {

@@ -407,7 +407,13 @@ void mc_mat_load_unload(void)
     plan_data.feed_rate = 1000.0;
     plan_data.condition = (PL_COND_FLAG_SYSTEM_MOTION|PL_COND_FLAG_NO_FEED_OVERRIDE);
     system_convert_array_steps_to_mpos(target, sys_position);
+#ifdef BOARD_EXPLORE3
+    /* Explore 3 (2026-11-15): with 45 the mat went 32 mm past the top grid line (measured by the
+     * user; the same at Y0 and at the mat centre), so its rollers grip sooner: load feeds 13 mm. */
+    target[Y_AXIS] = (sys.mat_loaded == 0) ? (target[Y_AXIS] + 13.0f) : -50.0f;
+#else
     target[Y_AXIS] = (sys.mat_loaded == 0) ? (target[Y_AXIS] + 45.0f) : -50.0f;   /* 45: Y0 = top edge of the mat work area (50 went 5 mm past it) */
+#endif
     if (plan_buffer_line(target, pl_data) == PLAN_EMPTY_BLOCK) { return; }
     sys.step_control = STEP_CONTROL_EXECUTE_SYS_MOTION;
     st_prep_buffer();

@@ -33,19 +33,37 @@
     // Cricut Maker 3, measured with a ruler (2026-11-08): 100 mm commanded at
     // 11.76 gave 131 mm on X; at 29.14 gave 280 mm on Y.
     #define DEFAULT_X_STEPS_PER_MM 8.977
+  #ifdef BOARD_EXPLORE3
+    // Explore 3 (2026-11-15): with 10.407 the pen fell short of the mat grid by 2 mm at 6 in and
+    // 4 mm at 11 in (1.4 %, Y0 on the top line), so 10.407 * 283.4 / 279.4.
+    #define DEFAULT_Y_STEPS_PER_MM 10.556
+  #else
     #define DEFAULT_Y_STEPS_PER_MM 10.407
+  #endif
   #else
     #define DEFAULT_X_STEPS_PER_MM 11.76
     #define DEFAULT_Y_STEPS_PER_MM 29.14
   #endif
-  #ifdef BOARD_MAKER3
+  #if defined(BOARD_EXPLORE3)
+    // Explore 3 clamps A and B: steppers on A4985s in half step (MS1 driven high), ~20 half
+    // steps/mm (10 full steps = about 1 mm by eye, 2026-11-14). One Grbl Z step = one half step.
+    #define DEFAULT_A_STEPS_PER_MM 20.0
+    #define DEFAULT_B_STEPS_PER_MM 20.0
+    // Z limits per clamp, just under the clamp drive's (2500 half steps/s, 150000 /s^2), so the
+    // clamp's own ramp shapes the motion: rate in mm/min, acceleration in mm/min^2 (mm/s^2 * 3600).
+    #define EXPLORE3_Z_RATE_A  7200.0           // 120 mm/s = 2400 half steps/s
+    #define EXPLORE3_Z_RATE_B  7200.0
+    #define EXPLORE3_Z_ACCEL_A (6000.0*3600)    // 6000 mm/s^2 = 120000 half steps/s^2
+    #define EXPLORE3_Z_ACCEL_B (6000.0*3600)
+  #elif defined(BOARD_MAKER3)
     // Pen holder (A): full 10 mm stroke = 1573 encoder counts (ruler, 2026-11-08).
     // Blade holder (B): 5 mm = 1720 counts, so 43.26 (original Maker) is right.
     #define DEFAULT_A_STEPS_PER_MM 19.66
+    #define DEFAULT_B_STEPS_PER_MM 43.26
   #else
     #define DEFAULT_A_STEPS_PER_MM 11.16
+    #define DEFAULT_B_STEPS_PER_MM 43.26
   #endif
-  #define DEFAULT_B_STEPS_PER_MM 43.26
   #define DEFAULT_X_MAX_RATE 1500.0 // mm/min
   #define DEFAULT_Y_MAX_RATE 1500.0 // mm/min
   #define DEFAULT_Z_MAX_RATE 1500.0 // mm/min

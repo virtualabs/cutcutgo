@@ -264,8 +264,16 @@ static int32_t tool_z_steps[2] = { 0, 0 };   /* per-tool Z position, steps */
  * X/Y are the blade tip's position, so the same coordinates mean the same spot
  * on the paper for both tools: carriage = position + st_carriage_offset_steps().
  */
+#ifdef BOARD_EXPLORE3
+/* Explore 3 (2026-11-15): clamp B cut a 10 mm square commanded at X170 Y60 (no offset); the
+ * sensor found it at X131.98 Y59.25 (both directions averaged, 9.9 mm wide). A pen square cut
+ * over with 38.0 came out about 0.4 mm to the left (+X) of the ink: 37.6. */
+#define ST_B_DX_MM  37.6f
+#define ST_B_DY_MM  0.75f
+#else
 #define ST_B_DX_MM  39.0f   /* 39.4 from the sensor; draw-then-cut tests: 39.8 was the wrong way */
 #define ST_B_DY_MM  3.3f    /* 3.7 from the sensor; 4.1 was the wrong way */
+#endif
 
 static int32_t st_tool_xy_steps(uint8_t axis, uint8_t tool)
 {
@@ -316,6 +324,10 @@ void st_select_tool(uint8_t tool)
         sys_position[Y_AXIS] -= st_tool_xy_steps(Y_AXIS, tool) - st_tool_xy_steps(Y_AXIS, selected_tool);
         selected_tool = tool;
         settings.steps_per_mm[Z_AXIS] = (tool == 1U) ? DEFAULT_B_STEPS_PER_MM : DEFAULT_A_STEPS_PER_MM;
+#ifdef BOARD_EXPLORE3
+        settings.max_rate[Z_AXIS] = (tool == 1U) ? EXPLORE3_Z_RATE_B : EXPLORE3_Z_RATE_A;   /* clamp speed */
+        settings.acceleration[Z_AXIS] = (tool == 1U) ? EXPLORE3_Z_ACCEL_B : EXPLORE3_Z_ACCEL_A;
+#endif
         plan_sync_position();
         gc_sync_position();
         return;
