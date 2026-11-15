@@ -27,7 +27,7 @@ The same tree also builds for the **Cricut Explore 3** (main board VLD-84-100-X5
 
 
 ## Download Boolloader
-The latest pre-compiled maker3 compatible bootloader is available on this [Release page](https://github.com/DnG-Crafts/cutcutgo-bl/releases)
+The latest pre-compiled compatible bootloader is available on this [Release page](https://github.com/DnG-Crafts/cutcutgo-bl/releases)
 
 
 ## Download Firmware
@@ -35,7 +35,7 @@ The latest pre-compiled firmwares are available on this [Release page](https://g
 
 
 ## Download CutCraft
-The latest pre-compiled design and send software with maker3(cutcutgo) support is available on this [Release page](https://github.com/DnG-Crafts/CutCraft/releases)
+The latest pre-compiled design and send software with cutcutgo support is available on this [Release page](https://github.com/DnG-Crafts/CutCraft/releases)
 
 
 ## Documentation
