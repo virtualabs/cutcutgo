@@ -27,7 +27,7 @@
 #define __INC_HAL_CONFIG_H
 
 #include <stdint.h>
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
 /*
  * Cricut Maker 3 main board (PIC32MK1024MCF100, 12 MHz crystal, SYSCLK 120 MHz
  * set by the cutcutgo-bl bootloader). Motor drivers (DRV8876) and encoders are

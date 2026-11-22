@@ -22,7 +22,7 @@
 #ifndef serial_h
 #define serial_h
 
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
 #include "config/maker3/osal/osal.h"
 #else
 #include "config/cutcutgo/osal/osal.h"

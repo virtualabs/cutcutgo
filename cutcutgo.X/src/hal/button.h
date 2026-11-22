@@ -11,7 +11,7 @@
 #include "configuration.h"
 #include "definitions.h"
 
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
 /* Cricut Maker 3 main board: active low, external pull-ups (PINS.TXT). */
 #define     BTN_PAUSE       GPIO_PIN_RE14
 #define     BTN_LOGO        GPIO_PIN_RE15

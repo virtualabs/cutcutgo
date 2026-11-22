@@ -4,7 +4,7 @@
 #include "configuration.h"
 #include "definitions.h"
 
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
 /* Cricut Maker 3 main board (PIC32MK1024MCF100), all active high.
  * NEVER drive RB10 on the Maker 3: it moves the blade-down actuator. */
 #define     GPIO_LED_LOGO        GPIO_PIN_RD13

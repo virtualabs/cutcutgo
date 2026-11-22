@@ -1,7 +1,7 @@
 #include "hal/button.h"
 #include "grbl/grbl/grbl.h"
 
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
 #include "hal/timer.h"
 
 /*

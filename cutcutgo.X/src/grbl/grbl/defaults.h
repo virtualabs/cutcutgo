@@ -29,7 +29,12 @@
 
 #ifdef DEFAULTS_GENERIC
   // Grbl generic default settings. Should work across different machines.
-  #ifdef BOARD_MAKER3
+  #if defined(BOARD_MAKER1)
+    // Original Cricut Maker: motor.c's values (8 encoder counts per step). Checked 2026-11-21:
+    // a 40 mm pen square measured 40 x 40 mm with a ruler.
+    #define DEFAULT_X_STEPS_PER_MM 11.76
+    #define DEFAULT_Y_STEPS_PER_MM 29.14
+  #elif defined(BOARD_MAKER3)
     // Cricut Maker 3, measured with a ruler (2026-11-08): 100 mm commanded at
     // 11.76 gave 131 mm on X; at 29.14 gave 280 mm on Y.
     #define DEFAULT_X_STEPS_PER_MM 8.977
@@ -55,6 +60,11 @@
     #define EXPLORE3_Z_RATE_B  7200.0
     #define EXPLORE3_Z_ACCEL_A (6000.0*3600)    // 6000 mm/s^2 = 120000 half steps/s^2
     #define EXPLORE3_Z_ACCEL_B (6000.0*3600)
+  #elif defined(BOARD_MAKER1)
+    // Original Cricut Maker: motor.c's values. Pen and blade moves tested; the blade's 43.26 is
+    // the Maker 3's measured value too. Pen draws at Z-9, the fine-point blade cuts paper at Z-9.
+    #define DEFAULT_A_STEPS_PER_MM 11.16
+    #define DEFAULT_B_STEPS_PER_MM 43.26
   #elif defined(BOARD_MAKER3)
     // Pen holder (A): full 10 mm stroke = 1573 encoder counts (ruler, 2026-11-08).
     // Blade holder (B): 5 mm = 1720 counts, so 43.26 (original Maker) is right.

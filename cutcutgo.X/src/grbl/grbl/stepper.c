@@ -270,6 +270,12 @@ static int32_t tool_z_steps[2] = { 0, 0 };   /* per-tool Z position, steps */
  * over with 38.0 came out about 0.4 mm to the left (+X) of the ink: 37.6. */
 #define ST_B_DX_MM  37.6f
 #define ST_B_DY_MM  0.75f
+#elif defined(BOARD_MAKER1)
+/* Original Maker (2026-11-21): with the Maker 3's 39.0 / 3.3, a 20 mm blade square cut over a
+ * pen square landed about 0.7 mm toward -X and 0.7 mm toward -Y of the ink (photo). At 39.7 / 4.0
+ * it landed about 0.4 mm toward +X and 0.4 mm toward -Y: 39.5 / 4.3 (photo estimates, +/-0.3 mm). */
+#define ST_B_DX_MM  39.5f
+#define ST_B_DY_MM  4.3f
 #else
 #define ST_B_DX_MM  39.0f   /* 39.4 from the sensor; draw-then-cut tests: 39.8 was the wrong way */
 #define ST_B_DY_MM  3.3f    /* 3.7 from the sensor; 4.1 was the wrong way */

@@ -26,7 +26,7 @@ void led_init(void)
 {
     int i;
     
-#ifdef BOARD_MAKER3
+#if defined(BOARD_MAKER3) && !defined(BOARD_MAKER1)   /* PIC32MK boards */
     /* Make every LED pin digital (ANSELxCLR; ports repeat every 0x100 bytes). */
     for (i=0; i<LED_MAX_ID; i++)
     {

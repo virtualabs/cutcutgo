@@ -59,6 +59,54 @@
 #define M_NULL  0
 #define M_ERR   2
 
+#ifdef BOARD_MAKER1
+/*
+ * Original Cricut Maker (PIC32MX470F512L): Allegro A4950 bridges (IN1/IN2), as in
+ * motor.c. For each direction one input is held high and the output-compare PWM goes
+ * to the other (slow decay): the PWM's high time brakes, so drive = 1 - OCxRS / period.
+ * Routing the OC output to one input or the other (peripheral pin select) sets the
+ * direction. Encoders on port G, one change-notice interrupt.
+ *
+ *   Motor            held high / PWM (motor.c CW)   OC   RPnR code   Encoder A/B
+ *   X carriage       RD1 / RD0                       2    1011        RG0/RG1
+ *   Y rollers        RD2 / RF1                       3    1011        RG6/RG7
+ *   TOOL1 pen  (A)   RF12 / RF8                      5    1011        RG12/RG13
+ *   TOOL2 blade (B)  RB6 / RD5                       1    1100        RG14/RG15
+ *   ACCESSORY gear   RD3 / RD11                      4    1011        RG8/RG9
+ *
+ * motor.c drove the blade holder with OC2, shared with X; its pins (RB6, RD5) can
+ * also take OC1 (code 1100, PPS output table), so every motor has its own PWM.
+ */
+#define PWM_FREQ_HZ         20000U
+#define PWM_PERIOD          ((SYS_FREQ / 2U) / PWM_FREQ_HZ)   /* Timer 2 at PBCLK (SYSCLK / 2): 2400 */
+#define SPEED_SCALE         2400U                       /* original motor.c PWM period */
+#define PIN_NONE            ((GPIO_PIN)-1)
+static const char M3_EOL[] = { 13, 10, 0 };   /* CR LF */
+
+#define OC_BASE(n)          (0xBF803000UL + (((uint32_t)(n) - 1U) * 0x200UL))
+#define OCxCON(n)           (*(volatile uint32_t *)(OC_BASE(n) + 0x00U))
+#define OCxR(n)             (*(volatile uint32_t *)(OC_BASE(n) + 0x10U))
+#define OCxRS(n)            (*(volatile uint32_t *)(OC_BASE(n) + 0x20U))
+
+typedef struct {
+    uint8_t  oc;            /* output compare module 1-5 (Timer 2 based) */
+    uint8_t  pps;           /* RPnR value that puts this OC on pin_a / pin_b */
+    GPIO_PIN pin_a;         /* held high, PWM on pin_b: motor.c's CW */
+    GPIO_PIN pin_b;
+    volatile uint32_t *rp_a;
+    volatile uint32_t *rp_b;
+    uint8_t  ph_cw;         /* "PH" level for HAL_MOTOR_DIR_CW: 1 = pin_a high, PWM on pin_b */
+    GPIO_PIN enc_a;
+    GPIO_PIN enc_b;
+} m3_hw_t;
+
+static const m3_hw_t hw_x    = { 2U, 0x0BU, GPIO_PIN_RD1,  GPIO_PIN_RD0,  &RPD1R,  &RPD0R,  0U, GPIO_PIN_RG1,  GPIO_PIN_RG0  };   /* checked: level 0 = right */
+static const m3_hw_t hw_y    = { 3U, 0x0BU, GPIO_PIN_RD2,  GPIO_PIN_RF1,  &RPD2R,  &RPF1R,  1U, GPIO_PIN_RG6,  GPIO_PIN_RG7  };   /* checked: level 1 = feed out */
+static const m3_hw_t hw_t1   = { 5U, 0x0BU, GPIO_PIN_RF12, GPIO_PIN_RF8,  &RPF12R, &RPF8R,  1U, GPIO_PIN_RG12, GPIO_PIN_RG13 };   /* checked: level 1 = down */
+static const m3_hw_t hw_t2   = { 1U, 0x0CU, GPIO_PIN_RB6,  GPIO_PIN_RD5,  &RPB6R,  &RPD5R,  0U, GPIO_PIN_RG15, GPIO_PIN_RG14 };   /* checked: level 0 = down */
+static const m3_hw_t hw_gear = { 4U, 0x0BU, GPIO_PIN_RD3,  GPIO_PIN_RD11, &RPD3R,  &RPD11R, 0U, GPIO_PIN_RG8,  GPIO_PIN_RG9  };   /* checked with tool 21: counts up = Maker 3's scan direction */
+static const bool g_y_ok = true;
+#else
 #define PWM_FREQ_HZ         20000U
 #define PWM_PERIOD          (SYS_FREQ / PWM_FREQ_HZ)    /* MCPWM clocked at SYSCLK */
 #define SPEED_SCALE         2400U                       /* original motor.c PWM period */
@@ -123,6 +171,7 @@ static m3_hw_t hw_t1 = { 12, GPIO_PIN_RD5,  GPIO_PIN_RF0,  1, PIN_NONE,     GPIO
  * drive it), PH RA0, encoder RB9/RG8. PH low makes the encoder count up. */
 static const m3_hw_t hw_gear = { 1, GPIO_PIN_RB14, GPIO_PIN_RA0, 0, PIN_NONE, GPIO_PIN_RB9, GPIO_PIN_RG8, 0, 0, 0 };
 static const m3_hw_t hw_t2 = { 3,  GPIO_PIN_RB10, GPIO_PIN_RG15, 0, PIN_NONE,     GPIO_PIN_RA1,  GPIO_PIN_RA11, 0, 0, 0 };
+#endif /* BOARD_MAKER1 */
 
 #define M3_INIT(ocm_, inv_) { .ocm = (ocm_), .hard_limit_threshold = 200, .mode = HAL_MOTOR_PWM, \
                               .direction = HAL_MOTOR_STOP, .state = HAL_MOTOR_IDLE, .inv_encoder = (inv_) }
@@ -263,6 +312,69 @@ static uint32_t m3_base_duty(const hal_motor_driver_t *motor)
     return (duty > max) ? max : duty;
 }
 
+#ifdef BOARD_MAKER1
+static void m3_set_duty(const m3_hw_t *hw, uint32_t duty)
+{
+    if (duty > PWM_PERIOD) { duty = PWM_PERIOD; }
+    OCxRS(hw->oc) = PWM_PERIOD - duty;          /* PWM high = brake; 0 % drive = steady high */
+}
+
+/* Direction: level 1 = pin_a high with the PWM on pin_b, level 0 the other way round.
+ * Both latches stay high, so the input that isn't carrying the PWM is high. */
+static void m3_ph_write(const m3_hw_t *hw, bool level)
+{
+    if (level) { *hw->rp_a = 0U; *hw->rp_b = hw->pps; }
+    else       { *hw->rp_b = 0U; *hw->rp_a = hw->pps; }
+}
+
+static void m3_hw_init(void)
+{
+    int n;
+
+    if (g_hw_init) { return; }
+    RCONCLR = 0xFFFFFFFFU;
+
+    /* Timer 2: 20 kHz PWM time base for all five output compares. */
+    T2CON = 0;
+    TMR2 = 0;
+    PR2 = PWM_PERIOD - 1U;
+    for (n = 1; n <= 5; n++)
+    {
+        OCxCON(n) = 0;
+        OCxR(n) = PWM_PERIOD;
+        OCxRS(n) = PWM_PERIOD;                  /* steady high: brake */
+        OCxCON(n) = 6U;                         /* PWM mode, fault pin off, Timer 2 */
+        OCxCON(n) |= 0x8000U;                   /* ON */
+    }
+    T2CONSET = 0x8000U;                         /* ON, 1:1 */
+    g_hw_init = true;
+}
+
+static void m3_pins_init(const m3_hw_t *hw)
+{
+    m3_make_digital(hw->pin_a);
+    m3_make_digital(hw->pin_b);
+    *hw->rp_a = 0U;
+    *hw->rp_b = 0U;
+    GPIO_PinSet(hw->pin_a);                     /* both inputs high: brake */
+    GPIO_PinSet(hw->pin_b);
+    GPIO_PinOutputEnable(hw->pin_a);
+    GPIO_PinOutputEnable(hw->pin_b);
+    m3_ph_write(hw, true);
+    m3_make_digital(hw->enc_a);
+    m3_make_digital(hw->enc_b);
+    GPIO_PinInputEnable(hw->enc_a);
+    GPIO_PinInputEnable(hw->enc_b);
+    m3_cn_enable(hw->enc_a);
+    m3_cn_enable(hw->enc_b);
+}
+
+static uint8_t m3_enc_state(const m3_hw_t *hw)
+{
+    /* bit0 = A, bit1 = B (same convention as motor.c) */
+    return (uint8_t)((GPIO_PinRead(hw->enc_a) ? 1U : 0U) | (GPIO_PinRead(hw->enc_b) ? 2U : 0U));
+}
+#else
 /*
  * How an L-output EN pin (Y: RD3 = PWM6L) gets its PWM. A start-up
  * self-test (bring-up v7) found only mode 2 drives the pin.
@@ -410,6 +522,7 @@ static uint8_t m3_enc_state(const m3_hw_t *hw)
     /* bit0 = A, bit1 = B (same convention as motor.c) */
     return (uint8_t)((GPIO_PinRead(hw->enc_a) ? 1U : 0U) | (GPIO_PinRead(hw->enc_b) ? 2U : 0U));
 }
+#endif /* BOARD_MAKER1 */
 
 static int m3_index(const hal_motor_driver_t *motor)
 {
@@ -521,8 +634,28 @@ static volatile int32_t g_gear_slew = 8;       /* counts per ms */
 static volatile bool g_gear_slewing = false;   /* ramp the gear to g_gear_goal in the servo tick */
 static float    g_gear_sign = -1.0f;       /* +1: encoder counts up as the angle increases */
 uint32_t g_servo_on = 1U;
+#ifdef BOARD_MAKER1
+int32_t  g_kp = 24;                 /* PWM counts per count of error (2400 = 100 %): the Maker 3's 60 scaled */
+#else
 int32_t  g_kp = 60;                 /* PWM counts per count of error (6000 = 100 %) */
+#endif
 int32_t  g_ki = 1;                  /* integral gain, per ms */
+#ifdef BOARD_MAKER1
+/* Per-motor gains (X, Y, pen, blade, gear), set on the machine (2026-11-21/22). Proportional 24:
+ * Y at 9 stuck and lurched, at 40-60 it was noisy. Damping (D) on the error's change over the last
+ * 8 ms, PWM per count/ms: with PI alone Y oscillated at ~36 Hz, reversing its drive a quarter of the
+ * time; 60 removed it (error rms 10 -> 3 counts) and was smoother by ear on X, pen and blade too. */
+static const int32_t g_kp_m[5] = { 24, 24, 24, 24, 24 };
+static const int32_t g_ki_m[5] = { 1, 1, 1, 1, 1 };
+static const int32_t g_kd_m[5] = { 60, 60, 60, 60, 0 };   /* gear: not tuned */
+static int32_t g_ehist[5][8];
+static uint8_t g_eh_i[5];
+#define M3_KP(i) (g_kp_m[(i)])
+#define M3_KI(i) (g_ki_m[(i)])
+#else
+#define M3_KP(i) (g_kp)
+#define M3_KI(i) (g_ki)
+#endif
 int32_t  g_ferr_max = 0;            /* overrides every motor's limit when not 0 */
 /* Following-error limit per motor, counts: X ~7 mm, Y ~10 mm, pen ~2 mm, blade ~2.3 mm.
  * Measured lag in normal moves is under 30 counts. */
@@ -554,6 +687,10 @@ static void m3_servo_release(int idx)
     g_active[idx] = false;
 }
 
+#ifdef BOARD_MAKER1
+static bool    g_blade_homed;           /* defined with the homing code below */
+static int32_t g_blade_top;
+#endif
 static void m3_servo_one(int idx)
 {
     hal_motor_driver_t *m = g_servo_motor[idx];
@@ -564,7 +701,14 @@ static void m3_servo_one(int idx)
     bool fwd;
 
     if ((hw == NULL) || !g_active[idx]) { return; }
-    if (since > 400U) { m3_servo_release(idx); return; }
+#ifdef BOARD_MAKER1
+    /* Original Maker: keep holding the blade holder while it is down (over 1 mm below its top),
+     * so the cut's drag cannot walk it against the motor brake (drag blade chatter, 2026-11-22). */
+    if ((since > 400U) && !((idx == 3) && g_blade_homed && ((m->rel_pos_th - g_blade_top) > 344)))
+#else
+    if (since > 400U)
+#endif
+    { m3_servo_release(idx); return; }
 
     e = m->rel_pos_th - m->rel_pos;
     ae = (e < 0) ? -e : e;
@@ -585,12 +729,20 @@ static void m3_servo_one(int idx)
     }
 
     cap = (int32_t)m3_cap(m);
-    u = g_kp * e + g_int[idx];
+    u = M3_KP(idx) * e + g_int[idx];
+#ifdef BOARD_MAKER1
+    {
+        int32_t de = e - g_ehist[idx][g_eh_i[idx]];
+        g_ehist[idx][g_eh_i[idx]] = e;
+        g_eh_i[idx] = (uint8_t)((g_eh_i[idx] + 1U) & 7U);
+        u += (g_kd_m[idx] * de) / 8;
+    }
+#endif
     if (u > cap)       { u = cap; }
     else if (u < -cap) { u = -cap; }
     else
     {
-        g_int[idx] += g_ki * e;             /* integrate only when not saturated */
+        g_int[idx] += M3_KI(idx) * e;       /* integrate only when not saturated */
         if (g_int[idx] > cap)  { g_int[idx] = cap; }
         if (g_int[idx] < -cap) { g_int[idx] = -cap; }
     }
@@ -918,9 +1070,16 @@ uint32_t g_mat_raw = 0U;                /* last raw reading: bit 0 = low when li
 
 bool hal_motor_mat_present(void)
 {
+#ifdef BOARD_MAKER1
+    return true;            /* the original Maker has no mat sensor: the feed button always loads */
+#else
     return g_mat_present;
+#endif
 }
 
+#ifdef BOARD_MAKER1
+static void m3_mat_sensor_tick(void) { (void)g_mat_present; }
+#else
 static void m3_mat_sensor_tick(void)
 {
     static uint32_t phase = 0U;
@@ -981,6 +1140,7 @@ static void m3_mat_sensor_tick(void)
         blinking = false;
     }
 }
+#endif /* BOARD_MAKER1 */
 
 void hal_motor_servo_tick(void)
 {
@@ -1094,9 +1254,18 @@ static int m3_home_drive(hal_motor_driver_t *m, bool cw, uint32_t pct, int32_t m
     return r;
 }
 
+#ifdef BOARD_MAKER1
+/* Original Maker: pen ~89 counts/mm (11.16 steps/mm x 8), blade ~346 (43.26 x 8): 3 mm/s.
+ * X ~94 counts/mm (11.76 x 8): 2 mm back-off = 188 counts. */
+#define M3_HOME_TOOL_CPS_A  270U
+#define M3_HOME_TOOL_CPS_B  1040U
+#define M3_HOME_X_BACKOFF   188
+#else
 /* Pen 157 counts/mm, blade 344 counts/mm: 3 mm/s. */
 #define M3_HOME_TOOL_CPS_A  470U
 #define M3_HOME_TOOL_CPS_B  1030U
+#define M3_HOME_X_BACKOFF   144     /* 2 mm at 72 counts/mm */
+#endif
 static bool    g_blade_homed = false;
 static int32_t g_blade_top;             /* blade rel_pos at its top (after homing) */
 
@@ -1205,7 +1374,7 @@ bool hal_motor_home(uint8_t mask)
         if (r != M3_HOME_STALL) { ok = false; }
         if (ok)
         {
-            r = m3_home_drive(&HAL_MOTOR_X, false, 20U, 144, 300U, 3000U);        /* back off 2 mm */
+            r = m3_home_drive(&HAL_MOTOR_X, false, 20U, M3_HOME_X_BACKOFF, 300U, 3000U);   /* back off 2 mm */
             if (r != M3_HOME_DISTANCE) { ok = false; }
         }
         if (ok) { HAL_MOTOR_X.rel_pos_th = HAL_MOTOR_X.rel_pos; }
@@ -1388,6 +1557,7 @@ void hal_motor_set_manual(hal_motor_driver_t *motor, bool manual_mode)
     motor->manual = manual_mode;
 }
 
+#ifndef BOARD_MAKER1     /* Maker 3 / Explore 3 start-up checks (MCPWM, DRV8876 nSLEEP) */
 /*
  * Start-up self-test: with a driver ASLEEP (nSLEEP low, so nothing can move),
  * run its EN PWM at 50 % and count how often the EN pin reads high.
@@ -1552,6 +1722,7 @@ static void m3_calibrate_y(void)
         GPIO_PinClear(GPIO_PIN_RD3); GPIO_PinOutputEnable(GPIO_PIN_RD3);
     }
 }
+#endif /* !BOARD_MAKER1 */
 
 /*
  * Move a motor by the position servo at cps counts/s, blocking (USB kept alive).
@@ -1664,7 +1835,7 @@ static const m3_tool_t *m3_tool(void)
 
 void hal_motor_gear_steer(float deg, bool in_material, float lift_mm)
 {
-#ifdef BOARD_EXPLORE3
+#if defined(BOARD_EXPLORE3)
     (void)deg; (void)in_material; (void)lift_mm;
     return;                 /* no steered tools on the Explore 3 */
 #endif
@@ -1680,6 +1851,8 @@ void hal_motor_gear_steer(float deg, bool in_material, float lift_mm)
     const m3_tool_t *tl = m3_tool();
 
     if (!tl->steer) { return; }                     /* ball / point tools (21, 41): direction doesn't matter */
+    /* Original Maker too: air tests by eye (rotary blade X, Y, both diagonals; knife X both ways and Y,
+     * 2026-11-22) lined up with the Maker 3's zeros and sign unchanged; gear play about 2 degrees. */
     want = g_gear_zero + (int32_t)(g_gear_sign * (deg - tl->zero_deg) * ((float)M3_GEAR_REV / 360.0f));
     if (tl->half)
     {
@@ -1726,6 +1899,17 @@ void hal_motor_gear_steer(float deg, bool in_material, float lift_mm)
     }
 }
 
+#ifdef BOARD_MAKER1
+/*
+ * Original Maker tool sensor (2026-11-21): RB14 / AN14 (schematic UNKNOWN_3). The IR light is
+ * already on (no switch needed). Same spots and gear as the Maker 3 (27,660 counts a turn, tool
+ * 21 read A-to-B 8841). 10-bit ADC: readings are scaled x4 so the Maker 3's thresholds apply.
+ */
+static void m1_adc_setup(void);
+static uint16_t m1_adc_read(uint8_t ch);
+static bool m3_adc_start(void) { m1_adc_setup(); return true; }
+static int32_t m3_adc_read(uint8_t ch) { (void)ch; return (int32_t)m1_adc_read(14U) * 4; }
+#else
 /*
  * ADC for the tool position sensor (RB1 / AN3), read while a holder-B tool is
  * scanned. Set up for each scan and switched off again afterwards.
@@ -1771,6 +1955,7 @@ static int32_t m3_adc_read(uint8_t ch)
     }
     return (int32_t)(*data);
 }
+#endif /* BOARD_MAKER1 */
 
 /*
  * Find the tool's angle from its reflective marks. The carriage must be at X0
@@ -1799,6 +1984,9 @@ static int m3_find_tool_marks(int32_t *gap_out, uint32_t *nr_out, int32_t *zero_
     int32_t rise[16], zero2 = 0, gap = 0, moved2, d3;
     uint32_t nr = 0U, i3, tick, ms2, t1;
     bool found = false, is_high;
+#ifdef BOARD_MAKER1
+    if (!m3_adc_start()) { return -1; }                        /* RB14 analog, IR already on */
+#else
     volatile uint32_t *ansb = (volatile uint32_t *)&ANSELB;
     uint32_t saved_b;
 
@@ -1812,6 +2000,7 @@ static int m3_find_tool_marks(int32_t *gap_out, uint32_t *nr_out, int32_t *zero_
     m3_make_digital(GPIO_PIN_RC7);
     GPIO_PinSet(GPIO_PIN_RC7);
     GPIO_PinOutputEnable(GPIO_PIN_RC7);                        /* IR light on */
+#endif
     t1 = timer_get_ms();
     while ((timer_get_ms() - t1) < 20U) { }
     is_high = (m3_adc_read(3U) > 2000);
@@ -1875,10 +2064,12 @@ static int m3_find_tool_marks(int32_t *gap_out, uint32_t *nr_out, int32_t *zero_
     }
     g_gear_slewing = false;
     g_gear_slew = 8;
+#ifndef BOARD_MAKER1
     GPIO_PinClear(GPIO_PIN_RC7);
     GPIO_PinInputEnable(GPIO_PIN_RC7);
     *ansb = saved_b;
     ADCCON1CLR = _ADCCON1_ON_MASK;
+#endif
 
     *nr_out = nr;
     (void)rise;
@@ -2016,11 +2207,34 @@ static void m3_i2c_wait(void)
 #define M3_BUS_SCL   ((GPIO_PIN)77U)
 #define M3_BUS_SDA   ((GPIO_PIN)76U)
 #define M3_BUS_ADDR  0x38U        /* the Maker 3 sensor is 0x44 */
+#elif defined(BOARD_MAKER1)
+/* Original Maker (2026-11-22): the Explore 3's sensor (0x38) on the carriage bus SCL RA2 / SDA RA3. */
+#define M3_BUS_SCL   GPIO_PIN_RA2
+#define M3_BUS_SDA   GPIO_PIN_RA3
+#define M3_BUS_ADDR  0x38U
 #else
 #define M3_BUS_SCL   ((GPIO_PIN)77U)
 #define M3_BUS_SDA   ((GPIO_PIN)76U)
 #define M3_BUS_ADDR  0x44U
 #endif
+
+/* Carriage white light for the registration sensor: RG7 (Maker 3 / Explore 3), RF2 (original
+ * Maker, found by driving free pins), both on when low. */
+#ifdef BOARD_MAKER1
+#define M3_LIGHT_PIN GPIO_PIN_RF2
+#else
+#define M3_LIGHT_PIN GPIO_PIN_RG7
+#endif
+static void m3_light(bool on)
+{
+#ifdef BOARD_MAKER1
+    m3_make_digital(M3_LIGHT_PIN);
+    if (on) { GPIO_PinClear(M3_LIGHT_PIN); } else { GPIO_PinSet(M3_LIGHT_PIN); }
+    GPIO_PinOutputEnable(M3_LIGHT_PIN);
+#else
+    if (on) { GPIO_PinClear(M3_LIGHT_PIN); } else { GPIO_PinSet(M3_LIGHT_PIN); }
+#endif
+}
 
 static void m3_bus_scl_up(void)
 {
@@ -2116,6 +2330,12 @@ static bool m3_bus_read_reg(uint32_t reg, uint32_t *b0, uint32_t *b1)
  * Maker offsets: X read 165.94 (+5.94), Y read 37.17 (-2.83). Sensor = pen + (22.04, -0.83). */
 #define M3_REG_DX_MM       22.04f
 #define M3_REG_DY_MM       (-0.83f)
+#elif defined(BOARD_MAKER1)
+/* Original Maker (2026-11-22): 4 mm pen bands (11 lines 0.4 mm apart) scanned both ways with
+ * 14.5 / 0: band X200-204 read 204.46 / 203.59, band Y70-74 read 74.73 / 73.74 (white ~1340,
+ * dark ~130). Sensor = pen + (16.53, 2.24). */
+#define M3_REG_DX_MM       16.53f
+#define M3_REG_DY_MM       2.24f
 #else
 #define M3_REG_DX_MM       16.1f
 #define M3_REG_DY_MM       2.0f   /* 1.5 by 1 mm steps; #YE scans both ways then read 0.5 high */
@@ -2140,7 +2360,7 @@ static bool m3_reg_sensor_on(void)
     GPIO_PinClear(M3_BUS_SCL); GPIO_PinClear(M3_BUS_SDA);
     GPIO_PinInputEnable(M3_BUS_SCL); GPIO_PinInputEnable(M3_BUS_SDA);
     m3_bus_start();
-#ifdef BOARD_EXPLORE3
+#if defined(BOARD_EXPLORE3) || defined(BOARD_MAKER1)
     /* Explore 3 sensor (0x38, 5 channels at 0x1C-0x25): register 0 = 3 starts measuring. */
     ok = m3_bus_write(M3_BUS_ADDR << 1) && m3_bus_write(0U) && m3_bus_write(0x03U);
 #else
@@ -2154,7 +2374,7 @@ static int32_t m3_reg_read(void)
 {
     uint32_t b0 = 0U, b1 = 0U;
 
-#ifdef BOARD_EXPLORE3
+#if defined(BOARD_EXPLORE3) || defined(BOARD_MAKER1)
     if (!m3_bus_read_reg(0x22U, &b0, &b1)) { return -1; }    /* clear channel: the biggest signal */
 #else
     if (!m3_bus_read_reg(0x09U, &b0, &b1)) { return -1; }
@@ -2190,6 +2410,38 @@ static void m3_fmt_mm(char *buf, size_t len, float mm)
  *   #YZ [light] [reg val..]   read / write the registration sensor's registers
  * Anything else prints a usage line and changes nothing.
  */
+
+#ifdef BOARD_MAKER1
+/* Original Maker tool sensor: RB14 / AN14 (schematic UNKNOWN_3), 10-bit ADC. plib_clk powers the
+ * ADC down (PMD1 AD1MD), so it is switched on here before the first read. */
+static bool g_m1_adc_ready = false;
+
+static void m1_adc_setup(void)
+{
+    TRISBSET = (1UL << 14);                         /* input */
+    ANSELBSET = (1UL << 14);                        /* analog */
+    if (g_m1_adc_ready) { return; }
+    PMD1CLR = 0x0001U;                              /* AD1MD */
+    AD1CON1 = 0;
+    AD1CON1 = 0x00E0U;                              /* SSRC = auto-convert, integer, manual sample start */
+    AD1CON2 = 0;                                    /* AVDD / AVSS, no scan */
+    AD1CON3 = (15UL << 8) | 3UL;                    /* SAMC 15 TAD, TAD = 8 x TPB (166 ns) */
+    AD1CSSL = 0;
+    AD1CON1SET = 0x8000U;                           /* ON */
+    g_m1_adc_ready = true;
+}
+
+static uint16_t m1_adc_read(uint8_t ch)
+{
+    uint32_t t = 0;
+    AD1CHS = (uint32_t)ch << 16;
+    AD1CON1CLR = 0x0001U;                           /* DONE */
+    AD1CON1SET = 0x0002U;                           /* SAMP: sample, then auto-convert */
+    while (((AD1CON1 & 0x0001U) == 0U) && (t++ < 100000U)) { }
+    return (uint16_t)ADC1BUF0;
+}
+#endif
+
 void hal_motor_y_cmd(const char *line)
 {
     char out[64];
@@ -2207,6 +2459,62 @@ void hal_motor_y_cmd(const char *line)
         n++;
     }
 
+#ifdef BOARD_MAKER1
+    /* Original Maker: #YN 1 (tool signature) and #YE (registration scan, shared code below). */
+    /* #YN 1: the Maker 3's tool-signature recording (spots seen in one turn). */
+    if ((line[2] == 'N') || (line[2] == 'n'))
+    {
+        /* #YN 1: record the tool's signature, doing the whole job-start move itself
+         * (holder B up, X0, down into the tool pocket, 1.6 turns, back). Needs T1.
+         * [YNS i start width peak] per spot in the first turn (start = counts within
+         * one turn of the gear), then [YNB k v v v ...] brightest reading per 5 degrees. */
+        if ((n >= 1U) && (a[0] == 1U))
+        {
+            uint32_t k4, j4;
+            bool okh;
+
+            if ((sys.state != STATE_IDLE) || (fabsf(settings.steps_per_mm[Z_AXIS] - DEFAULT_B_STEPS_PER_MM) > 0.01f))
+            {
+                printString("[YNS refused: select T1 and be idle]"); printString(M3_EOL);
+                return;
+            }
+            g_sig_mode = true;
+            okh = hal_motor_tool_home(sys_position[X_AXIS] + st_carriage_offset_steps(X_AXIS), sys_position[Z_AXIS]);
+            g_sig_mode = false;
+            snprintf(out, sizeof(out), "[YNS moves %s spots=%lu]", okh ? "ok" : "failed", (unsigned long)g_sig_n);
+            m3_tx(out); m3_tx(M3_EOL);
+            snprintf(out, sizeof(out), "[YNS tool=%s a_to_b=%ld]", m3_tool()->name, (long)g_tool_ab);
+            m3_tx(out); m3_tx(M3_EOL);
+            for (k4 = 0U; k4 < g_sig_n; k4++)
+            {
+                snprintf(out, sizeof(out), "[YNS %lu %ld %ld %ld]", (unsigned long)k4,
+                         (long)(((g_sig_seg[k4][0] % M3_GEAR_REV) + M3_GEAR_REV) % M3_GEAR_REV),
+                         (long)g_sig_seg[k4][1], (long)g_sig_seg[k4][2]);
+                m3_tx(out); m3_tx(M3_EOL);
+            }
+            for (k4 = 0U; k4 < M3_SIG_BINS; k4 += 12U)
+            {
+                snprintf(out, sizeof(out), "[YNB %lu", (unsigned long)k4);
+                m3_tx(out);
+                for (j4 = k4; (j4 < k4 + 12U) && (j4 < M3_SIG_BINS); j4++)
+                {
+                    snprintf(out, sizeof(out), " %u", (unsigned)g_sig_bin[j4]);
+                    m3_tx(out);
+                }
+                m3_tx("]"); m3_tx(M3_EOL);
+            }
+            m3_tx("[YNS done]"); m3_tx(M3_EOL);
+            return;
+        }
+        printString("[YN usage: #YN 1 (select T1 first)]"); printString(M3_EOL);
+        return;
+    }
+    if ((line[2] != 'E') && (line[2] != 'e'))
+    {
+        printString("[Y? commands: #YE axis from to | #YN 1]"); printString(M3_EOL);
+        return;
+    }
+#endif
 #ifdef BOARD_EXPLORE3
     /* The Explore 3 has #YE (registration scan) and #YZ (sensor registers) only. */
     if ((line[2] != 'E') && (line[2] != 'e') && (line[2] != 'Z') && (line[2] != 'z'))
@@ -2264,7 +2572,7 @@ void hal_motor_y_cmd(const char *line)
             printString("[MARK sensor not answering]"); printString(M3_EOL);
             return;
         }
-        GPIO_PinClear(GPIO_PIN_RG7);                          /* white light on */
+        m3_light(true);                                       /* white light on */
 
         /* Machine coordinate up = encoder counts down, on both axes. */
         d1 = (int32_t)(((cur_mm - from_mm) * g_reg_cpm) + ((cur_mm > from_mm) ? 0.5f : -0.5f));
@@ -2283,7 +2591,7 @@ void hal_motor_y_cmd(const char *line)
             r4 = m3_servo_ramp((int)axis, d2 > 0, (d2 > 0) ? d2 : -d2, (uint32_t)(M3_REG_SCAN_MM_S * g_reg_cpm), &moved4, &ms4);
             g_ramp_hook = NULL;
         }
-        GPIO_PinSet(GPIO_PIN_RG7);
+        m3_light(false);
         /* Back exactly to where Grbl thinks the axis is. */
         back = g_reg_rel0 - g_reg_motor->rel_pos_th;
         if (back != 0)
@@ -2390,6 +2698,7 @@ void hal_motor_y_cmd(const char *line)
         return;
     }
 
+#ifndef BOARD_MAKER1     /* #YN: tool signature, Maker 3 only */
     if ((line[2] == 'N') || (line[2] == 'n'))
     {
         /* #YN 1: record the tool's signature, doing the whole job-start move itself
@@ -2437,6 +2746,7 @@ void hal_motor_y_cmd(const char *line)
         printString("[YN usage: #YN 1 (select T1 first)]"); printString(M3_EOL);
         return;
     }
+#endif /* !BOARD_MAKER1 */
     printString("[Y? commands: #YE axis from to | #YN 1 | #YZ [light] [reg val [val2]]]");
     printString(M3_EOL);
 }
@@ -2450,6 +2760,37 @@ void hal_motor_driver_init(void)
     if (done) { return; }
     done = true;
 
+#ifdef BOARD_MAKER1
+    /* Original Maker: five A4950 bridges on Timer 2 output compares, encoders on port G. */
+    m3_hw_init();
+    m3_pins_init(&hw_x);
+    m3_pins_init(&hw_y);
+    m3_pins_init(&hw_t1);
+    m3_pins_init(&hw_t2);
+    m3_pins_init(&hw_gear);
+    HAL_MOTOR_X.enc_cur_state = m3_enc_state(&hw_x);
+    HAL_MOTOR_Y.enc_cur_state = m3_enc_state(&hw_y);
+    HAL_MOTOR_TOOL1.enc_cur_state = m3_enc_state(&hw_t1);
+    HAL_MOTOR_TOOL2.enc_cur_state = m3_enc_state(&hw_t2);
+    HAL_MOTOR_ACCESSORY.enc_cur_state = m3_enc_state(&hw_gear);
+    HAL_MOTOR_ACCESSORY.rel_pos = 0;
+    HAL_MOTOR_ACCESSORY.rel_pos_th = 0;
+    HAL_MOTOR_ACCESSORY.grbl_axis = Z_AXIS;
+    HAL_MOTOR_X.grbl_axis = X_AXIS;
+    HAL_MOTOR_Y.grbl_axis = Y_AXIS;
+    HAL_MOTOR_TOOL1.grbl_axis = Z_AXIS;
+    HAL_MOTOR_TOOL2.grbl_axis = Z_AXIS;
+
+    /* Port G change notification: one vector for all ports on the PIC32MX, shared with
+     * the buttons (config/cutcutgo/interrupts.c). Priority 1, as button_init() sets it. */
+    (void)PORTG;
+    CNCONGSET = _CNCONG_ON_MASK;
+    IPC8CLR = _IPC8_CNIP_MASK;
+    IPC8SET = (1UL << _IPC8_CNIP_POSITION);
+    IFS1CLR = _IFS1_CNGIF_MASK;
+    IEC1SET = _IEC1_CNGIE_MASK;
+    g_servo_ready = true;
+#else
     m3_hw_init();
     m3_pins_init(&hw_x);
     m3_pins_init(&hw_y);
@@ -2494,6 +2835,7 @@ void hal_motor_driver_init(void)
     IFS1CLR = _IFS1_CNAIF_MASK | _IFS1_CNBIF_MASK | _IFS1_CNEIF_MASK | _IFS1_CNGIF_MASK;
     IEC1SET = _IEC1_CNAIE_MASK | _IEC1_CNBIE_MASK | _IEC1_CNEIE_MASK | _IEC1_CNGIE_MASK;   /* priorities: EVIC_Initialize() */
     g_servo_ready = true;
+#endif /* BOARD_MAKER1 */
 }
 
 void hal_motor_driver_deinit(void)

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
 hex2uf2.py - convert an XC32 Intel HEX application into a UF2 file for the
-cutcutgo-bl PIC32MK1024MCF100 bootloader.
+cutcutgo-bl bootloader.
 
-  python tools/hex2uf2.py app.hex app.uf2
+  python tools/hex2uf2.py app.hex app.uf2            Maker 3 / Explore 3 (PIC32MK1024MCF100)
+  python tools/hex2uf2.py --maker app.hex app.uf2    original Cricut Maker (PIC32MX470F512L)
 
-Rules enforced (they match fat32.c in the bootloader):
-  * family ID 0x4d4b4d43 ("MKMC")
+Rules enforced (they match fat32.c and board.h in the bootloader):
+  * family ID 0x4d4b4d43 ("MKMC"), or 0x4d414b52 ("MAKR") with --maker
   * only program-flash data in the application window
-    0x1D010000 .. 0x1D100000 (physical) is kept; KSEG0/KSEG1 addresses
+    0x1D010000 .. 0x1D100000 (physical; 0x1D080000 with --maker) is kept; KSEG0/KSEG1 addresses
     (0x9Dxxxxxx / 0xBDxxxxxx) are converted to physical
   * 256 data bytes per block, block addresses 256-byte aligned, gaps filled
     with 0xFF inside a block
@@ -22,9 +23,11 @@ UF2_MAGIC0 = 0x0A324655
 UF2_MAGIC1 = 0x9E5D5157
 UF2_MAGICEND = 0x0AB16F30
 UF2_FLAG_FAMILY = 0x00002000
-FAMILY_ID = 0x4D4B4D43          # "MKMC" - must match UF2_FAMILYID in fat32.h
+FAMILY_ID = 0x4D4B4D43          # "MKMC" - must match UF2_FAMILYID in board.h
 APP_START = 0x1D010000
 APP_END = 0x1D100000
+MAKER_FAMILY_ID = 0x4D414B52    # "MAKR" - original Cricut Maker (PIC32MX)
+MAKER_APP_END = 0x1D080000      # PIC32MX470F512: 512 KB program flash
 PAYLOAD = 256
 
 
@@ -54,10 +57,15 @@ def read_hex(path):
 
 
 def main():
-    if len(sys.argv) != 3:
+    global FAMILY_ID, APP_END
+    args = sys.argv[1:]
+    if args[:1] == ["--maker"]:
+        args = args[1:]
+        FAMILY_ID, APP_END = MAKER_FAMILY_ID, MAKER_APP_END
+    if len(args) != 2:
         print(__doc__)
         sys.exit(1)
-    mem = read_hex(sys.argv[1])
+    mem = read_hex(args[0])
 
     app, dropped = {}, {}
     for addr, b in mem.items():
@@ -87,8 +95,8 @@ def main():
         assert len(block) == 512
         out += block
 
-    open(sys.argv[2], "wb").write(out)
-    print("wrote %s: %d blocks, 0x%08X-0x%08X" % (sys.argv[2], len(blocks), blocks[0],
+    open(args[1], "wb").write(out)
+    print("wrote %s: %d blocks, 0x%08X-0x%08X" % (args[1], len(blocks), blocks[0],
                                                    blocks[-1] + PAYLOAD))
 
 

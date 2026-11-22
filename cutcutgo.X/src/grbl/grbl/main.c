@@ -71,7 +71,7 @@ void GRBL_Init(void)
   GRBL_Reset();
 
 #ifdef BOARD_MAKER3
-  /* Maker 3 and Explore 3, power-up only: home tools and X so every position is known
+  /* Maker 3, Explore 3 and the original Maker (servo build), power-up only: home tools and X so every position is known
    * (run by protocol_handler() on its first pass). Not after a soft reset or
    * a failed homing: Grbl must not start moving by itself then. */
   {
