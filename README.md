@@ -32,7 +32,6 @@ The same tree also builds for the original **Cricut Maker** (PIC32MX470F512L), r
 - **Build:** run `./build_maker.sh` in Git Bash, with XC32 v5.10 and the `PIC32MX_DFP` pack. Copy `build_maker/cutcutgo_maker.uf2` onto the bootloader's drive.
 - **What works** (tested on the machine):
   - all five motors on the encoder position servo, with damping tuned on the machine; the machine homes at power-on
-  - X travel 0 to 340 mm, as on the Maker 3; the pen draws to size (a 40 mm square measured 40 x 40 mm)
   - pen in holder A (`T0`) and blades in holder B (`T1`), with holder B's offset applied by the firmware
   - holder-B drive tools: every tool type is identified (scoring wheel, perforation, fine debossing, wavy blade, engraving, knife, rotary blade), and every steered tool lines up with the direction of travel
   - print then cut (`#YE`), using the carriage's colour sensor; a full run cut on the printed line.
@@ -43,7 +42,7 @@ The latest pre-compiled compatible bootloader is available on this [Release page
 
 
 ## Download Firmware
-The latest pre-compiled firmwares are available on this [Release page](https://github.com/DnG-Crafts/cutcutgo/releases/tag/latest)
+The latest pre-compiled firmwares are available on this [Release page](https://github.com/DnG-Crafts/cutcutgo/releases/)
 
 
 ## Download CutCraft
