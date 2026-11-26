@@ -44,7 +44,7 @@ The same tree also builds for the original **Cricut Maker** (PIC32MX470F512L), r
 All three machines have a Microchip RN4678 Bluetooth module on the main board. The firmware connects it to Grbl, so Bluetooth works as a second serial port with exactly the same commands and replies as USB. A sender just opens a different COM port.
 
 | Machine | Shows up as |
-|---|---|---|
+|---|---|
 | Cricut Maker 3 | `Maker3-xxxx` |
 | Cricut Explore 3 | `Explore3-xxxx` |
 | Original Cricut Maker | `Maker-xxxx` |
