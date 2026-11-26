@@ -1093,6 +1093,27 @@ static void m3_mat_sensor_tick(void)
     {
         if (phase == 0U)
         {
+#ifdef BOARD_EXPLORE3
+            /* Explore 3 (2026-11-27): the receiver only dips low for a moment after each light
+             * change: with a green mat about 155-350 us after the light goes on, and the same
+             * after it goes off. Reading once at 300 us caught the end of the dip only now and
+             * then, and the "high when dark" read 300 us after switching off landed in the
+             * second dip, so the green mat was rarely seen. Here "dark" is read just before the
+             * flash, and the dip is sampled eight times between 180 and 320 us. */
+            uint32_t t3, k3, lows = 0U;
+            const bool dark_high = GPIO_PinRead(GPIO_PIN_RG6);
+
+            PDCx(2) = PWM_PERIOD + 1U;
+            t3 = _CP0_GET_COUNT();
+            for (k3 = 0U; k3 < 8U; k3++)
+            {
+                while ((uint32_t)(_CP0_GET_COUNT() - t3) < ((180U + (k3 * 20U)) * (SYS_FREQ / 2000000U))) { }
+                if (!GPIO_PinRead(GPIO_PIN_RG6)) { lows++; }
+            }
+            PDCx(2) = 0U;
+            lit_low = (lows >= 2U);
+            g_mat_raw = (lit_low ? 1U : 0U) | (dark_high ? 2U : 0U);
+#else
             /* The sensor's response fades: read 300 us after each change, as
              * in the pulsed test that found it (1 ms was too late). */
             uint32_t t3;
@@ -1105,6 +1126,7 @@ static void m3_mat_sensor_tick(void)
             t3 = _CP0_GET_COUNT();
             while ((uint32_t)(_CP0_GET_COUNT() - t3) < 18000U) { }
             g_mat_raw = (lit_low ? 1U : 0U) | (GPIO_PinRead(GPIO_PIN_RG6) ? 2U : 0U);
+#endif
 
             if (lit_low && (g_mat_raw & 2U))
             {

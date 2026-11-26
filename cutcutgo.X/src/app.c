@@ -56,6 +56,7 @@
 #include "app.h"
 #include "grbl/grbl/grbl.h"
 #include "reset.h"
+#include "hal/bluetooth.h"
 #include <stdio.h>
 
 
@@ -462,6 +463,9 @@ void APP_Initialize(void)
     led_init();
     button_init();
     hal_motor_driver_init();
+#ifdef CCG_HAS_BT
+    bt_init();                  /* Bluetooth serial link (RN4678) */
+#endif
     
     /* Initialize GRBL layer. */
     GRBL_Init();
@@ -486,6 +490,11 @@ void APP_Tasks(void)
     
     /* Update the application state machine based
      * on the current state */
+
+#ifdef CCG_HAS_BT
+    /* Bluetooth serial link: runs on every pass, also inside Grbl's blocking loops. */
+    bt_tasks();
+#endif
 
     if (appData.grblInitialized && !g_serial_only)
     {
@@ -630,6 +639,9 @@ void APP_Tasks(void)
                     }
                 }
 #endif
+#ifdef CCG_HAS_BT
+                if (appData.numBytesRead > 0U) { bt_release_tx(); }   /* replies go back to USB */
+#endif
                 if (serial_on_receive(appData.cdcReadBuffer, appData.numBytesRead) < 0)
                 {
                     memset(&notificationData, 0, sizeof(USB_CDC_SERIAL_STATE));
@@ -657,6 +669,9 @@ void APP_Tasks(void)
                 nb_pending_bytes = serial_get_tx_buffer_count();
                 /* Only one write at a time: starting another while one is in flight fails
                  * and drops the whole USB link (and Grbl) into APP_STATE_ERROR. */
+#ifdef CCG_HAS_BT
+                if (bt_owns_tx()) { nb_pending_bytes = 0; }           /* Bluetooth is sending them */
+#endif
                 if ((nb_pending_bytes > 0) && appData.isWriteComplete)
                 {
                     /* Setup the write */

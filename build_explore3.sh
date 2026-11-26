@@ -43,7 +43,7 @@ SRCS=(
   grbl/grbl/spindle_control.c grbl/grbl/serial.c grbl/grbl/planner.c grbl/grbl/system.c
   grbl/grbl/stepper.c grbl/grbl/nuts_bolts.c grbl/grbl/main.c grbl/grbl/report.c
   grbl/grbl/eeprom.c grbl/grbl/limits.c grbl/grbl/probe.c
-  hal/motor_maker3.c hal/timer.c hal/led.c hal/watchdog.c hal/button.c
+  hal/motor_maker3.c hal/timer.c hal/led.c hal/watchdog.c hal/button.c hal/bluetooth.c
   main.c app.c reset.c
 )
 
